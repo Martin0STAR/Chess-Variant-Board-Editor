@@ -1,0 +1,27 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/resources
+/.vs
+/Debug
+/vcruntime140d.dll
+/ucrtbased.dll
+/sfml-window-d-2.dll
+/Chess Variant Board Editor.sln
+/Chess Variant Board Editor.vcxproj
+/Chess Variant Board Editor.vcxproj.filters
+/Chess Variant Board Editor.vcxproj.user
+/libgcc_s_dw2-1.dll
+/libstdc++-6.dll
+/msvcp140d.dll
+/openal32.dll
+/sfml-audio-2.dll
+/sfml-audio-d-2.dll
+/sfml-graphics-2.dll
+/sfml-graphics-d-2.dll
+/sfml-network-2.dll
+/sfml-network-d-2.dll
+/sfml-system-2.dll
+/sfml-system-d-2.dll
+/sfml-window-2.dll
