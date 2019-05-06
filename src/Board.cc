@@ -2,9 +2,18 @@
 
 using namespace std;
 
-Board::Board(){}//needs to run load(name)
+Board::Board()
+	:_displaysize{ sf::Vector2u{ 500, 500 } },
+	_textsize{ 32 },
+	_textcolor{ sf::Color(155, 155, 155, 255) },
+	_displaytextcolor{ sf::Color::Black },
+	_textbackgroundcolor{ sf::Color::White },
+	_textbackgroundleftoffset{ 5 },
+	_textbackgroundtopoffset{ 5 }
+{}//needs to run load(name)
 
 Board::Board(string name)
+	: Board::Board{}
 {
 	load(name);
 }
@@ -1019,22 +1028,13 @@ bool Board::intern_load(string imagefilename, string textfilename)
 	_showdragarrow = false;
 	_showtext = false;
 
-	_displaysize = sf::Vector2u{ 500, 500 };
-
 	_profilesize = sf::Vector2u{ 110, 110 };
 	_profileborder1width = 5;
 	_profileborder2width = 5;
 	_profilehighlightcolor = sf::Color(255, 255, 255, 255);
 
 	_textbelowboardoffset = 3;
-	
-	_textsize = 32;
-	_textcolor = sf::Color(155, 155, 155, 255);
-	_displaytextcolor = sf::Color::Black;
-	_textbackgroundcolor = sf::Color::White;
-	_textbackgroundleftoffset = 5;
-	_textbackgroundtopoffset = 5;
-	
+
 	_squarecolors.clear();
 	_removed_square_list.clear();
 	_colored_square_list.clear();
