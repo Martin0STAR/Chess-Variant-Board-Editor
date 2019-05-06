@@ -881,7 +881,9 @@ void Board::save(string name)
 		<< "[BoardCornerSize " << _boardcornersize << "]\n"
 		<< "[SquareCornerSize " << _squarecornersize << "]\n"
 		<< "[LeftOffset " << _leftofboardwidth << "]\n"
+		<< "[RightOffset " << _rightofboardwidth << "]\n"
 		<< "[TopOffset " << _topofboardheight << "]\n"
+		<< "[BottomOffset " << _bottomofboardheight << "]\n"
 		<< "[BoardColor " << _boardcolor.toInteger() << "]\n"
 		<< "[SquareColors";
 
@@ -1104,9 +1106,17 @@ bool Board::intern_load(string imagefilename, string textfilename)
 			{
 				ifs >> _leftofboardwidth;
 			}
+			else if (variable_name == "RightOffset")
+			{
+				ifs >> _rightofboardwidth;
+			}
 			else if (variable_name == "TopOffset")
 			{
 				ifs >> _topofboardheight;
+			}
+			else if (variable_name == "BottomOffset")
+			{
+				ifs >> _bottomofboardheight;
 			}
 			else if (variable_name == "BoardColor")
 			{
@@ -1269,8 +1279,6 @@ bool Board::intern_load(string imagefilename, string textfilename)
 		}
 	}
 	ifs.close();
-	_rightofboardwidth = _rendertexture.getSize().x - (_numcolumns * _squaresize.x + _leftofboardwidth);
-	_bottomofboardheight = _rendertexture.getSize().y - (_numrows * _squaresize.y + _topofboardheight);
 	return true;
 }
 
