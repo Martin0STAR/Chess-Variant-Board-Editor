@@ -1024,8 +1024,6 @@ bool Board::intern_load(string imagefilename, string textfilename)
 	_showdragarrow = false;
 	_showtext = false;
 
-	_textbelowboardoffset = 3;
-
 	_squarecolors.clear();
 	_removed_square_list.clear();
 	_colored_square_list.clear();
@@ -1387,15 +1385,14 @@ bool Board::drawCoordinates()
 		string filetext = coord.getNotationX();
 		text.setString(filetext);
 		sf::FloatRect textRect = text.getLocalBounds();
-		text.setOrigin(textRect.left + textRect.width / 2.0f,
-			0.f);
+		text.setOrigin(textRect.left + textRect.width / 2.f,
+			textRect.top + textRect.height / 2.f);
 
 		float xpos = (float)getImageSquareOffset().x +
 			(float)x*_squaresize.x +
 			(float)_squaresize.x / 2.f;
 		float ypos = (float)_rendertexture.getSize().y -
-			float(_bottomofboardheight) +
-			(float)_textbelowboardoffset;
+			float(_bottomofboardheight / 2.f);
 		text.setPosition(xpos, ypos);
 		_rendertexture.draw(text);
 	}

@@ -153,7 +153,6 @@ class Board
 		unsigned int _squarecornersize;
 
 		unsigned int _notationsize;
-		unsigned int _textbelowboardoffset;
 		
 		sf::Font _font;
 		sf::Text _text;
