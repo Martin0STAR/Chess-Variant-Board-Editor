@@ -11,6 +11,7 @@
 [BoardColor 841886719]
 [SquareColors 4025406207 1989563903]
 [NotationSize 16]
+[NotationColor 2610666495]
 [Piece rook white a1 -]
 [Piece knight white b1 -]
 [Piece bishop white c1 -]

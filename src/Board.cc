@@ -5,7 +5,7 @@ using namespace std;
 Board::Board()
 	:_displaysize{ sf::Vector2u{ 500, 500 } },
 	_textsize{ 32 },
-	_textcolor{ sf::Color(155, 155, 155, 255) },
+	_notationcolor{ sf::Color(155, 155, 155, 255) },
 	_displaytextcolor{ sf::Color::Black },
 	_textbackgroundcolor{ sf::Color::White },
 	_textbackgroundleftoffset{ 5 },
@@ -893,7 +893,8 @@ void Board::save(string name)
 	}
 	ofs << "]\n";
 
-	ofs << "[NotationSize " << _notationsize << "]\n";
+	ofs << "[NotationSize " << _notationsize << "]\n"
+		<< "[NotationColor " << _notationcolor.toInteger() << "]\n";
 
 	if (_showgrid)
 	{
@@ -1122,6 +1123,12 @@ bool Board::intern_load(string setupfilename)
 			else if (variable_name == "NotationSize")
 			{
 				ifs >> _notationsize;
+			}
+			else if (variable_name == "NotationColor")
+			{
+				uint32_t intcolor;
+				ifs >> intcolor;
+				_notationcolor = sf::Color{ intcolor };
 			}
 			else if (variable_name == "Piece")
 			{
@@ -1371,7 +1378,7 @@ bool Board::drawCoordinates()
 	sf::Text text;
 	text.setFont(font);
 	text.setCharacterSize(_notationsize);
-	text.setFillColor(_textcolor);
+	text.setFillColor(_notationcolor);
 	
 	for (unsigned int x{ 0 }; x < _numcolumns; x++)
 	{

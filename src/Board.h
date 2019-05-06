@@ -152,11 +152,11 @@ class Board
 		unsigned int _squarecornersize;
 
 		unsigned int _notationsize;
+		sf::Color _notationcolor;
 		
 		sf::Font _font;
 		sf::Text _text;
 		unsigned int _textsize;
-		sf::Color _textcolor;
 		sf::Color _displaytextcolor;
 		sf::RectangleShape _textbackground;
 		sf::Color _textbackgroundcolor;
