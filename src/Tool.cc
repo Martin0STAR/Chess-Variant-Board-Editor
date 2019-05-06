@@ -10,6 +10,10 @@ Tool::Tool()
 Tool::Tool(sf::Vector2u size,
 	Tool_State::Tool_State state, sf::Color squarecolor,
 	sf::Color boardcolor)
+	: _profilesize{ 110, 110 },
+_profileborder1width{ 5 },
+_profileborder2width{ 5 },
+_profilehighlightcolor{ 255, 255, 255, 255 }
 {
 	_size = size;
 	_rendertexture.create(_size.x, _size.y);
@@ -35,6 +39,10 @@ Tool::Tool(const Tool & rhs)
 	_accessoryname = rhs._accessoryname;
 	_characcessory = rhs._characcessory;
 	_playername = rhs._playername;
+	_profilesize = rhs._profilesize;
+	_profileborder1width = rhs._profileborder1width;
+	_profileborder2width = rhs._profileborder2width;
+	_profilehighlightcolor = rhs._profilehighlightcolor;
 }
 
 Tool &Tool::operator =(const Tool & rhs)
@@ -49,6 +57,10 @@ Tool &Tool::operator =(const Tool & rhs)
 	_accessoryname = rhs._accessoryname;
 	_characcessory = rhs._characcessory;
 	_playername = rhs._playername;
+	_profilesize = rhs._profilesize;
+	_profileborder1width = rhs._profileborder1width;
+	_profileborder2width = rhs._profileborder2width;
+	_profilehighlightcolor = rhs._profilehighlightcolor;
 	return *this;
 }
 
@@ -140,6 +152,11 @@ sf::Color Tool::getAccessoryColor(unsigned int index) const
 string Tool::getPlayerName() const
 {
 	return _playername;
+}
+
+BoardComponent::ProfileBox Tool::getProfileBox() const
+{
+	return BoardComponent::ProfileBox{ _playername,  sf::Vector2f{0.f,0.f}, _profilesize, _profileborder1width, _profileborder2width, _colortool.getBorderColor(), _profilehighlightcolor };
 }
 
 void Tool::setSquareColor(sf::Color color)

@@ -253,7 +253,8 @@ void BoardRunner::run(std::default_random_engine & rng)
 				}
 				break;
 			case Window_Action_State::ADD_PROFILE_BOX:
-				if (_board.addProfileBox(_action.tosquarecoord, tool->getPlayerName(), tool->getBorderColor()))
+				if(_board.addProfileBox(tool->getProfileBox() ,_action.tosquarecoord))
+				//if (_board.addProfileBox(_action.tosquarecoord, tool->getPlayerName(), tool->getBorderColor()))
 				{
 					_board.updateImage();
 					_toolwindow.setSaveIconNotSaved();

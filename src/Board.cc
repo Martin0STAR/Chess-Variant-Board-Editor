@@ -472,23 +472,19 @@ bool Board::removeArrow(Arrow & arrow)
 }
 
 
-
-bool Board::addProfileBox(BoardComponent::Coord coord, string name, sf::Color bordercolor)
+bool Board::addProfileBox(const BoardComponent::ProfileBox profilebox, BoardComponent::Coord coord)
 {
-
 	sf::Vector2f position{ getCenterPosition(coord) };
-	
-	BoardComponent::ProfileBox profilebox{ name,  position, _profilesize, _profileborder1width, _profileborder2width, bordercolor, _profilehighlightcolor };
 
+	BoardComponent::ProfileBox newprofilebox{profilebox};
+	newprofilebox.setPosition(position);
 	if (_profile_box_list.size() == 0)
 	{
-		profilebox.highlight();
+		newprofilebox.highlight();
 	}
-	_profile_box_list.push_back(profilebox);
+	_profile_box_list.push_back(newprofilebox);
 	return true;
 }
-
-
 
 bool Board::removeProfileBox(unsigned int playerid)
 {
@@ -1027,11 +1023,6 @@ bool Board::intern_load(string imagefilename, string textfilename)
 	_showgrid = false;
 	_showdragarrow = false;
 	_showtext = false;
-
-	_profilesize = sf::Vector2u{ 110, 110 };
-	_profileborder1width = 5;
-	_profileborder2width = 5;
-	_profilehighlightcolor = sf::Color(255, 255, 255, 255);
 
 	_textbelowboardoffset = 3;
 

@@ -36,6 +36,7 @@ namespace BoardComponent
 		bool set(std::string name, sf::Color bordercolor);
 		bool setPlayerColor(sf::Color);
 		bool setHighLightColor(sf::Color);
+		bool setPosition(sf::Vector2f position);
 		bool unhighlight();
 		bool highlight();
 		void drawProfilePicture(sf::RenderTarget &);

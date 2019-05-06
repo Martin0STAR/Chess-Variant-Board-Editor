@@ -81,7 +81,7 @@ class Board
 		bool addArrow(BoardComponent::Coord, BoardComponent::Coord, sf::Color);
 		bool removeArrow(Arrow &);
 
-		bool addProfileBox(BoardComponent::Coord coord, std::string name, sf::Color bordercolor);
+		bool addProfileBox(BoardComponent::ProfileBox profilebox, BoardComponent::Coord coord);
 		bool removeProfileBox(unsigned int playerid);
 		bool highlightPlayerBox(unsigned int);
 		
@@ -151,11 +151,6 @@ class Board
 		
 		sf::Vector2u _squaresize;
 		unsigned int _squarecornersize;
-
-		sf::Vector2u _profilesize;
-		unsigned int _profileborder1width;
-		unsigned int _profileborder2width;
-		sf::Color _profilehighlightcolor;
 
 		unsigned int _notationsize;
 		unsigned int _textbelowboardoffset;

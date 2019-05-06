@@ -56,6 +56,7 @@ public:
 	sf::Color getAccessoryColor() const;
 	sf::Color getAccessoryColor(unsigned int index) const;
 	std::string getPlayerName() const;
+	BoardComponent::ProfileBox getProfileBox() const;
 
 	void setSquareColor(sf::Color color);
 	void setState(Tool_State::Tool_State);
@@ -112,6 +113,11 @@ private:
 	std::string _accessoryname;
 	char _characcessory;
 	std::string _playername;
+
+	sf::Vector2u _profilesize;
+	unsigned int _profileborder1width;
+	unsigned int _profileborder2width;
+	sf::Color _profilehighlightcolor;
 
 	std::map<Tool_State::Tool_State, std::string> _toolnames
 	{

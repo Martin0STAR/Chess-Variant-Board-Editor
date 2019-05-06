@@ -11,7 +11,8 @@ BoardComponent::ProfileBox::ProfileBox(
 	sf::Color border1color, sf::Color border2color)
 	:_profilename{ profilename }, _position{ position },
 	_size{ size }, _border1width{border1width},_border2width{border2width},
-	_border1color{ border1color }, _border2color{border2color}
+	_border1color{ border1color }, _border2color{border2color},
+	_ishighlighted{ false }
 {
 	updateProfilePicture();
 }
@@ -126,6 +127,12 @@ bool BoardComponent::ProfileBox::setHighLightColor(sf::Color color)
 		return false;
 	}
 	_border2color = color;
+	return true;
+}
+
+bool BoardComponent::ProfileBox::setPosition(sf::Vector2f position)
+{
+	_position = position;
 	return true;
 }
 
