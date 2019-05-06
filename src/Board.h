@@ -157,9 +157,8 @@ class Board
 		unsigned int _profileborder2width;
 		sf::Color _profilehighlightcolor;
 
-		unsigned int _charactersize;
+		unsigned int _notationsize;
 		unsigned int _textbelowboardoffset;
-		unsigned int _textleftofboardoffset;
 		
 		sf::Font _font;
 		sf::Text _text;

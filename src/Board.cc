@@ -873,8 +873,11 @@ void Board::save(string name)
 		<< "[Columns " << _numcolumns << "]\n"
 		<< "[SquareWidth " << _squaresize.x << "]\n"
 		<< "[SquareHeight " << _squaresize.y << "]\n"
+		<< "[BoardCornerSize " << _boardcornersize << "]\n"
+		<< "[SquareCornerSize " << _squarecornersize << "]\n"
 		<< "[LeftOffset " << _leftofboardwidth << "]\n"
 		<< "[TopOffset " << _topofboardheight << "]\n"
+		<< "[BoardColor " << _boardcolor.toInteger() << "]\n"
 		<< "[SquareColors";
 
 	for (auto elem : _squarecolors)
@@ -882,6 +885,8 @@ void Board::save(string name)
 		ofs << " " << elem.toInteger();
 	}
 	ofs << "]\n";
+
+	ofs << "[NotationSize " << _notationsize << "]\n";
 
 	if (_showgrid)
 	{
@@ -1014,19 +1019,14 @@ bool Board::intern_load(string imagefilename, string textfilename)
 	_showdragarrow = false;
 	_showtext = false;
 
-	_boardcolor = sf::Color(50, 46, 43, 255);
 	_displaysize = sf::Vector2u{ 500, 500 };
-	_boardcornersize = 12;
-	_squarecornersize = 8;
 
 	_profilesize = sf::Vector2u{ 110, 110 };
 	_profileborder1width = 5;
 	_profileborder2width = 5;
 	_profilehighlightcolor = sf::Color(255, 255, 255, 255);
 
-	_charactersize = 16;
 	_textbelowboardoffset = 3;
-	_textleftofboardoffset = 3;
 	
 	_textsize = 32;
 	_textcolor = sf::Color(155, 155, 155, 255);
@@ -1103,6 +1103,14 @@ bool Board::intern_load(string imagefilename, string textfilename)
 			{
 				ifs >> _squaresize.y;
 			}
+			else if (variable_name == "BoardCornerSize")
+			{
+				ifs >> _boardcornersize;
+			}
+			else if (variable_name == "SquareCornerSize")
+			{
+				ifs >> _squarecornersize;
+			}
 			else if (variable_name == "LeftOffset")
 			{
 				ifs >> _leftofboardwidth;
@@ -1111,6 +1119,12 @@ bool Board::intern_load(string imagefilename, string textfilename)
 			{
 				ifs >> _topofboardheight;
 			}
+			else if (variable_name == "BoardColor")
+			{
+				uint32_t intcolor;
+				ifs >> intcolor;
+				_boardcolor = sf::Color{ intcolor };
+			}
 			else if (variable_name == "SquareColors")
 			{
 				uint32_t intcolor;
@@ -1118,6 +1132,10 @@ bool Board::intern_load(string imagefilename, string textfilename)
 				_squarecolors.push_back(sf::Color{ intcolor });
 				ifs >> intcolor;
 				_squarecolors.push_back(sf::Color{ intcolor });
+			}
+			else if (variable_name == "NotationSize")
+			{
+				ifs >> _notationsize;
 			}
 			else if (variable_name == "Piece")
 			{
@@ -1240,7 +1258,6 @@ bool Board::intern_load(string imagefilename, string textfilename)
 			{
 				string name;
 				sf::Vector2f position;
-				//float xcoord, ycoord;
 				sf::Vector2u size;
 				unsigned int borderwidth, highlightwidth, ishighlighted;
 				uint32_t intplayercolor, inthighlightcolor;
@@ -1370,7 +1387,7 @@ bool Board::drawCoordinates()
 	}
 	sf::Text text;
 	text.setFont(font);
-	text.setCharacterSize(_charactersize);
+	text.setCharacterSize(_notationsize);
 	text.setFillColor(_textcolor);
 	
 	for (unsigned int x{ 0 }; x < _numcolumns; x++)
