@@ -216,8 +216,6 @@ void BoardComponent::ProfileBox::draw(sf::RenderTarget & target)
 void BoardComponent::ProfileBox::move(const sf::Vector2f& offset)
 {
 	_position += offset;
-	//_xcoord += offset.x;
-	//_ycoord += offset.y;
 }
 
 bool BoardComponent::ProfileBox::saveProfileImage()
