@@ -110,10 +110,9 @@ class Board
 		void save(std::string);
 		void newNameSave(std::string newname, std::string oldname);
 	private:
-		bool intern_load(std::string, std::string);
+		bool intern_load(std::string setupfilename);
 
 		std::string getInitFileName(std::string) const;
-		std::string getInitImageFileName(std::string) const;
 		std::string getInitSetupFileName(std::string) const;
 		std::string getImageFileName(std::string) const;
 		std::string getSetupFileName(std::string) const;

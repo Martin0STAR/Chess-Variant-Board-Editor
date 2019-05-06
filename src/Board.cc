@@ -20,12 +20,12 @@ Board::Board(string name)
 
 bool Board::load(string name)
 {
-	return intern_load(getImageFileName(name), getSetupFileName(name));
+	return intern_load(getSetupFileName(name));
 }
 
 bool Board::initLoad(string name)
 {
-	return intern_load(getInitImageFileName(name), getInitSetupFileName(name));
+	return intern_load(getInitSetupFileName(name));
 }
 
 Board::~Board()
@@ -1015,10 +1015,9 @@ void Board::newNameSave(string newname, string oldname)
 	std::remove(("savedboards/setup/" + oldname + ".txt").c_str());
 }
 
-bool Board::intern_load(string imagefilename, string textfilename)
+bool Board::intern_load(string setupfilename)
 {
-	if (!experimental::filesystem::exists(imagefilename) ||
-		!experimental::filesystem::exists(textfilename))
+	if (!experimental::filesystem::exists(setupfilename))
 	{
 		return false;
 	}
@@ -1033,18 +1032,6 @@ bool Board::intern_load(string imagefilename, string textfilename)
 	_piece_list.clear();
 	_arrow_list.clear();
 	_profile_box_list.clear();
-	{
-		sf::Image image;
-		image.loadFromFile(imagefilename);
-		_rendertexture.create(image.getSize().x, image.getSize().y);
-		sf::Texture texture;
-		texture.loadFromImage(image);
-		sf::Sprite sprite{ texture };
-		_rendertexture.clear();
-		
-		_rendertexture.draw(sprite, sf::BlendNone);
-		_rendertexture.display();
-	}
 
 	string filename = getFontFileName();
 	if (_font.loadFromFile(filename))
@@ -1066,7 +1053,7 @@ bool Board::intern_load(string imagefilename, string textfilename)
 
 
 	ifstream ifs;
-	ifs.open(textfilename);
+	ifs.open(setupfilename);
 	string variable_name;
 	char c;
 	while (ifs >> c)
@@ -1279,6 +1266,10 @@ bool Board::intern_load(string imagefilename, string textfilename)
 		}
 	}
 	ifs.close();
+	_rendertexture.create(
+		_leftofboardwidth + _rightofboardwidth + _numcolumns * _squaresize.x,
+		_topofboardheight + _bottomofboardheight + _numrows * _squaresize.y);
+	updateImage();
 	return true;
 }
 
@@ -1287,14 +1278,9 @@ string Board::getInitFileName(string type) const
 	return "resources\\config_files\\" + type + ".txt";
 }
 
-string Board::getInitImageFileName(string name) const
-{
-	return ("resources\\setupboards\\" + name + ".png");
-}
-
 string Board::getInitSetupFileName(string name) const
 {
-	return ("resources\\setupboards\\setup\\" + name + ".txt");
+	return ("resources\\setupboards\\" + name + ".txt");
 }
 
 string Board::getImageFileName(string name) const
