@@ -865,47 +865,7 @@ void Board::save(string name)
 	for (auto elem : _piece_list)
 	{
 		ofs << "[Piece " << elem.first.getNotation(getNumRows())
-			<< " " << elem.second.getStyle()
-			<< " " << elem.second.getName()
-			<< " " << elem.second.getColor().name 
-			<< " -" << elem.second.getFlags();
-		if (elem.second.colorIsModified())
-		{
-			ofs << " " << elem.second.getColor().adder.toInteger()
-				<< " " << elem.second.getColor().subtracter.toInteger()
-				<< " " << elem.second.getColor().multiplier.toInteger();
-		}
-		if (elem.second.hasAccessories())
-		{
-			ofs << " [";
-			auto alist = elem.second.getAccessorylist();
-			for (auto it = alist.begin();
-				it != alist.end();
-				it++)
-			{
-				ofs << it->getName() << " " << it->getColor().toInteger();
-				if (it + 1 != alist.end())
-				{
-					ofs << " ";
-				}
-			}
-			ofs << "]";
-		}
-		if (elem.second.isCarrying())
-		{
-			const Piece & pieceontop = elem.second.getPieceOnTop();
-			ofs << " [" << pieceontop.getName()
-				<< " " << pieceontop.getColor().name
-				<< " -" << pieceontop.getFlags();
-			if (pieceontop.colorIsModified())
-			{
-				ofs << " " << pieceontop.getColor().adder.toInteger()
-					<< " " << pieceontop.getColor().subtracter.toInteger()
-					<< " " << pieceontop.getColor().multiplier.toInteger();
-			}
-			ofs << "]";
-		}
-		ofs << "]\n";
+			<< " " << elem.second << "]\n";
 	}
 
 	for (auto elem : _colored_square_list)

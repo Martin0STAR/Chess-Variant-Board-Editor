@@ -184,6 +184,51 @@ istream & operator >> (istream & is, Piece & piece)
 	return is;
 }
 
+ostream &operator <<(ostream &os, const Piece& piece)
+{
+	os << piece.getStyle()
+		<< " " << piece.getName()
+		<< " " << piece.getColor().name
+		<< " -" << piece.getFlags();
+	if (piece.colorIsModified())
+	{
+		os << " " << piece.getColor().adder.toInteger()
+			<< " " << piece.getColor().subtracter.toInteger()
+			<< " " << piece.getColor().multiplier.toInteger();
+	}
+	if (piece.hasAccessories())
+	{
+		os << " [";
+		auto alist = piece.getAccessorylist();
+		for (auto it = alist.begin();
+			it != alist.end();
+			it++)
+		{
+			os << it->getName() << " " << it->getColor().toInteger();
+			if (it + 1 != alist.end())
+			{
+				os << " ";
+			}
+		}
+		os << "]";
+	}
+	if (piece.isCarrying())
+	{
+		const Piece & pieceontop = piece.getPieceOnTop();
+		os << " [" << pieceontop.getName()
+			<< " " << pieceontop.getColor().name
+			<< " -" << pieceontop.getFlags();
+		if (pieceontop.colorIsModified())
+		{
+			os << " " << pieceontop.getColor().adder.toInteger()
+				<< " " << pieceontop.getColor().subtracter.toInteger()
+				<< " " << pieceontop.getColor().multiplier.toInteger();
+		}
+		os << "]";
+	}
+	return os;
+}
+
 string Piece::getStyle() const
 {
 	return _style;

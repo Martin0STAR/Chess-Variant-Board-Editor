@@ -14,6 +14,7 @@ public:
 	Piece& operator =(const Piece& rhs);
 	bool operator ==(const Piece &) const;
 	friend std::istream & operator >> (std::istream &is, Piece& piece);
+	friend std::ostream & operator << (std::ostream &os, const Piece& piece);
 
 	std::string getStyle() const;
 	std::string getName() const;
