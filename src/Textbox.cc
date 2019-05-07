@@ -7,18 +7,14 @@ BoardComponent::Textbox::Textbox()
 {}
 
 BoardComponent::Textbox::Textbox(sf::Vector2f position)
-	: _textsize{ 32 },
-	_displaytextcolor{ sf::Color::Black },
-	_textbackgroundcolor{ sf::Color::White },
-	_textbackgroundleftoffset{ 5 },
-	_textbackgroundtopoffset{ 5 }
+	: _backgroundoffset{5,5}
 {
 	string filename = getFontFileName();
 	if (_font.loadFromFile(filename))
 	{
 		_text.setFont(_font);
-		_text.setCharacterSize(_textsize);
-		_text.setFillColor(_displaytextcolor);
+		_text.setCharacterSize(32);
+		_text.setFillColor(sf::Color::Black);
 		_text.setString("");
 		_text.setPosition(position);
 	}
@@ -41,13 +37,13 @@ void BoardComponent::Textbox::setText(string text)
 	_text.setOrigin(textrect.left + textrect.width / 2.f,
 		textrect.top + textrect.height / 2.f);
 
-	_textbackground.setSize(sf::Vector2f{
-		textrect.width + 2 * _textbackgroundleftoffset,
-		textrect.height + 2 * _textbackgroundtopoffset });
-	_textbackground.setOrigin(
-		_textbackground.getSize().x / 2.f,
-		_textbackground.getSize().y / 2.f);
-	_textbackground.setPosition(_text.getPosition());
+	_background.setSize(sf::Vector2f{
+		textrect.width + 2 * _backgroundoffset.x,
+		textrect.height + 2 * _backgroundoffset.y });
+	_background.setOrigin(
+		_background.getSize().x / 2.f,
+		_background.getSize().y / 2.f);
+	_background.setPosition(_text.getPosition());
 }
 
 void BoardComponent::Textbox::showText()
@@ -64,7 +60,7 @@ void BoardComponent::Textbox::draw(sf::RenderTarget & target)
 {
 	if (_show)
 	{
-		target.draw(_textbackground);
+		target.draw(_background);
 		target.draw(_text);
 	}
 }

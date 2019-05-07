@@ -20,11 +20,7 @@ namespace BoardComponent
 		bool _show;
 		sf::Font _font;
 		sf::Text _text;
-		unsigned int _textsize;
-		sf::Color _displaytextcolor;
-		sf::RectangleShape _textbackground;
-		sf::Color _textbackgroundcolor;
-		unsigned int _textbackgroundleftoffset;
-		unsigned int _textbackgroundtopoffset;
+		sf::RectangleShape _background;
+		sf::Vector2u _backgroundoffset;
 	};
 }
