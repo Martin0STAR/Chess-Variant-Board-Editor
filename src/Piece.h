@@ -15,6 +15,7 @@ public:
 	bool operator ==(const Piece &) const;
 	friend std::istream & operator >> (std::istream &is, Piece& piece);
 
+	std::string getStyle() const;
 	std::string getName() const;
 	PieceColor getColor() const;
 	std::string getFlags() const;
@@ -49,8 +50,6 @@ public:
 	bool invertColors();
 
 	void draw(sf::RenderTarget & target, const sf::Vector2f & position);
-
-	std::string _notation; //Temporary solution to write notation to
 
 private:
 	std::string getFileName() const;

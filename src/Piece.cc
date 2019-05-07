@@ -105,10 +105,10 @@ bool Piece::operator ==(const Piece & rhs) const
 istream & operator >> (istream & is, Piece & piece)
 {
 	string flags;
-	piece._style = "bulldog";
+	is >> piece._style;
 	is >> piece._name;
 	is >> piece._color.name;
-	is >> piece._notation;
+	
 	is >> flags;
 	for (auto c : flags)
 	{
@@ -182,6 +182,11 @@ istream & operator >> (istream & is, Piece & piece)
 		piece.addPieceOnTop(pieceontop);
 	}
 	return is;
+}
+
+string Piece::getStyle() const
+{
+	return _style;
 }
 
 string Piece::getName() const

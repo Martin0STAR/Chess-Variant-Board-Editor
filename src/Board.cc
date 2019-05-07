@@ -864,9 +864,10 @@ void Board::save(string name)
 
 	for (auto elem : _piece_list)
 	{
-		ofs << "[Piece " << elem.second.getName()
-			<< " " << elem.second.getColor().name
-			<< " " << elem.first.getNotation(getNumRows())
+		ofs << "[Piece " << elem.first.getNotation(getNumRows())
+			<< " " << elem.second.getStyle()
+			<< " " << elem.second.getName()
+			<< " " << elem.second.getColor().name 
 			<< " -" << elem.second.getFlags();
 		if (elem.second.colorIsModified())
 		{
@@ -1074,8 +1075,10 @@ bool Board::intern_load(string setupfilename)
 			else if (variable_name == "Piece")
 			{
 				Piece piece;
+				std::string notation;
+				ifs >> notation;
 				ifs >> piece;
-				BoardComponent::Coord coord{ getNumRows(), piece._notation };
+				BoardComponent::Coord coord{ getNumRows(), notation };
 				_piece_list.insert({ coord, piece });
 			}
 			else if (variable_name == "Colored_Square")
