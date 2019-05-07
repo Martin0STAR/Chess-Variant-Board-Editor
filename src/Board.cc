@@ -3,8 +3,7 @@
 using namespace std;
 
 Board::Board()
-	:_displaysize{ sf::Vector2u{ 500, 500 } },
-	_notationcolor{ sf::Color(155, 155, 155, 255) }
+	:_displaysize{ sf::Vector2u{ 500, 500 } }
 {}//needs to run load(name)
 
 Board::Board(string name)
