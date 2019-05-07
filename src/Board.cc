@@ -1073,66 +1073,9 @@ bool Board::intern_load(string setupfilename)
 			}
 			else if (variable_name == "Piece")
 			{
-				string piecename;
-				PieceColor piececolor;
-				string notation;
-				string flags;
-				ifs >> piecename;
-				ifs >> piececolor.name;
-				ifs >> notation;
-				ifs >> flags;
-
-				Piece piece{ "bulldog", piecename, piececolor, flags };
-				if (flags.find('p') != string::npos)
-				{
-					uint32_t intcolor;
-					ifs >> intcolor;
-					sf::Color adder{ intcolor };
-					ifs >> intcolor;
-					sf::Color subtracter{ intcolor };
-					ifs >> intcolor;
-					sf::Color multiplier{ intcolor };
-					piece.setColorAdder(adder);
-					piece.setColorSubtracter(subtracter);
-					piece.setColorMultiplier(multiplier);
-				}
-				if (flags.find('a') != string::npos)
-				{
-					ifs >> ws;
-					ifs.ignore(1);
-					std::string accessoryname;
-					uint32_t intcolor;
-					while (ifs.peek() != ']')
-					{
-						ifs >> accessoryname >> intcolor;
-						piece.addAccessory(accessoryname, sf::Color{ intcolor });
-						ifs >> ws;
-					}
-				}
-				if (flags.find('c') != string::npos)
-				{
-					ifs >> ws;
-					ifs.ignore(1);
-					ifs >> piecename;
-					ifs >> piececolor.name;
-					ifs >> flags;
-					Piece pieceontop{ "bulldog", piecename, piececolor, flags };
-					if (flags.find('p') != string::npos)
-					{
-						uint32_t intcolor;
-						ifs >> intcolor;
-						sf::Color adder{ intcolor };
-						ifs >> intcolor;
-						sf::Color subtracter{ intcolor };
-						ifs >> intcolor;
-						sf::Color multiplier{ intcolor };
-						pieceontop.setColorAdder(adder);
-						pieceontop.setColorSubtracter(subtracter);
-						pieceontop.setColorMultiplier(multiplier);
-					}
-					piece.addPieceOnTop(pieceontop);
-				}
-				BoardComponent::Coord coord{ getNumRows(), notation };
+				Piece piece;
+				ifs >> piece;
+				BoardComponent::Coord coord{ getNumRows(), piece._notation };
 				_piece_list.insert({ coord, piece });
 			}
 			else if (variable_name == "Colored_Square")

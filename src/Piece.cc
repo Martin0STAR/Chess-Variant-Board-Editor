@@ -102,6 +102,88 @@ bool Piece::operator ==(const Piece & rhs) const
 	return false;
 }
 
+istream & operator >> (istream & is, Piece & piece)
+{
+	string flags;
+	piece._style = "bulldog";
+	is >> piece._name;
+	is >> piece._color.name;
+	is >> piece._notation;
+	is >> flags;
+	for (auto c : flags)
+	{
+		if (c == 'd')
+		{
+			piece._iscarried = true;
+		}
+		if (c == 'm')
+		{
+			piece._ismirrored = true;
+		}
+		if (c == 'u')
+		{
+			piece._isupsidedown = true;
+		}
+		if (c == 'i')
+		{
+			piece._isinvertedcolors = true;
+		}
+	}
+	
+	if (flags.find('p') != string::npos)
+	{
+		uint32_t intcolor;
+		is >> intcolor;
+		sf::Color adder{ intcolor };
+		is >> intcolor;
+		sf::Color subtracter{ intcolor };
+		is >> intcolor;
+		sf::Color multiplier{ intcolor };
+		piece.setColorAdder(adder);
+		piece.setColorSubtracter(subtracter);
+		piece.setColorMultiplier(multiplier);
+	}
+	if (flags.find('a') != string::npos)
+	{
+		is >> ws;
+		is.ignore(1);
+		std::string accessoryname;
+		uint32_t intcolor;
+		while (is.peek() != ']')
+		{
+			is >> accessoryname >> intcolor;
+			piece.addAccessory(accessoryname, sf::Color{ intcolor });
+			is >> ws;
+		}
+	}
+	if (flags.find('c') != string::npos)
+	{
+		std::string piecename;
+		PieceColor piececolor;
+		is >> ws;
+		is.ignore(1);
+		is >> piecename;
+		is >> piececolor.name;
+		is >> flags;
+		Piece pieceontop{ "bulldog", piecename, piececolor, flags };
+		if (flags.find('p') != string::npos)
+		{
+			uint32_t intcolor;
+			is >> intcolor;
+			sf::Color adder{ intcolor };
+			is >> intcolor;
+			sf::Color subtracter{ intcolor };
+			is >> intcolor;
+			sf::Color multiplier{ intcolor };
+			pieceontop.setColorAdder(adder);
+			pieceontop.setColorSubtracter(subtracter);
+			pieceontop.setColorMultiplier(multiplier);
+		}
+		piece.addPieceOnTop(pieceontop);
+	}
+	return is;
+}
+
 string Piece::getName() const
 {
 	return _name;
