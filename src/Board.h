@@ -54,9 +54,6 @@ class Board
 
 		bool togglegrid();
 		void removeDragArrow();
-		void setText(std::string);
-		void showText();
-		void hideText();
 
 		bool addRowUp();
 		bool addRowDown();
@@ -134,7 +131,6 @@ class Board
 		unsigned int _numcolumns;
 		bool _showgrid;
 		bool _showdragarrow;
-		bool _showtext;
 
 		sf::RenderTexture _rendertexture;
 		Arrow _dragarrow;
@@ -153,15 +149,6 @@ class Board
 
 		unsigned int _notationsize;
 		sf::Color _notationcolor;
-		
-		sf::Font _font;
-		sf::Text _text;
-		unsigned int _textsize;
-		sf::Color _displaytextcolor;
-		sf::RectangleShape _textbackground;
-		sf::Color _textbackgroundcolor;
-		unsigned int _textbackgroundleftoffset;
-		unsigned int _textbackgroundtopoffset;
 
 		std::vector<sf::Color> _squarecolors;
 		std::vector<BoardComponent::Coord> _removed_square_list;

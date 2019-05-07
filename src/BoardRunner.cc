@@ -39,6 +39,10 @@ BoardRunner::BoardRunner(string setupfilename)
 		_mainwindow.setTitle("board");
 		_toolwindow.setSaveIconNotSaved();
 	}
+
+	_textbox.setPosition(sf::Vector2f{
+		(float)_board.getDisplaySize().x / 2.f,
+		(float)_board.getDisplaySize().y / 2.f });
 }
 
 
@@ -491,12 +495,12 @@ void BoardRunner::run(std::default_random_engine & rng)
 			case Window_Action_State::ENTER_BOARD_NAME:
 				_keyboardhandler.setState(Keyboard::State::ENTER_BOARD_NAME);
 				_mainwindow.setTitle("");
-				_board.setText("Enter a new boardname:\n");
-				_board.showText();
+				_textbox.setText("Enter a new boardname:\n");
+				_textbox.showText();
 				break;
 			case Window_Action_State::DISPLAY_ENTERED_BOARD_NAME:
 				_mainwindow.setTitle(_action.name);
-				_board.setText("Enter a new boardname:\n" + _action.name);
+				_textbox.setText("Enter a new boardname:\n" + _action.name);
 				break;
 			case Window_Action_State::SET_BOARD_NAME:
 			{
@@ -518,30 +522,30 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_toolwindow.setSaveIconSaved();
 				}
 				_mainwindow.setTitle(_boardnamelist.getName(_boardnumber));
-				_board.setText("");
-				_board.hideText();
+				_textbox.setText("");
+				_textbox.hideText();
 			}
 				break;
 			case Window_Action_State::ENTER_PROFILE_NAME:
 				_keyboardhandler.setState(Keyboard::State::ENTER_PROFILE_NAME);
-				_board.setText("Enter playername:\n");
-				_board.showText();
+				_textbox.setText("Enter playername:\n");
+				_textbox.showText();
 				break;
 			case Window_Action_State::DISPLAY_ENTERED_PROFILE_NAME:
-				_board.setText("Enter playername:\n" + _action.name);
+				_textbox.setText("Enter playername:\n" + _action.name);
 				break;
 			case Window_Action_State::SET_PROFILE_IMAGE:
 				tool->setPlayerName(_action.name);
-				_board.setText("");
-				_board.hideText();
+				_textbox.setText("");
+				_textbox.hideText();
 				break;
 			case Window_Action_State::ENTER_SAVE_AS_BOARDNAME:
 				_keyboardhandler.setState(Keyboard::State::ENTER_SAVE_AS_BOARDNAME);
-				_board.setText("Save as:\n");
-				_board.showText();
+				_textbox.setText("Save as:\n");
+				_textbox.showText();
 				break;
 			case Window_Action_State::DISPLAY_SAVE_AS_BOARDNAME:
-				_board.setText("Save as:\n" + _action.name);
+				_textbox.setText("Save as:\n" + _action.name);
 				break;
 			case Window_Action_State::SAVE_BOARD_AS:
 				if (_action.name.size() > 0)
@@ -553,8 +557,8 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_toolwindow.setSaveIconSaved();
 				}
 				_mainwindow.setTitle(_boardnamelist.getName(_boardnumber));
-				_board.setText("");
-				_board.hideText();
+				_textbox.setText("");
+				_textbox.hideText();
 				break;
 			default:
 				break;
@@ -563,6 +567,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 
 		_mainwindow.clear(sf::Color{ 180, 180, 180, 255 });
 		_board.draw(_mainwindow);
+		_textbox.draw(_mainwindow);
 		_toolwindow.draw(_mainwindow);
 		_mainwindow.display();
 

@@ -4,12 +4,7 @@ using namespace std;
 
 Board::Board()
 	:_displaysize{ sf::Vector2u{ 500, 500 } },
-	_textsize{ 32 },
-	_notationcolor{ sf::Color(155, 155, 155, 255) },
-	_displaytextcolor{ sf::Color::Black },
-	_textbackgroundcolor{ sf::Color::White },
-	_textbackgroundleftoffset{ 5 },
-	_textbackgroundtopoffset{ 5 }
+	_notationcolor{ sf::Color(155, 155, 155, 255) }
 {}//needs to run load(name)
 
 Board::Board(string name)
@@ -186,33 +181,6 @@ bool Board::togglegrid()
 void Board::removeDragArrow()
 {
 	_showdragarrow = false;
-}
-
-void Board::setText(std::string text)
-{
-	_text.setString(text);
-
-	sf::FloatRect textrect = _text.getLocalBounds();
-	_text.setOrigin(textrect.left + textrect.width / 2.f,
-		textrect.top + textrect.height / 2.f);
-
-	_textbackground.setSize(sf::Vector2f{
-		textrect.width + 2 * _textbackgroundleftoffset,
-		textrect.height + 2 * _textbackgroundtopoffset });
-	_textbackground.setOrigin(
-		_textbackground.getSize().x / 2.f,
-		_textbackground.getSize().y / 2.f);
-	_textbackground.setPosition(_text.getPosition());
-}
-
-void Board::showText()
-{
-	_showtext = true;
-}
-
-void Board::hideText()
-{
-	_showtext = false;
 }
 
 bool Board::addRowUp()
@@ -860,12 +828,6 @@ void Board::draw(sf::RenderTarget & target)
 	{
 		_dragarrow.draw(target);
 	}
-
-	if (_showtext)
-	{
-		target.draw(_textbackground);
-		target.draw(_text);
-	}
 }
 
 void Board::save(string name)
@@ -1024,7 +986,6 @@ bool Board::intern_load(string setupfilename)
 	}
 	_showgrid = false;
 	_showdragarrow = false;
-	_showtext = false;
 
 	_squarecolors.clear();
 	_removed_square_list.clear();
@@ -1033,25 +994,6 @@ bool Board::intern_load(string setupfilename)
 	_piece_list.clear();
 	_arrow_list.clear();
 	_profile_box_list.clear();
-
-	string filename = getFontFileName();
-	if (_font.loadFromFile(filename))
-	{
-		_text.setFont(_font);
-		_text.setCharacterSize(_textsize);
-		_text.setFillColor(_displaytextcolor);
-		_text.setString("");
-		sf::Vector2f position{
-		(float)_displaysize.x / 2.f,
-		(float)_displaysize.y / 2.f
-		};
-		_text.setPosition(position);
-	}
-	else
-	{
-		cerr << "unable to find font in " << filename << endl;
-	}
-
 
 	ifstream ifs;
 	ifs.open(setupfilename);

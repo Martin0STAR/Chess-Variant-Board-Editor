@@ -8,6 +8,7 @@
 #include "Window_Action.h"
 #include "Event_handler.h"
 #include "Keyboardhandler.h"
+#include "Textbox.h"
 
 class BoardRunner
 {
@@ -27,4 +28,5 @@ private:
 	Window_Action _action;
 	Event_handler _event_handler;
 	Keyboardhandler _keyboardhandler;
+	BoardComponent::Textbox _textbox;
 };
