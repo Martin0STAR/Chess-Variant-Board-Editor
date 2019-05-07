@@ -162,23 +162,8 @@ istream & operator >> (istream & is, Piece & piece)
 		PieceColor piececolor;
 		is >> ws;
 		is.ignore(1);
-		is >> piecename;
-		is >> piececolor.name;
-		is >> flags;
-		Piece pieceontop{ "bulldog", piecename, piececolor, flags };
-		if (flags.find('p') != string::npos)
-		{
-			uint32_t intcolor;
-			is >> intcolor;
-			sf::Color adder{ intcolor };
-			is >> intcolor;
-			sf::Color subtracter{ intcolor };
-			is >> intcolor;
-			sf::Color multiplier{ intcolor };
-			pieceontop.setColorAdder(adder);
-			pieceontop.setColorSubtracter(subtracter);
-			pieceontop.setColorMultiplier(multiplier);
-		}
+		Piece pieceontop;
+		is >> pieceontop;
 		piece.addPieceOnTop(pieceontop);
 	}
 	return is;
@@ -214,17 +199,7 @@ ostream &operator <<(ostream &os, const Piece& piece)
 	}
 	if (piece.isCarrying())
 	{
-		const Piece & pieceontop = piece.getPieceOnTop();
-		os << " [" << pieceontop.getName()
-			<< " " << pieceontop.getColor().name
-			<< " -" << pieceontop.getFlags();
-		if (pieceontop.colorIsModified())
-		{
-			os << " " << pieceontop.getColor().adder.toInteger()
-				<< " " << pieceontop.getColor().subtracter.toInteger()
-				<< " " << pieceontop.getColor().multiplier.toInteger();
-		}
-		os << "]";
+		os << " [" << piece.getPieceOnTop() << "]";
 	}
 	return os;
 }
