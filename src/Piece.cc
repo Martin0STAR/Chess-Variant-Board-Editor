@@ -158,8 +158,6 @@ istream & operator >> (istream & is, Piece & piece)
 	}
 	if (flags.find('c') != string::npos)
 	{
-		std::string piecename;
-		PieceColor piececolor;
 		is >> ws;
 		is.ignore(1);
 		Piece pieceontop;
