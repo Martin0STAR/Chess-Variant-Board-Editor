@@ -56,16 +56,16 @@ void BoardComponent::Textbox::hideText()
 	_show = false;
 }
 
-void BoardComponent::Textbox::draw(sf::RenderTarget & target)
+std::string BoardComponent::Textbox::getFontFileName()
+{
+	return "resources\\fonts\\Raleway-SemiBold.ttf";
+}
+
+void BoardComponent::Textbox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (_show)
 	{
 		target.draw(_background);
 		target.draw(_text);
 	}
-}
-
-std::string BoardComponent::Textbox::getFontFileName()
-{
-	return "resources\\fonts\\Raleway-SemiBold.ttf";
 }

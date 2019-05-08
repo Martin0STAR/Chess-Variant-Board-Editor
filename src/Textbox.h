@@ -4,7 +4,7 @@
 
 namespace BoardComponent
 {
-	class Textbox
+	class Textbox : public sf::Drawable
 	{
 	public:
 		Textbox();
@@ -13,9 +13,9 @@ namespace BoardComponent
 		void setText(std::string text);
 		void showText();
 		void hideText();
-		void draw(sf::RenderTarget & target);
 	private:
 		std::string getFontFileName();
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 		bool _show;
 		sf::Font _font;
