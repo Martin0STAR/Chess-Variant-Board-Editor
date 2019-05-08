@@ -904,9 +904,16 @@ void Board::save(string name)
 	for (auto profile : _profile_box_list)
 	{
 		profile.saveProfileImage();
-		ofs << "[Profilebox "
-			<< profile.getName() << " "
-			<< profile.getPosition().x << " "
+		ofs << "[Profilebox ";
+		if (profile.getName() == "")
+		{
+			ofs << "- ";
+		}
+		else
+		{
+			ofs << profile.getName() << " ";
+		}
+		ofs << profile.getPosition().x << " "
 			<< profile.getPosition().y << " "
 			<< profile.getSize().x << " "
 			<< profile.getSize().y << " "
@@ -1087,21 +1094,8 @@ bool Board::intern_load(string setupfilename)
 			}
 			else if (variable_name == "Profilebox")
 			{
-				string name;
-				sf::Vector2f position;
-				sf::Vector2u size;
-				unsigned int borderwidth, highlightwidth, ishighlighted;
-				uint32_t intplayercolor, inthighlightcolor;
-				ifs >> name >> position.x >> position.y >> size.x >> size.y
-					>> borderwidth >> highlightwidth
-					>> intplayercolor >> inthighlightcolor >> ishighlighted;
-				BoardComponent::ProfileBox profilebox{ name, position, size,
-					borderwidth, highlightwidth, sf::Color{intplayercolor},
-					sf::Color{inthighlightcolor} };
-				if (ishighlighted == 1)
-				{
-					profilebox.highlight();
-				}
+				BoardComponent::ProfileBox profilebox;
+				ifs >> profilebox;
 				_profile_box_list.push_back(profilebox);
 			}
 			else if (variable_name == "Grid_On")

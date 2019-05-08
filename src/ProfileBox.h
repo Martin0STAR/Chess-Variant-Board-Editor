@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <filesystem>
@@ -16,6 +17,9 @@ namespace BoardComponent
 			sf::Vector2u size,
 			unsigned int border1width, unsigned int border2width,
 			sf::Color border1color, sf::Color border2color);
+
+		friend std::istream & operator >> (std::istream &is, ProfileBox& profilebox);
+
 		std::string getName() const;
 		sf::Vector2f getPosition() const;
 

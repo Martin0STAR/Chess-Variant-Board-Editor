@@ -17,6 +17,24 @@ BoardComponent::ProfileBox::ProfileBox(
 	updateProfilePicture();
 }
 
+istream& BoardComponent::operator>> (istream &is, BoardComponent::ProfileBox& profilebox)
+{
+	unsigned int ishighlighted;
+	uint32_t intplayercolor, inthighlightcolor;
+	is >> profilebox._profilename >> profilebox._position.x >> profilebox._position.y
+		>> profilebox._size.x >> profilebox._size.y
+		>> profilebox._border1width >> profilebox._border2width
+		>> intplayercolor >> inthighlightcolor >> ishighlighted;
+	profilebox._border1color = sf::Color{ intplayercolor };
+	profilebox._border2color = sf::Color{ inthighlightcolor };
+	if (ishighlighted == 1)
+	{
+		profilebox.highlight();
+	}
+	profilebox.updateProfilePicture();
+	return is;
+}
+
 string BoardComponent::ProfileBox::getName() const
 {
 	return _profilename;
