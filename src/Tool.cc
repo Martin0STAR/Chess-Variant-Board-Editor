@@ -353,13 +353,6 @@ void Tool::drawAccessoryTool(
 	target.draw(a);
 }
 
-void Tool::draw(sf::RenderTarget & target)
-{
-	sf::Sprite sprite{ _rendertexture.getTexture() };
-	sprite.setPosition(_position);
-	target.draw(sprite);
-}
-
 string Tool::getName()
 {
 	return getName(_state);
@@ -383,4 +376,11 @@ string Tool::getFileName()
 string Tool::getFileName(Tool_State::Tool_State state)
 {
 	return "resources/icons/" + getName(state) + ".png";
+}
+
+void Tool::draw(sf::RenderTarget & target, sf::RenderStates states) const
+{
+	sf::Sprite sprite{ _rendertexture.getTexture() };
+	sprite.setPosition(_position);
+	target.draw(sprite, states);
 }

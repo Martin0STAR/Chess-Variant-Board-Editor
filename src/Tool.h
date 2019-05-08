@@ -25,7 +25,7 @@ namespace Tool_State
 	};
 }
 
-class Tool
+class Tool : public sf::Drawable
 {
 public:
 	Tool();
@@ -94,13 +94,13 @@ public:
 		sf::RenderTarget & target, sf::Vector2f position,
 		sf::Vector2u size,
 		unsigned int colorindex, std::string toolname);
-
-	void draw(sf::RenderTarget & target);
 private:
 	std::string getName();
 	std::string getName(Tool_State::Tool_State);
 	std::string getFileName();
 	std::string getFileName(Tool_State::Tool_State);
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::Vector2u _size;
 	Tool_State::Tool_State _state;

@@ -47,12 +47,12 @@ void ToolWindow::load(Board& board)
 	_lefttool.setColorIndex(0);
 	_lefttool.updateImage();
 	_lefttool.setPosition(getToolPosition(ToolWindowComponent::LEFTTOOL));
-	_lefttool.draw(_rendertexture);
+	_rendertexture.draw(_lefttool);
 	_righttool.setState(Tool_State::ADD_ARROW);
 	_righttool.setColorIndex(2);
 	_righttool.updateImage();
 	_righttool.setPosition(getToolPosition(ToolWindowComponent::RIGHTTOOL));
-	_righttool.draw(_rendertexture);
+	_rendertexture.draw(_righttool);
 	_rendertexture.display();
 }
 
@@ -147,7 +147,7 @@ bool ToolWindow::updateToolImage(bool islefttool)
 	{
 		_lefttool.updateImage();
 		_lefttool.setPosition(getToolPosition(ToolWindowComponent::LEFTTOOL));
-		_lefttool.draw(_rendertexture);
+		_rendertexture.draw(_lefttool);
 		_rendertexture.display();
 		return true;
 	}
@@ -155,7 +155,7 @@ bool ToolWindow::updateToolImage(bool islefttool)
 	{
 		_righttool.updateImage();
 		_righttool.setPosition(getToolPosition(ToolWindowComponent::RIGHTTOOL));
-		_righttool.draw(_rendertexture);
+		_rendertexture.draw(_righttool);
 		return true;
 	}
 }
