@@ -19,7 +19,7 @@
 #include "ProfileBox.h"
 #include "PieceColor.h"
 
-class Board
+class Board : public sf::Drawable
 {
 	public:
 		Board();
@@ -102,7 +102,6 @@ class Board
 		bool drawArrow(Arrow&);
 		bool drawColoredSquare(sf::Color, BoardComponent::Coord);
 		bool drawProfileBox(BoardComponent::ProfileBox);
-		void draw(sf::RenderTarget &);
 		
 		void save(std::string);
 		void newNameSave(std::string newname, std::string oldname);
@@ -126,6 +125,8 @@ class Board
 		bool isBottomRight(BoardComponent::Coord) const;
 		
 		bool drawCoordinates();
+
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 		unsigned int _numrows;
 		unsigned int _numcolumns;

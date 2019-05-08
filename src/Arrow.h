@@ -2,7 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "BoardCoord.h"
-class Arrow
+class Arrow : public sf::Drawable
 {
 public:
 	Arrow();
@@ -17,9 +17,10 @@ public:
 	void setPosition(sf::Vector2f frompos, sf::Vector2f topos);
 	void setColor(sf::Color color);
 	void move(const sf::Vector2f &);
-	void draw(sf::RenderTarget &);
 
 private:
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	bool _hide;
 	sf::Vector2f _to;
 	float _thickness;

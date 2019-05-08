@@ -318,7 +318,7 @@ void Tool::drawArrowTool(
 		position + sf::Vector2f{(float)size.x / 2.f, 0.f},
 		getArrowColor(colorindex)
 	};
-	arrow.draw(target);
+	target.draw(arrow);
 }
 
 void Tool::drawAddProfileBoxTool(

@@ -97,7 +97,7 @@ void Arrow::move(const sf::Vector2f& offset)
 	_head.move(offset);
 }
 
-void Arrow::draw(sf::RenderTarget & target)
+void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (!_hide)
 	{

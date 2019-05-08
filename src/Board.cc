@@ -778,7 +778,7 @@ bool Board::drawArrow(Arrow & arrow)
 	{
 		return false;
 	}
-	arrow.draw(_rendertexture);
+	_rendertexture.draw(arrow);
 	return true;
 }
 
@@ -812,21 +812,6 @@ bool Board::drawProfileBox(BoardComponent::ProfileBox profilebox)
 	}
 	profilebox.draw(_rendertexture);
 	return true;
-}
-
-void Board::draw(sf::RenderTarget & target)
-{
-	sf::Sprite sprite{ _rendertexture.getTexture() };
-	sprite.setScale(
-		((float)_displaysize.x) / _rendertexture.getSize().x,
-		((float)_displaysize.y) / _rendertexture.getSize().y
-	);
-	target.draw(sprite);
-
-	if (_showdragarrow)
-	{
-		_dragarrow.draw(target);
-	}
 }
 
 void Board::save(string name)
@@ -1223,4 +1208,19 @@ bool Board::drawCoordinates()
 	}
 	
 	return true;
+}
+
+void Board::draw(sf::RenderTarget & target, sf::RenderStates states) const
+{
+	sf::Sprite sprite{ _rendertexture.getTexture() };
+	sprite.setScale(
+		((float)_displaysize.x) / _rendertexture.getSize().x,
+		((float)_displaysize.y) / _rendertexture.getSize().y
+	);
+	target.draw(sprite, states);
+
+	if (_showdragarrow)
+	{
+		target.draw(_dragarrow, states);
+	}
 }
