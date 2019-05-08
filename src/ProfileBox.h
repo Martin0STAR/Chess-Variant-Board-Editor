@@ -7,7 +7,7 @@
 
 namespace BoardComponent
 {
-	class ProfileBox
+	class ProfileBox : public sf::Drawable
 	{
 	public:
 		ProfileBox();
@@ -44,10 +44,9 @@ namespace BoardComponent
 		bool setPosition(sf::Vector2f position);
 		bool unhighlight();
 		bool highlight();
-		void drawProfilePicture(sf::RenderTarget &);
-		void drawBorder(sf::RenderTarget &);
-		void drawHighlightBorder(sf::RenderTarget &);
-		void draw(sf::RenderTarget &);
+		void drawProfilePicture(sf::RenderTarget& target, sf::RenderStates states) const;
+		void drawBorder(sf::RenderTarget& target, sf::RenderStates states) const;
+		void drawHighlightBorder(sf::RenderTarget& target, sf::RenderStates states) const;
 		void move(const sf::Vector2f &);
 		bool saveProfileImage();
 		bool updateProfilePicture();
@@ -55,6 +54,9 @@ namespace BoardComponent
 
 		std::string getImageFileName();
 		std::string getNoAvatarFileName();
+
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 		std::string _profilename;
 		sf::Vector2f _position;
 		sf::Vector2u _size;

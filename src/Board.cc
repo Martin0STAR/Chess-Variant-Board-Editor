@@ -810,7 +810,7 @@ bool Board::drawProfileBox(BoardComponent::ProfileBox profilebox)
 	{
 		return false;
 	}
-	profilebox.draw(_rendertexture);
+	_rendertexture.draw(profilebox);
 	return true;
 }
 

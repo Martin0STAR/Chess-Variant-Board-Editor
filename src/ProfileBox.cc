@@ -203,7 +203,7 @@ bool BoardComponent::ProfileBox::highlight()
 	return true;
 }
 
-void BoardComponent::ProfileBox::drawProfilePicture(sf::RenderTarget & target)
+void BoardComponent::ProfileBox::drawProfilePicture(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	if (_profileimage.getSize().x == 0)
 	{
@@ -222,10 +222,10 @@ void BoardComponent::ProfileBox::drawProfilePicture(sf::RenderTarget & target)
 
 	sprite.setPosition(_position.x - profilewidth / 2.f, _position.y - profileheight / 2.f);
 	
-	target.draw(sprite);
+	target.draw(sprite, states);
 }
 
-void BoardComponent::ProfileBox::drawBorder(sf::RenderTarget & target)
+void BoardComponent::ProfileBox::drawBorder(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	sf::RectangleShape rect{ sf::Vector2f{
 		(float)(_size.x - 2 * _border2width),
@@ -235,10 +235,10 @@ void BoardComponent::ProfileBox::drawBorder(sf::RenderTarget & target)
 	rect.setOutlineThickness(-(float)_border1width);
 	rect.setPosition(getTopLeftPosition() + sf::Vector2f{
 		(float)_border2width, (float)_border2width });
-	target.draw(rect);
+	target.draw(rect, states);
 }
 
-void BoardComponent::ProfileBox::drawHighlightBorder(sf::RenderTarget & target)
+void BoardComponent::ProfileBox::drawHighlightBorder(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	sf::RectangleShape rect{ sf::Vector2f{
 		(float)_size.x,
@@ -247,17 +247,7 @@ void BoardComponent::ProfileBox::drawHighlightBorder(sf::RenderTarget & target)
 	rect.setOutlineColor(_border2color);
 	rect.setOutlineThickness(-(float)_border2width);
 	rect.setPosition(getTopLeftPosition());
-	target.draw(rect);
-}
-
-void BoardComponent::ProfileBox::draw(sf::RenderTarget & target)
-{
-	drawProfilePicture(target);
-	drawBorder(target);
-	if (_ishighlighted)
-	{
-		drawHighlightBorder(target);
-	}
+	target.draw(rect, states);
 }
 
 void BoardComponent::ProfileBox::move(const sf::Vector2f& offset)
@@ -334,4 +324,14 @@ string BoardComponent::ProfileBox::getImageFileName()
 string BoardComponent::ProfileBox::getNoAvatarFileName()
 {
 	return "resources\\profiles\\noavatar.png";
+}
+
+void BoardComponent::ProfileBox::draw(sf::RenderTarget & target, sf::RenderStates states) const
+{
+	drawProfilePicture(target, states);
+	drawBorder(target, states);
+	if (_ishighlighted)
+	{
+		drawHighlightBorder(target, states);
+	}
 }

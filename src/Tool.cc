@@ -337,7 +337,7 @@ void Tool::drawAddProfileBoxTool(
 		size, 3, 3,
 		_colortool.getBorderColor(colorindex),
 		sf::Color::Transparent };
-	profilebox.draw(target);
+	target.draw(profilebox);
 }
 
 void Tool::drawAccessoryTool(
