@@ -568,7 +568,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 		_mainwindow.clear(sf::Color{ 180, 180, 180, 255 });
 		_mainwindow.draw(_board);
 		_mainwindow.draw(_textbox);
-		_toolwindow.draw(_mainwindow);
+		_mainwindow.draw(_toolwindow);
 		_mainwindow.display();
 
 		_pieceselectwindow.clear();

@@ -53,6 +53,7 @@ void ToolWindow::load(Board& board)
 	_righttool.updateImage();
 	_righttool.setPosition(getToolPosition(ToolWindowComponent::RIGHTTOOL));
 	_righttool.draw(_rendertexture);
+	_rendertexture.display();
 }
 
 Tool& ToolWindow::getTool(bool isLeftTool)
@@ -113,6 +114,7 @@ void ToolWindow::setSaveIconSaved()
 		sf::Sprite sprite{ texture };
 		setPosition(sprite, ToolWindowComponent::SAVE);
 		_rendertexture.draw(sprite);
+		_rendertexture.display();
 	}
 }
 
@@ -135,6 +137,7 @@ void ToolWindow::setSaveIconNotSaved()
 		sf::Sprite sprite{ texture };
 		setPosition(sprite, ToolWindowComponent::SAVE);
 		_rendertexture.draw(sprite);
+		_rendertexture.display();
 	}
 }
 
@@ -145,6 +148,7 @@ bool ToolWindow::updateToolImage(bool islefttool)
 		_lefttool.updateImage();
 		_lefttool.setPosition(getToolPosition(ToolWindowComponent::LEFTTOOL));
 		_lefttool.draw(_rendertexture);
+		_rendertexture.display();
 		return true;
 	}
 	else
@@ -154,14 +158,6 @@ bool ToolWindow::updateToolImage(bool islefttool)
 		_righttool.draw(_rendertexture);
 		return true;
 	}
-}
-
-void ToolWindow::draw(sf::RenderTarget & target)
-{
-	_rendertexture.display();
-	sf::Sprite sprite{ _rendertexture.getTexture() };
-	sprite.setPosition(0.f, static_cast<float>(_boardheight));
-	target.draw(sprite);
 }
 
 string ToolWindow::getSaveIconFileNameSaved() const
@@ -260,6 +256,7 @@ bool ToolWindow::updateArrowLeftImage()
 	sf::Sprite sprite{ texture };
 	setPosition(sprite, ToolWindowComponent::ARROWLEFT);
 	_rendertexture.draw(sprite);
+	_rendertexture.display();
 	return true;
 }
 
@@ -274,6 +271,7 @@ bool ToolWindow::updateArrowRightImage()
 	sf::Sprite sprite{ texture };
 	setPosition(sprite, ToolWindowComponent::ARROWRIGHT);
 	_rendertexture.draw(sprite);
+	_rendertexture.display();
 	return true;
 }
 
@@ -288,6 +286,7 @@ bool ToolWindow::updateAddImage()
 	sf::Sprite sprite{ texture };
 	setPosition(sprite, ToolWindowComponent::ADDBOARD);
 	_rendertexture.draw(sprite);
+	_rendertexture.display();
 	return true;
 }
 
@@ -302,5 +301,13 @@ bool ToolWindow::updateDeleteImage()
 	sf::Sprite sprite{ texture };
 	setPosition(sprite, ToolWindowComponent::REMOVEBOARD);
 	_rendertexture.draw(sprite);
+	_rendertexture.display();
 	return true;
+}
+
+void ToolWindow::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	sf::Sprite sprite{ _rendertexture.getTexture() };
+	sprite.setPosition(0.f, static_cast<float>(_boardheight));
+	target.draw(sprite, states);
 }

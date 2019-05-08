@@ -20,7 +20,7 @@ namespace ToolWindowComponent
 	};
 }
 
-class ToolWindow
+class ToolWindow : public sf::Drawable
 {
 public:
 	ToolWindow();
@@ -36,7 +36,6 @@ public:
 	void setSaveIconNotSaved();
 	void swapTools();
 	bool updateToolImage(bool islefttool);
-	void draw(sf::RenderTarget &);
 	
 private:
 	
@@ -58,6 +57,7 @@ private:
 	bool updateArrowRightImage();
 	bool updateAddImage();
 	bool updateDeleteImage();
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	unsigned int _boardheight;
 	sf::Vector2u _squaresize;
