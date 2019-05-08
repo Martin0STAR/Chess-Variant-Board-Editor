@@ -29,6 +29,28 @@ bool Arrow::operator ==(const Arrow & rhs) const
 		_line.getFillColor() == rhs._line.getFillColor();
 }
 
+std::istream& operator>> (istream& is, Arrow & arrow)
+{
+	sf::Vector2f frompos, topos;
+	is >> frompos.x >> frompos.y >> topos.x >> topos.y;
+	arrow.setPosition(frompos, topos);
+	uint32_t intcolor;
+	is >> intcolor;
+	sf::Color color{ intcolor };
+	arrow.setColor(color);
+	return is;
+}
+
+std::ostream& operator<< (ostream& os, const Arrow & arrow)
+{
+	os << arrow.getFromCoord().x << " "
+		<< arrow.getFromCoord().y << " "
+		<< arrow.getToCoord().x << " "
+		<< arrow.getToCoord().y << " "
+		<< arrow.getColor().toInteger() << "]\n";
+	return os;
+}
+
 sf::Vector2f Arrow::getFromCoord() const
 {
 	return _line.getPosition();
@@ -60,6 +82,12 @@ void Arrow::setPosition(sf::Vector2f frompos, sf::Vector2f topos)
 		frompos.y + (sin(rotation))* (length - _headsize)
 	);
 	_hide = false;
+}
+
+void Arrow::setColor(sf::Color color)
+{
+	_line.setFillColor(color);
+	_head.setFillColor(color);
 }
 
 void Arrow::move(const sf::Vector2f& offset)

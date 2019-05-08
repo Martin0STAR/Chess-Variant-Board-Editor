@@ -9,10 +9,13 @@ public:
 	Arrow(sf::Vector2f frompos, sf::Vector2f topos, sf::Color color);
 	
 	bool operator ==(const Arrow &) const;
+	friend std::istream & operator >> (std::istream &is, Arrow& arrow);
+	friend std::ostream & operator << (std::ostream &os, const Arrow& arrow);
 	sf::Vector2f getFromCoord() const;
 	sf::Vector2f getToCoord() const;
 	sf::Color getColor() const;
 	void setPosition(sf::Vector2f frompos, sf::Vector2f topos);
+	void setColor(sf::Color color);
 	void move(const sf::Vector2f &);
 	void draw(sf::RenderTarget &);
 

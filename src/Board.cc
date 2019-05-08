@@ -882,12 +882,7 @@ void Board::save(string name)
 
 	for (auto arrow : _arrow_list)
 	{
-		ofs << "[Arrow "
-			<< arrow.getFromCoord().x << " "
-			<< arrow.getFromCoord().y << " "
-			<< arrow.getToCoord().x << " "
-			<< arrow.getToCoord().y << " "
-			<< arrow.getColor().toInteger() << "]\n";
+		ofs << "[Arrow " << arrow << "]\n";
 	}
 
 	if (_removed_square_list.size() != 0)
@@ -1063,12 +1058,8 @@ bool Board::intern_load(string setupfilename)
 			}
 			else if (variable_name == "Arrow")
 			{
-				float fx, fy, tx, ty;
-				ifs >> fx >> fy >> tx >> ty;
-				uint32_t intcolor;
-				ifs >> intcolor;
-				sf::Color color{ intcolor };
-				Arrow arrow{ sf::Vector2f{fx,fy}, sf::Vector2f{tx,ty}, color };
+				Arrow arrow;
+				ifs >> arrow;
 				_arrow_list.push_back(arrow);
 			}
 			else if (variable_name == "Removed_Squares")
