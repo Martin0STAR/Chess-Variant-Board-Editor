@@ -350,7 +350,7 @@ void Tool::drawAccessoryTool(
 		position + sf::Vector2f{
 			(float)size.x / 8, (float)size.y / 10 },
 			sf::Vector2u{ size.x * 3 / 4, size.y * 4 / 5 });
-	a.draw(target);
+	target.draw(a);
 }
 
 void Tool::draw(sf::RenderTarget & target)

@@ -510,7 +510,7 @@ void Piece::draw(sf::RenderTarget & target, const sf::Vector2f & position)
 		{
 			a.setPosition(piecesprite.getPosition(), pieceimage.getSize());
 			a.setScale(piecesprite.getScale());
-			a.draw(target);
+			target.draw(a);
 		}
 	}
 }

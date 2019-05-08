@@ -44,74 +44,22 @@ void PieceAccessory::setScale(sf::Vector2f scale)
 	_scale = scale;
 }
 
-void PieceAccessory::draw(sf::RenderTarget & target)
-{
-	if (isCharacter())
-	{
-		sf::Font font;
-		string filename = getFontFileName();
-		if (font.loadFromFile(filename))
-		{
-			sf::Text text;
-			text.setFont(font);
-			text.setCharacterSize(_charactersize);
-			text.setFillColor(_color);
-			text.setString(_name);
-			text.setStyle(sf::Text::Bold);
-			sf::FloatRect textrect = text.getLocalBounds();
-			text.setOrigin(textrect.left + textrect.width / 2.0f,
-				textrect.top + textrect.height / 2.0f);
-
-			sf::Vector2f position{
-				_pieceposition.x + (float)_piecesize.x / 2.f + _onpiecepositionadder.x,
-				_pieceposition.y + (float)_piecesize.y / 2.f + _onpiecepositionadder.y
-			};
-			text.setPosition(position);
-			target.draw(text);
-		}
-		else
-		{
-			cerr << "Font for character in accessory in file " << filename << " not found." << endl;
-		}
-	}
-	else
-	{
-		string filename = getFileName();
-		if (std::experimental::filesystem::exists(filename))
-		{
-			sf::Image image;
-			image.loadFromFile(getFileName());
-			sf::Texture texture;
-			texture.loadFromImage(image);
-			sf::Sprite sprite{ texture };
-			sprite.setPosition(getPosition(image.getSize()));
-			sprite.setScale(_scale);
-			sprite.setColor(_color);
-			target.draw(sprite);
-		}
-		else
-		{
-			cerr << "Accessory in file " << filename << " not found." << endl;
-		}
-	}
-}
-
-string PieceAccessory::getFileName()
+string PieceAccessory::getFileName() const
 {
 	return "resources/pieceaccessories/" + _name + ".png";
 }
 
-string PieceAccessory::getFontFileName()
+string PieceAccessory::getFontFileName() const
 {
 	return "resources\\fonts\\Raleway-SemiBold.ttf";
 }
 
-sf::Vector2f PieceAccessory::getPosition(sf::Vector2u size)
+sf::Vector2f PieceAccessory::getPosition(sf::Vector2u size) const
 {
 	return _pieceposition + getOnPiecePosition(size);
 }
 
-sf::Vector2f PieceAccessory::getOnPiecePosition(sf::Vector2u size)
+sf::Vector2f PieceAccessory::getOnPiecePosition(sf::Vector2u size) const
 {
 	float x;
 	float y;
@@ -166,5 +114,57 @@ void PieceAccessory::setOnPiecePosition(std::string name)
 		_onpiecepositionadder = sf::Vector2f{ 0.f, 0.f };
 		_orientationx = OrientationX::LEFT;
 		_orientationy = OrientationY::TOP;
+	}
+}
+
+void PieceAccessory::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	if (isCharacter())
+	{
+		sf::Font font;
+		string filename = getFontFileName();
+		if (font.loadFromFile(filename))
+		{
+			sf::Text text;
+			text.setFont(font);
+			text.setCharacterSize(_charactersize);
+			text.setFillColor(_color);
+			text.setString(_name);
+			text.setStyle(sf::Text::Bold);
+			sf::FloatRect textrect = text.getLocalBounds();
+			text.setOrigin(textrect.left + textrect.width / 2.0f,
+				textrect.top + textrect.height / 2.0f);
+
+			sf::Vector2f position{
+				_pieceposition.x + (float)_piecesize.x / 2.f + _onpiecepositionadder.x,
+				_pieceposition.y + (float)_piecesize.y / 2.f + _onpiecepositionadder.y
+			};
+			text.setPosition(position);
+			target.draw(text, states);
+		}
+		else
+		{
+			cerr << "Font for character in accessory in file " << filename << " not found." << endl;
+		}
+	}
+	else
+	{
+		string filename = getFileName();
+		if (std::experimental::filesystem::exists(filename))
+		{
+			sf::Image image;
+			image.loadFromFile(getFileName());
+			sf::Texture texture;
+			texture.loadFromImage(image);
+			sf::Sprite sprite{ texture };
+			sprite.setPosition(getPosition(image.getSize()));
+			sprite.setScale(_scale);
+			sprite.setColor(_color);
+			target.draw(sprite, states);
+		}
+		else
+		{
+			cerr << "Accessory in file " << filename << " not found." << endl;
+		}
 	}
 }

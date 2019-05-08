@@ -25,7 +25,7 @@ namespace OrientationY
 	};
 }
 
-class PieceAccessory
+class PieceAccessory : public sf::Drawable
 {
 public:
 	PieceAccessory();
@@ -41,14 +41,15 @@ public:
 	void setPosition(sf::Vector2f pieceposition, sf::Vector2u piecesize);
 	void setScale(sf::Vector2f scale);
 	
-	void draw(sf::RenderTarget & target);
 private:
-	std::string getFileName();
-	std::string getFontFileName();
-	sf::Vector2f getPosition(sf::Vector2u size);
-	sf::Vector2f getOnPiecePosition(sf::Vector2u size);
+	std::string getFileName() const;
+	std::string getFontFileName() const;
+	sf::Vector2f getPosition(sf::Vector2u size) const;
+	sf::Vector2f getOnPiecePosition(sf::Vector2u size) const;
 
 	void setOnPiecePosition(std::string name);
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	std::string _name;
 	sf::Color _color;
