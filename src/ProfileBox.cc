@@ -35,6 +35,35 @@ istream& BoardComponent::operator>> (istream &is, BoardComponent::ProfileBox& pr
 	return is;
 }
 
+ostream& BoardComponent::operator<< (ostream& os, const BoardComponent::ProfileBox& profilebox)
+{
+	if (profilebox.getName() == "")
+	{
+		os << "noavatar ";
+	}
+	else
+	{
+		os << profilebox.getName() << " ";
+	}
+	os << profilebox.getPosition().x << " "
+		<< profilebox.getPosition().y << " "
+		<< profilebox.getSize().x << " "
+		<< profilebox.getSize().y << " "
+		<< profilebox.getBorderWidth() << " "
+		<< profilebox.getHighlightWidth() << " "
+		<< profilebox.getPlayerColor().toInteger() << " "
+		<< profilebox.getHighlightColor().toInteger() << " ";
+	if (profilebox.isHighlighted())
+	{
+		os << "1";
+	}
+	else
+	{
+		os << "0";
+	}
+	return os;
+}
+
 string BoardComponent::ProfileBox::getName() const
 {
 	return _profilename;

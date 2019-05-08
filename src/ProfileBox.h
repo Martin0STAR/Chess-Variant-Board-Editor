@@ -19,6 +19,7 @@ namespace BoardComponent
 			sf::Color border1color, sf::Color border2color);
 
 		friend std::istream & operator >> (std::istream &is, ProfileBox& profilebox);
+		friend std::ostream & operator << (std::ostream &os, const ProfileBox& profilebox);
 
 		std::string getName() const;
 		sf::Vector2f getPosition() const;

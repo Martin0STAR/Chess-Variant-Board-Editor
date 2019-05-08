@@ -901,35 +901,10 @@ void Board::save(string name)
 		ofs << "]\n";
 	}
 
-	for (auto profile : _profile_box_list)
+	for (auto profilebox : _profile_box_list)
 	{
-		profile.saveProfileImage();
-		ofs << "[Profilebox ";
-		if (profile.getName() == "")
-		{
-			ofs << "- ";
-		}
-		else
-		{
-			ofs << profile.getName() << " ";
-		}
-		ofs << profile.getPosition().x << " "
-			<< profile.getPosition().y << " "
-			<< profile.getSize().x << " "
-			<< profile.getSize().y << " "
-			<< profile.getBorderWidth() << " "
-			<< profile.getHighlightWidth() << " "
-			<< profile.getPlayerColor().toInteger() << " "
-			<< profile.getHighlightColor().toInteger() << " ";
-		if (profile.isHighlighted())
-		{
-			ofs << "1";
-		}
-		else
-		{
-			ofs << "0";
-		}
-		ofs << "]\n";
+		profilebox.saveProfileImage();
+		ofs << "[Profilebox " << profilebox << "]\n";
 	}
 }
 
