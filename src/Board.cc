@@ -706,8 +706,8 @@ bool Board::drawEmptyBoard()
 		true,
 		true
 	};
-
-	board.draw(_rendertexture, sf::Vector2f{ 0.f, 0.f });
+	board.setPosition(sf::Vector2f{ 0.f, 0.f });
+	_rendertexture.draw(board);
 	return true;
 }
 
@@ -727,8 +727,8 @@ bool Board::drawEmptySquare(BoardComponent::Coord coord)
 		isBottomLeft(coord),
 		isBottomRight(coord)
 	};
-	square.draw(_rendertexture, getPosition(coord));
-
+	square.setPosition(getPosition(coord));
+	_rendertexture.draw(square);
 	return true;
 }
 
@@ -798,8 +798,8 @@ bool Board::drawColoredSquare(sf::Color color, BoardComponent::Coord coord)
 		isBottomLeft(coord),
 		isBottomRight(coord)
 	};
-	square.draw(_rendertexture, getPosition(coord));
-
+	square.setPosition(getPosition(coord));
+	_rendertexture.draw(square);
 	return true;
 }
 

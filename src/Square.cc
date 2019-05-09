@@ -8,28 +8,32 @@ BoardComponent::Square::Square()
 BoardComponent::Square::Square(sf::Color color, sf::Vector2u size,
 	unsigned int cornersize, bool istopleft, bool istopright,
 	bool isbottomleft, bool isbottomright)
+	: _size{ size }, _cornersize{cornersize},
+	_istopleft{istopleft}, _istopright{istopright},
+	_isbottomleft{ isbottomleft }, _isbottomright{ isbottomright }
 {
-	_color = color;
-	_size = size;
-	_cornersize = cornersize;
-	_istopleft = istopleft;
-	_istopright = istopright;
-	_isbottomleft = isbottomleft;
-	_isbottomright = isbottomright;
+	_shape.setFillColor(color);
+	updateShape();
 }
 
-void BoardComponent::Square::draw(sf::RenderTarget & target, const sf::Vector2f & position)
+void BoardComponent::Square::setPosition(sf::Vector2f position)
 {
-	if (!_istopleft && !_istopright && !_isbottomleft && !_isbottomright)
+	_shape.setPosition(position);
+}
+
+bool BoardComponent::Square::updateShape()
+{
+	if (!_istopleft && !_istopright && !_isbottomleft && !_isbottomright
+		|| _cornersize == 0)
 	{
-		sf::RectangleShape square{sf::Vector2f{(float)_size.x,(float)_size.y}};
-		square.setFillColor(_color);
-		square.setPosition(position);
-		target.draw(square);
-		return;
+		_shape.setPointCount(4);
+		_shape.setPoint(0, sf::Vector2f{ 0.f,0.f });
+		_shape.setPoint(1, sf::Vector2f{ (float)_size.x, 0.f });
+		_shape.setPoint(2, sf::Vector2f{ (float)_size.x, (float)_size.y });
+		_shape.setPoint(3, sf::Vector2f{ 0.f, (float)_size.y });
+		return true;
 	}
 
-	
 	const unsigned int precision{ _cornersize };
 	size_t pointcount{ 12 };
 	if (_istopleft)
@@ -48,30 +52,29 @@ void BoardComponent::Square::draw(sf::RenderTarget & target, const sf::Vector2f 
 	{
 		pointcount += precision - 2;
 	}
-	sf::ConvexShape square;
 	size_t index{ 0 };
-	square.setPointCount(pointcount);
-	square.setPoint(index, sf::Vector2f(0.f, (float)_cornersize));
+	_shape.setPointCount(pointcount);
+	_shape.setPoint(index, sf::Vector2f(0.f, (float)_cornersize));
 	index++;
 	if (_istopleft)
 	{
 		for (unsigned int i{ 1 }; i < precision; i++)
 		{
-			float radious = ((float)i/(float)precision) * 3.14f / 2.f;
+			float radious = ((float)i / (float)precision) * 3.14f / 2.f;
 			float xpos = (1 - cos(radious)) * (float)_cornersize;
 			float ypos = (1 - sin(radious)) * (float)_cornersize;
-			square.setPoint(index, sf::Vector2f{ xpos, ypos });
+			_shape.setPoint(index, sf::Vector2f{ xpos, ypos });
 			index++;
 		}
 	}
 	else
 	{
-		square.setPoint(index, sf::Vector2f{ 0.f, 0.f });
+		_shape.setPoint(index, sf::Vector2f{ 0.f, 0.f });
 		index++;
 	}
-	square.setPoint(index, sf::Vector2f{ (float)_cornersize, 0.f });
+	_shape.setPoint(index, sf::Vector2f{ (float)_cornersize, 0.f });
 	index++;
-	square.setPoint(index, sf::Vector2f{ (float)(_size.x - _cornersize), 0.f });
+	_shape.setPoint(index, sf::Vector2f{ (float)(_size.x - _cornersize), 0.f });
 	index++;
 	if (_istopright)
 	{
@@ -80,18 +83,18 @@ void BoardComponent::Square::draw(sf::RenderTarget & target, const sf::Vector2f 
 			float radious = ((float)i / (float)precision) * 3.14f / 2.f;
 			float xpos = (float)_size.x - (1 - sin(radious)) * (float)_cornersize;
 			float ypos = (1 - cos(radious)) * (float)_cornersize;
-			square.setPoint(index, sf::Vector2f{ xpos, ypos });
+			_shape.setPoint(index, sf::Vector2f{ xpos, ypos });
 			index++;
 		}
 	}
 	else
 	{
-		square.setPoint(index, sf::Vector2f{ (float)_size.x, 0.f });
+		_shape.setPoint(index, sf::Vector2f{ (float)_size.x, 0.f });
 		index++;
 	}
-	square.setPoint(index, sf::Vector2f{ (float)_size.x, (float)_cornersize });
+	_shape.setPoint(index, sf::Vector2f{ (float)_size.x, (float)_cornersize });
 	index++;
-	square.setPoint(index, sf::Vector2f{ (float)_size.x, (float)(_size.y - _cornersize) });
+	_shape.setPoint(index, sf::Vector2f{ (float)_size.x, (float)(_size.y - _cornersize) });
 	index++;
 	if (_isbottomright)
 	{
@@ -100,18 +103,18 @@ void BoardComponent::Square::draw(sf::RenderTarget & target, const sf::Vector2f 
 			float radious = ((float)i / (float)precision) * 3.14f / 2.f;
 			float xpos = (float)_size.x - (1 - cos(radious)) * (float)_cornersize;
 			float ypos = _size.y - (1 - sin(radious)) * (float)_cornersize;
-			square.setPoint(index, sf::Vector2f{ xpos, ypos });
+			_shape.setPoint(index, sf::Vector2f{ xpos, ypos });
 			index++;
 		}
 	}
 	else
 	{
-		square.setPoint(index, sf::Vector2f{ (float)_size.x, (float)_size.y });
+		_shape.setPoint(index, sf::Vector2f{ (float)_size.x, (float)_size.y });
 		index++;
 	}
-	square.setPoint(index, sf::Vector2f{ (float)(_size.x - _cornersize), (float)_size.y });
+	_shape.setPoint(index, sf::Vector2f{ (float)(_size.x - _cornersize), (float)_size.y });
 	index++;
-	square.setPoint(index, sf::Vector2f{ (float)_cornersize, (float)_size.y });
+	_shape.setPoint(index, sf::Vector2f{ (float)_cornersize, (float)_size.y });
 	index++;
 
 	if (_isbottomleft)
@@ -119,20 +122,22 @@ void BoardComponent::Square::draw(sf::RenderTarget & target, const sf::Vector2f 
 		for (unsigned int i{ 1 }; i < precision; i++)
 		{
 			float radious = ((float)i / (float)precision) * 3.14f / 2.f;
-			float xpos =  (1 - sin(radious)) * (float)_cornersize;
+			float xpos = (1 - sin(radious)) * (float)_cornersize;
 			float ypos = _size.y - (1 - cos(radious)) * (float)_cornersize;
-			square.setPoint(index, sf::Vector2f{ xpos, ypos });
+			_shape.setPoint(index, sf::Vector2f{ xpos, ypos });
 			index++;
 		}
 	}
 	else
 	{
-		square.setPoint(index, sf::Vector2f{ 0.f, (float)_size.y });
+		_shape.setPoint(index, sf::Vector2f{ 0.f, (float)_size.y });
 		index++;
 	}
-	square.setPoint(index, sf::Vector2f{ 0.f, (float)(_size.y - _cornersize) });
+	_shape.setPoint(index, sf::Vector2f{ 0.f, (float)(_size.y - _cornersize) });
+	return true;
+}
 
-	square.setFillColor(_color);
-	square.setPosition(position);
-	target.draw(square);
+void BoardComponent::Square::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(_shape, states);
 }

@@ -4,21 +4,23 @@
 
 namespace BoardComponent
 {
-	class Square
+	class Square : public sf::Drawable
 	{
 	public:
 		Square();
 		Square(sf::Color color, sf::Vector2u size,
 			unsigned int cornersize, bool istopleft, bool istopright,
 			bool isbottomleft, bool isbottomright);
-		void draw(sf::RenderTarget & target, const sf::Vector2f & position);
+		void setPosition(sf::Vector2f position);
+		bool updateShape();
 	private:
-		sf::Color _color;
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 		sf::Vector2u _size;
 		unsigned int _cornersize;
 		bool _istopleft;
 		bool _istopright;
 		bool _isbottomleft;
 		bool _isbottomright;
+		sf::ConvexShape _shape;
 	};
 }
