@@ -347,7 +347,8 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 			Piece piece = tool.getPieceBrush();
 			piece.invertColors();
 			piece.setSize(_squaresize);
-			piece.draw(_rendertexture, position);
+			piece.setPosition(position);
+			_rendertexture.draw(piece);
 			return;
 		}
 		case Piece_Tool::ACCESSORY_STAR6POINT:
@@ -420,7 +421,8 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 			default:
 				Piece piece = getPieceFromId(tool, x, y);
 				piece.setSize(_squaresize);
-				piece.draw(_rendertexture, position);
+				piece.setPosition(position);
+				_rendertexture.draw(piece);
 				return;
 			}
 		}
@@ -430,7 +432,8 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 			if (piece.exists())
 			{
 				piece.setSize(_squaresize);
-				piece.draw(_rendertexture, position);
+				piece.setPosition(position);
+				_rendertexture.draw(piece);
 			}
 			return;
 		}

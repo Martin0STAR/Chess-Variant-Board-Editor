@@ -766,8 +766,8 @@ bool Board::drawPiece(Piece & piece, BoardComponent::Coord coord)
 	}
 	piece.setWidth(_squaresize.x);
 	piece.setHeight(_squaresize.y);
-	piece.draw(_rendertexture, getPosition(coord));
-
+	piece.setPosition(getPosition(coord));
+	_rendertexture.draw(piece);
 	return true;
 }
 

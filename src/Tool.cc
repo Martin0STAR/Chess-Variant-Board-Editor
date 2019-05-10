@@ -230,7 +230,8 @@ void Tool::updateImage()
 		_rendertexture.clear(_squarecolor);
 		_piecebrush.setWidth(_size.x);
 		_piecebrush.setHeight(_size.y);
-		_piecebrush.draw(_rendertexture, sf::Vector2f{ 0.f, 0.f });
+		_piecebrush.setPosition(sf::Vector2f{ 0.f, 0.f });
+		_rendertexture.draw(_piecebrush);
 		break;
 	}
 	case Tool_State::SET_SQUARE_COLOR:

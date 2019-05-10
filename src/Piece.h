@@ -4,7 +4,7 @@
 #include <filesystem>
 #include "PieceColor.h"
 #include "PieceAccessory.h"
-class Piece
+class Piece : public sf::Drawable
 {
 public:
 	Piece();
@@ -42,6 +42,7 @@ public:
 	void setWidth(unsigned int width);
 	void setHeight(unsigned int height);
 	void setSize(sf::Vector2u size);
+	void setPosition(sf::Vector2f position);
 	bool addPieceOnTop(Piece);
 	bool addAccessory(std::string accessoryname, sf::Color color);
 	bool removePieceOnTop();
@@ -49,8 +50,6 @@ public:
 	bool flipHorizontally();
 	bool flipVertically();
 	bool invertColors();
-
-	void draw(sf::RenderTarget & target, const sf::Vector2f & position);
 
 	bool updateImage();
 private:
@@ -60,10 +59,15 @@ private:
 	void invertColor(sf::Image & image) const;
 	void offsetColor(sf::Image & image) const;
 
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	std::string _style;
 	std::string _name;
 	PieceColor _color;
+
 	sf::Vector2u _drawareasize;
+	sf::Vector2f _drawareaposition;
+	sf::Vector2f _inareaposition;
 	
 	bool _iscarried;
 	bool _ismirrored;

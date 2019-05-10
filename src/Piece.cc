@@ -358,6 +358,38 @@ void Piece::setSize(sf::Vector2u size)
 	_drawareasize = size;
 }
 
+void Piece::setPosition(sf::Vector2f position)
+{
+	_drawareaposition = position;
+
+	int xpos, ypos;
+	if (isCarrier())
+	{
+		xpos = (int)(((float)_drawareasize.x - _pieceimage.getSize().x) / 2.f);
+		ypos = (int)((float)_drawareasize.y / 2.f);
+	}
+	else if (isCarried())
+	{
+		xpos = (int)(((float)_drawareasize.x - _pieceimage.getSize().x) / 2.f);
+		ypos = (int)((float)_drawareasize.y / 2.f - _pieceimage.getSize().y);
+	}
+	else
+	{
+		xpos = (int)((_drawareasize.x - _pieceimage.getSize().x) / 2);
+		ypos = (int)((_drawareasize.y - _pieceimage.getSize().y) / 2);
+	}
+	_inareaposition = sf::Vector2f{ (float)xpos, (float)ypos };
+
+	if (isCarrying())
+	{
+		_pieceontop->setPosition(position);
+	}
+	for (auto &a : _accessories)
+	{
+		a.setPosition(_drawareaposition + _inareaposition, _pieceimage.getSize());
+	}
+}
+
 void Piece::setHeight(unsigned int height)
 {
 	_drawareasize.y = height;
@@ -403,7 +435,9 @@ bool Piece::addAccessory(std::string accessoryname, sf::Color color)
 		{
 			_accessories.erase(it2);
 		}
-		_accessories.push_back(PieceAccessory{ accessoryname, color });
+		PieceAccessory pieceaccessory{ accessoryname, color };
+		pieceaccessory.setPosition(_drawareaposition, _pieceimage.getSize());
+		_accessories.push_back(pieceaccessory);
 	}
 	else
 	{
@@ -442,75 +476,6 @@ bool Piece::invertColors()
 {
 	_isinvertedcolors = !_isinvertedcolors;
 	return true;
-}
-
-void Piece::draw(sf::RenderTarget & target, const sf::Vector2f & position)
-{
-	sf::Image drawpieceimage{ _pieceimage };
-	if (isCarrying())
-	{
-		_pieceontop->draw(target, position);
-	}
-	if (isInvertedColors())
-	{
-		invertColor(drawpieceimage);
-	}
-	offsetColor(drawpieceimage);
-	if (isMirrored())
-	{
-		drawpieceimage.flipHorizontally();
-	}
-	if (isUpsideDown())
-	{
-		drawpieceimage.flipVertically();
-	}
-
-	sf::Texture piecetexture;
-	piecetexture.loadFromImage(drawpieceimage);
-	piecetexture.setSmooth(false);
-	sf::Sprite piecesprite{ piecetexture };
-
-	if (isCarrier())
-	{
-		piecesprite.setPosition(
-			position + sf::Vector2f{
-				((float)_drawareasize.x - drawpieceimage.getSize().x) / 2.f,
-				(float)_drawareasize.y / 2.f
-			}
-		);
-	}
-	else if (isCarried())
-	{
-		float piecewidth = (float)drawpieceimage.getSize().x;
-		float pieceheight = (float)drawpieceimage.getSize().y;
-		if ((float)drawpieceimage.getSize().y > (float)_drawareasize.y / 2.f)
-		{
-			piecesprite.setScale(0.5f, 0.5f);
-			piecewidth = piecewidth / 2.f;
-			pieceheight = pieceheight / 2.f;
-		}
-		piecesprite.setPosition(
-			position + sf::Vector2f{
-				((float)_drawareasize.x - piecewidth) / 2,
-				(float)_drawareasize.y / 2.f - pieceheight
-			}
-		);
-	}
-	else
-	{
-		int xpos = (_drawareasize.x - drawpieceimage.getSize().x) / 2;
-		int ypos = (_drawareasize.y - drawpieceimage.getSize().y) / 2;
-		piecesprite.setPosition(
-			position + sf::Vector2f{(float)xpos, (float)ypos});
-	}
-	piecesprite.setColor(_color.multiplier);
-	target.draw(piecesprite);
-	for (auto &a : _accessories)
-	{
-		a.setPosition(piecesprite.getPosition(), drawpieceimage.getSize());
-		a.setScale(piecesprite.getScale());
-		target.draw(a);
-	}
 }
 
 bool Piece::updateImage()
@@ -564,5 +529,60 @@ void Piece::offsetColor(sf::Image & image) const
 				y,
 				image.getPixel(x, y) + _color.adder - _color.subtracter);
 		}
+	}
+}
+
+void Piece::draw(sf::RenderTarget & target, sf::RenderStates states) const
+{
+	sf::Image drawpieceimage{ _pieceimage };
+	if (isCarrying())
+	{
+		_pieceontop->draw(target, states);
+	}
+	if (isInvertedColors())
+	{
+		invertColor(drawpieceimage);
+	}
+	offsetColor(drawpieceimage);
+	if (isMirrored())
+	{
+		drawpieceimage.flipHorizontally();
+	}
+	if (isUpsideDown())
+	{
+		drawpieceimage.flipVertically();
+	}
+
+	sf::Texture piecetexture;
+	piecetexture.loadFromImage(drawpieceimage);
+	piecetexture.setSmooth(false);
+	sf::Sprite piecesprite{ piecetexture };
+
+	if (isCarried())
+	{
+		float piecewidth = (float)drawpieceimage.getSize().x;
+		float pieceheight = (float)drawpieceimage.getSize().y;
+		if ((float)drawpieceimage.getSize().y > (float)_drawareasize.y / 2.f)
+		{
+			piecesprite.setScale(0.5f, 0.5f);
+			piecewidth = piecewidth / 2.f;
+			pieceheight = pieceheight / 2.f;
+		}
+		piecesprite.setPosition(
+			_drawareaposition + sf::Vector2f{
+				((float)_drawareasize.x - piecewidth) / 2,
+				(float)_drawareasize.y / 2.f - pieceheight
+			}
+		);
+	}
+	else
+	{
+		piecesprite.setPosition(_drawareaposition + _inareaposition);
+	}
+	piecesprite.setColor(_color.multiplier);
+	target.draw(piecesprite, states);
+	for (auto &a : _accessories)
+	{
+		target.draw(a, states);
 	}
 }
