@@ -52,7 +52,9 @@ public:
 
 	void draw(sf::RenderTarget & target, const sf::Vector2f & position);
 
+	bool updateImage();
 private:
+
 	std::string getFileName() const;
 
 	void invertColor(sf::Image & image) const;
@@ -61,12 +63,15 @@ private:
 	std::string _style;
 	std::string _name;
 	PieceColor _color;
-	sf::Vector2u _size;
+	sf::Vector2u _drawareasize;
 	
 	bool _iscarried;
 	bool _ismirrored;
 	bool _isupsidedown;
 	bool _isinvertedcolors;
 	Piece* _pieceontop = nullptr;
+
+	sf::Image _pieceimage;
+
 	std::vector<PieceAccessory> _accessories;
 };

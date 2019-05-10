@@ -427,8 +427,11 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 		else
 		{
 			Piece piece = getPieceFromId(tool, x, y);
-			piece.setSize(_squaresize);
-			piece.draw(_rendertexture, position);
+			if (piece.exists())
+			{
+				piece.setSize(_squaresize);
+				piece.draw(_rendertexture, position);
+			}
 			return;
 		}
 	}

@@ -20,6 +20,7 @@ _profilehighlightcolor{ 255, 255, 255, 255 }
 	_piecebrush.setStyle("bulldog");
 	_piecebrush.setColor(_colortool.getPieceColor());
 	_piecebrush.setName("pawn");
+	_piecebrush.updateImage();
 	_squarecolor = squarecolor;
 	_boardcolor = boardcolor;
 	setState(state);
@@ -181,6 +182,7 @@ void Tool::setColorIndex(unsigned int index)
 {
 	_colortool.setIndex(index);
 	_piecebrush.setColor(_colortool.getPieceColor());
+	_piecebrush.updateImage();
 	updateImage();
 }
 

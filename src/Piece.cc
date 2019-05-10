@@ -30,6 +30,7 @@ Piece::Piece(string style, string name, PieceColor color, string flags = "")
 			_isinvertedcolors = true;
 		}
 	}
+	updateImage();
 }
 
 Piece::Piece(const Piece & piece)
@@ -52,6 +53,8 @@ Piece::Piece(const Piece & piece)
 	{
 		_accessories.push_back(a);
 	}
+	//_pieceimage = piece._pieceimage;
+	updateImage();
 }
 
 Piece::~Piece()
@@ -81,6 +84,8 @@ Piece& Piece::operator =(const Piece& rhs)
 	{
 		removePieceOnTop();
 	}
+	//_pieceimage = rhs._pieceimage;
+	updateImage();
 	return *this;
 }
 
@@ -164,6 +169,7 @@ istream & operator >> (istream & is, Piece & piece)
 		is >> pieceontop;
 		piece.addPieceOnTop(pieceontop);
 	}
+	piece.updateImage();
 	return is;
 }
 
@@ -342,7 +348,7 @@ void Piece::setColorMultiplier(sf::Color color)
 
 void Piece::setWidth(unsigned int width)
 {
-	_size.x = width;
+	_drawareasize.x = width;
 	if (isCarrying())
 	{
 		_pieceontop->setWidth(width);
@@ -351,12 +357,12 @@ void Piece::setWidth(unsigned int width)
 
 void Piece::setSize(sf::Vector2u size)
 {
-	_size = size;
+	_drawareasize = size;
 }
 
 void Piece::setHeight(unsigned int height)
 {
-	_size.y = height;
+	_drawareasize.y = height;
 	if (isCarrying())
 	{
 		_pieceontop->setHeight(height);
@@ -442,76 +448,83 @@ bool Piece::invertColors()
 
 void Piece::draw(sf::RenderTarget & target, const sf::Vector2f & position)
 {
+	sf::Image drawpieceimage{ _pieceimage };
 	if (isCarrying())
 	{
 		_pieceontop->draw(target, position);
 	}
-
-	string filename = getFileName();
-	if (std::experimental::filesystem::exists(filename))
+	if (isInvertedColors())
 	{
-		sf::Image pieceimage;
-		pieceimage.loadFromFile(filename);
-		if (isInvertedColors())
-		{
-			invertColor(pieceimage);
-		}
-		offsetColor(pieceimage);
-		if (isMirrored())
-		{
-			pieceimage.flipHorizontally();
-		}
-		if (isUpsideDown())
-		{
-			pieceimage.flipVertically();
-		}
+		invertColor(drawpieceimage);
+	}
+	offsetColor(drawpieceimage);
+	if (isMirrored())
+	{
+		drawpieceimage.flipHorizontally();
+	}
+	if (isUpsideDown())
+	{
+		drawpieceimage.flipVertically();
+	}
 
-		sf::Texture piecetexture;
-		piecetexture.loadFromImage(pieceimage);
-		piecetexture.setSmooth(false);
-		sf::Sprite piecesprite{ piecetexture };
+	sf::Texture piecetexture;
+	piecetexture.loadFromImage(drawpieceimage);
+	piecetexture.setSmooth(false);
+	sf::Sprite piecesprite{ piecetexture };
 
-		if (isCarrier())
-		{
-			piecesprite.setPosition(
-				position + sf::Vector2f{
-					((float)_size.x - pieceimage.getSize().x) / 2.f,
-					(float)_size.y / 2.f
-				}
-			);
-		}
-		else if (isCarried())
-		{
-			float piecewidth = (float)pieceimage.getSize().x;
-			float pieceheight = (float)pieceimage.getSize().y;
-			if ((float)pieceimage.getSize().y > (float)_size.y / 2.f)
-			{
-				piecesprite.setScale(0.5f, 0.5f);
-				piecewidth = piecewidth / 2.f;
-				pieceheight = pieceheight / 2.f;
+	if (isCarrier())
+	{
+		piecesprite.setPosition(
+			position + sf::Vector2f{
+				((float)_drawareasize.x - drawpieceimage.getSize().x) / 2.f,
+				(float)_drawareasize.y / 2.f
 			}
-			piecesprite.setPosition(
-				position + sf::Vector2f{
-					((float)_size.x - piecewidth) / 2,
-					(float)_size.y / 2.f - pieceheight
-				}
-			);
-		}
-		else
+		);
+	}
+	else if (isCarried())
+	{
+		float piecewidth = (float)drawpieceimage.getSize().x;
+		float pieceheight = (float)drawpieceimage.getSize().y;
+		if ((float)drawpieceimage.getSize().y > (float)_drawareasize.y / 2.f)
 		{
-			int xpos = (_size.x - pieceimage.getSize().x) / 2;
-			int ypos = (_size.y - pieceimage.getSize().y) / 2;
-			piecesprite.setPosition(
-				position + sf::Vector2f{(float)xpos, (float)ypos});
+			piecesprite.setScale(0.5f, 0.5f);
+			piecewidth = piecewidth / 2.f;
+			pieceheight = pieceheight / 2.f;
 		}
-		piecesprite.setColor(_color.multiplier);
-		target.draw(piecesprite);
-		for (auto &a : _accessories)
-		{
-			a.setPosition(piecesprite.getPosition(), pieceimage.getSize());
-			a.setScale(piecesprite.getScale());
-			target.draw(a);
-		}
+		piecesprite.setPosition(
+			position + sf::Vector2f{
+				((float)_drawareasize.x - piecewidth) / 2,
+				(float)_drawareasize.y / 2.f - pieceheight
+			}
+		);
+	}
+	else
+	{
+		int xpos = (_drawareasize.x - drawpieceimage.getSize().x) / 2;
+		int ypos = (_drawareasize.y - drawpieceimage.getSize().y) / 2;
+		piecesprite.setPosition(
+			position + sf::Vector2f{(float)xpos, (float)ypos});
+	}
+	piecesprite.setColor(_color.multiplier);
+	target.draw(piecesprite);
+	for (auto &a : _accessories)
+	{
+		a.setPosition(piecesprite.getPosition(), drawpieceimage.getSize());
+		a.setScale(piecesprite.getScale());
+		target.draw(a);
+	}
+}
+
+bool Piece::updateImage()
+{
+	if (std::experimental::filesystem::exists(getFileName()))
+	{
+		_pieceimage.loadFromFile(getFileName());
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
