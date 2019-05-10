@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <array>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include "Board.h"
 #include "Tool.h"
@@ -36,35 +37,37 @@ class PieceSelectWindow
 {
 public:
 	PieceSelectWindow();
-	PieceSelectWindow(Board &, Tool&);
-	void load(Board &, Tool &);
+	PieceSelectWindow(Board& board, Tool& tool);
+	void load(Board& board, Tool& tool);
+	bool loadPieces(std::string type);
 	bool isOpen();
-	void update(Board &, Tool &);
-	void open(sf::RenderWindow &);
+	void update(Board& board, Tool& tool);
+	void open(sf::RenderWindow& window);
 	void close();
 	void clear();
 	void draw();
 	void display();
 	
-	bool pollEvent(sf::Event &);
+	bool pollEvent(sf::Event& event);
 	Window_Action handleEvent(sf::Event, Board &, Tool &, Tool &, Keyboardhandler &);
 	
 	private:
-	PieceColor getColorFromId(Tool &, int, int) const;
-	std::string getTypeFromId(Tool &, int, int) const;
-	Piece getPieceFromId(Tool &, int, int) const;
-	Piece_Tool::Piece_Tool getPieceToolFromId(unsigned int);
-	Piece_Tool::Piece_Tool getPieceToolFromId(int, int);
-	std::string getToolName(Piece_Tool::Piece_Tool) const;
-	std::string getToolName(int) const;
-	std::string getToolName(int, int) const;
-	std::string getToolFileName(int) const;
+	PieceColor getColorFromId(Tool& tool, int x, int y) const;
+	std::string getTypeFromId(Tool& tool, int x, int y) const;
+	Piece getPieceFromId(Tool& tool, int x, int y) const;
+	Piece_Tool::Piece_Tool getPieceToolFromId(unsigned int index);
+	Piece_Tool::Piece_Tool getPieceToolFromId(int x, int y);
+	std::string getToolName(Piece_Tool::Piece_Tool piece_tool) const;
+	std::string getToolName(int index) const;
+	std::string getToolName(int x, int y) const;
+	std::string getToolFileName(int index) const;
 	void drawTool(Tool & tool, unsigned int x, unsigned int y);
 
 	sf::Color getSquareColor(unsigned int x, unsigned int y) const;
 	unsigned int getToolIndex(unsigned int x, unsigned int y) const;
 	sf::RectangleShape getEmptySquare(unsigned int x, unsigned int y) const;
 
+	std::string getPieceListFileName(std::string type);
 
 	unsigned int _numcolumns;
 	unsigned int _numrows;
@@ -75,40 +78,7 @@ public:
 	sf::Vector2u _squaresize;
 	sf::Color _backgroundcolor;
 
-	std::array<std::string, 34> _pieces
-	{
-		"pawn",
-		"knight",
-		"bishop",
-		"rook",
-		"queen",
-		"king",
-		"guard",
-		"witch",
-		"bulldog",
-		"dwarf",
-		"hunter",
-		"timethief",
-		"zombie",
-		"wirewolf",
-		"archbishop",
-		"siege_tower",
-		"angel",
-		"peasant",
-		"ball",
-		"nazgul",
-		"monkey",
-		"time_traveller",
-		"uniqator",
-		"lumberjack",
-		"caveman",
-		"harpy",
-		"xiangqi_cannon",
-		"tree",
-		"wild_goat",
-		"step_rock",
-		"step_rook"
-	};
+	std::vector<std::string> _pieces;
 
 	std::map<Piece_Tool::Piece_Tool, std::string> _toolnames
 	{

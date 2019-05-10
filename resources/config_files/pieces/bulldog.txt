@@ -1,0 +1,3 @@
+[Width 57]
+[Height 57]
+[Names pawn knight bishop rook queen king guard witch bulldog dwarf hunter timethief zombie wirewolf archbishop siege_tower angel peasant ball nazgul monkey time_traveller uniqator lumberjack caveman harpy xiangqi_cannon tree wild_goat step_rock step_rook]

@@ -4,10 +4,12 @@ using namespace std;
 
 PieceSelectWindow::PieceSelectWindow()
 {
+	loadPieces("bulldog");
 	//must run load(board, toolwindow) to work
 }
 
 PieceSelectWindow::PieceSelectWindow(Board & board, Tool & tool)
+	:PieceSelectWindow::PieceSelectWindow{}
 {
 	load(board, tool);
 }
@@ -28,7 +30,53 @@ void PieceSelectWindow::load(Board & board, Tool & tool)
 	_rendertexture.create(_squaresize.x*_numcolumns, _squaresize.y*_numrows);
 
 	update(board, tool);
+}
+
+bool PieceSelectWindow::loadPieces(std::string type)
+{
+	_pieces.clear();
+	ifstream ifs;
+	ifs.open(getPieceListFileName(type));
+	string variable_name;
+	char c;
+	while (ifs >> c)
+	{
+		if (c == '[')
+		{
+			ifs >> variable_name;
+			if (variable_name == "Width")
+			{
+				ifs >> _squaresize.x;
+			}
+			else if (variable_name == "Height")
+			{
+				ifs >> _squaresize.y;
+			}
+			else if (variable_name == "Names")
+			{
+				string line;
+				ifs >> ws;
+				while (getline(ifs, line))
+				{
+					string names;
+					stringstream ss{ line };
+					ifs >> ws;
+					while (getline(ss, names, ']'))
+					{
+						istringstream iss(names);
+						copy(istream_iterator<string>(iss),
+							istream_iterator<string>(),
+							back_inserter(_pieces));
+						ifs >> ws;
+					}
+					ifs >> ws;
+				}
+			}
+		}
 	}
+	ifs.close();
+	return _pieces.size() > 0;
+}
 
 bool PieceSelectWindow::isOpen()
 {
@@ -471,4 +519,9 @@ sf::RectangleShape PieceSelectWindow::getEmptySquare(unsigned int x, unsigned in
 		}
 	);
 	return square;
+}
+
+string PieceSelectWindow::getPieceListFileName(string type)
+{
+	return "resources/config_files/pieces/" + type + ".txt";
 }
