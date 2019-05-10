@@ -53,7 +53,6 @@ Piece::Piece(const Piece & piece)
 	{
 		_accessories.push_back(a);
 	}
-	//_pieceimage = piece._pieceimage;
 	updateImage();
 }
 
@@ -84,7 +83,6 @@ Piece& Piece::operator =(const Piece& rhs)
 	{
 		removePieceOnTop();
 	}
-	//_pieceimage = rhs._pieceimage;
 	updateImage();
 	return *this;
 }
