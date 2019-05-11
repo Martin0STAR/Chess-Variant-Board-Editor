@@ -16,7 +16,7 @@ PieceSelectWindow::PieceSelectWindow(Board & board, Tool & tool)
 
 void PieceSelectWindow::load(Board & board, Tool & tool)
 {
-	_squaresize = board.getImageSquareSize();
+	_displaysquaresize = board.getImageSquareSize();
 	_numcolumns = 5;
 	_backgroundcolor = sf::Color{ 180, 180, 180 };
 	_numtoolrows = (_tools.size() + _numcolumns - 1) / _numcolumns;
@@ -27,7 +27,7 @@ void PieceSelectWindow::load(Board & board, Tool & tool)
 
 	_numrows = _numtoolrows + numpiecerows;
 
-	_rendertexture.create(_squaresize.x*_numcolumns, _squaresize.y*_numrows);
+	_rendertexture.create(_displaysquaresize.x*_numcolumns, _displaysquaresize.y*_numrows);
 
 	update(board, tool);
 }
@@ -39,6 +39,7 @@ bool PieceSelectWindow::loadPieces(std::string type)
 	ifs.open(getPieceListFileName(type));
 	string variable_name;
 	char c;
+	sf::Vector2i size;
 	while (ifs >> c)
 	{
 		if (c == '[')
@@ -46,11 +47,11 @@ bool PieceSelectWindow::loadPieces(std::string type)
 			ifs >> variable_name;
 			if (variable_name == "Width")
 			{
-				ifs >> _squaresize.x;
+				ifs >> size.x;
 			}
 			else if (variable_name == "Height")
 			{
-				ifs >> _squaresize.y;
+				ifs >> size.y;
 			}
 			else if (variable_name == "Names")
 			{
@@ -75,6 +76,7 @@ bool PieceSelectWindow::loadPieces(std::string type)
 		}
 	}
 	ifs.close();
+	_squaresizelist.insert_or_assign(type, size);
 	return _pieces.size() > 0;
 }
 
@@ -156,9 +158,9 @@ Window_Action PieceSelectWindow::handleEvent(
 		}
 
 		int x = event.mouseButton.x * _rendertexture.getSize().x /
-			_window.getSize().x / _squaresize.x;
+			_window.getSize().x / _displaysquaresize.x;
 		int y = event.mouseButton.y * _rendertexture.getSize().y /
-			_window.getSize().y / _squaresize.y;
+			_window.getSize().y / _displaysquaresize.y;
 
 		if (y < 0 || y >= (int)_numrows || x < 0 || x >= (int)_numcolumns)
 		{
@@ -363,8 +365,8 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 	sf::Color squarecolor = getSquareColor(x, y);
 	unsigned int toolindex = getToolIndex(x, y);
 	sf::Vector2f position{
-		float(_squaresize.x*x),
-		float(_squaresize.y*y)
+		float(_displaysquaresize.x*x),
+		float(_displaysquaresize.y*y)
 	};
 
 	sf::Image toolimage;
@@ -375,54 +377,54 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 		case Piece_Tool::ADD_ARROW:
 		{
 			tool.drawArrowTool(_rendertexture, position,
-				_squaresize, tool.getColorIndex());
+				_displaysquaresize, tool.getColorIndex());
 			return;
 		}
 		case Piece_Tool::COLOR_SQUARE:
 			tool.drawSetSquareColorTool(_rendertexture, position,
-				_squaresize, tool.getColorIndex());
+				_displaysquaresize, tool.getColorIndex());
 			return;
 		case Piece_Tool::ADD_PROFILE_BOX:
 			tool.drawAddProfileBoxTool(_rendertexture, position,
-				_squaresize, tool.getColorIndex());
+				_displaysquaresize, tool.getColorIndex());
 			return;
 		case Piece_Tool::REMOVE_SQUARE:
 			tool.drawRemoveSquareTool(_rendertexture, position,
-				_squaresize);
+				_displaysquaresize);
 			return;
 		case Piece_Tool::INVERT_COLORS:
 		{
 			Piece piece = tool.getPieceBrush();
 			piece.invertColors();
-			piece.setSize(_squaresize);
+			piece.setSize(_displaysquaresize);
 			piece.setPosition(position);
 			_rendertexture.draw(piece);
 			return;
 		}
 		case Piece_Tool::ACCESSORY_STAR6POINT:
 			tool.drawAccessoryTool(
-				_rendertexture, position, _squaresize,
+				_rendertexture, position, _displaysquaresize,
 				tool.getColorIndex(), "star6point");
 			return;
 		case Piece_Tool::ACCESSORY_SHIELD:
 			tool.drawAccessoryTool(
-				_rendertexture, position, _squaresize,
+				_rendertexture, position, _displaysquaresize,
 				tool.getColorIndex(), "shield");
 			return;
 		case Piece_Tool::ACCESSORY_SWORD:
 			tool.drawAccessoryTool(
-				_rendertexture, position, _squaresize,
+				_rendertexture, position, _displaysquaresize,
 				tool.getColorIndex(), "sword");
 			return;
 		case Piece_Tool::ACCESSORY_CHAR:
 			tool.drawAccessoryTool(
-				_rendertexture, position, _squaresize,
+				_rendertexture, position, _displaysquaresize,
 				tool.getColorIndex(), string(1, tool.getCharAccessory()));
 			return;
 		default:
 			string imagefilename = getToolFileName(toolindex);
 			sf::Image icon;
-			toolimage.create(_squaresize.x, _squaresize.y, squarecolor);
+			toolimage.create(_displaysquaresize.x, _displaysquaresize.y, squarecolor);
 			if (std::experimental::filesystem::exists(imagefilename))
 			{
 				icon.loadFromFile(imagefilename);
@@ -448,27 +450,27 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 			{
 			case Tool_State::ADD_ARROW:
 				tool.drawArrowTool(_rendertexture, position,
-					_squaresize, y - _numtoolrows);
+					_displaysquaresize, y - _numtoolrows);
 				return;
 			case Tool_State::SET_SQUARE_COLOR:
 				tool.drawSetSquareColorTool(_rendertexture, position,
-					_squaresize, y - _numtoolrows);
+					_displaysquaresize, y - _numtoolrows);
 				return;
 			case Tool_State::ADD_PROFILE_BOX:
 				tool.drawAddProfileBoxTool(_rendertexture, position,
-					_squaresize, y - _numtoolrows);
+					_displaysquaresize, y - _numtoolrows);
 				return;
 			case Tool_State::ADD_PIECE_ACCESSORY:
 				tool.drawAccessoryTool(_rendertexture, position,
-					_squaresize, y - _numtoolrows, tool.getAccessoryName());
+					_displaysquaresize, y - _numtoolrows, tool.getAccessoryName());
 				return;
 			case Tool_State::ADD_PIECE_CHAR_ACCESSORY:
 				tool.drawAccessoryTool(_rendertexture, position,
-					_squaresize, y - _numtoolrows, string(1, tool.getCharAccessory()));
+					_displaysquaresize, y - _numtoolrows, string(1, tool.getCharAccessory()));
 				return;
 			default:
 				Piece piece = getPieceFromId(tool, x, y);
-				piece.setSize(_squaresize);
+				piece.setSize(_displaysquaresize);
 				piece.setPosition(position);
 				_rendertexture.draw(piece);
 				return;
@@ -479,7 +481,7 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 			Piece piece = getPieceFromId(tool, x, y);
 			if (piece.exists())
 			{
-				piece.setSize(_squaresize);
+				piece.setSize(_displaysquaresize);
 				piece.setPosition(position);
 				_rendertexture.draw(piece);
 			}
@@ -509,13 +511,13 @@ sf::RectangleShape PieceSelectWindow::getEmptySquare(unsigned int x, unsigned in
 {
 	sf::RectangleShape square{
 				sf::Vector2f{
-					(float)_squaresize.x,
-					(float)_squaresize.y }
+					(float)_displaysquaresize.x,
+					(float)_displaysquaresize.y }
 	};
 	square.setFillColor(getSquareColor(x, y));
 	square.setPosition(sf::Vector2f{
-			(float)(_squaresize.x*x),
-			(float)(_squaresize.y*y)
+			(float)(_displaysquaresize.x*x),
+			(float)(_displaysquaresize.y*y)
 		}
 	);
 	return square;

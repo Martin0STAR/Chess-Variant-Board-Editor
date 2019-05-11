@@ -75,7 +75,7 @@ public:
 
 	sf::RenderTexture _rendertexture;
 	sf::RenderWindow _window;
-	sf::Vector2u _squaresize;
+	sf::Vector2u _displaysquaresize;
 	sf::Color _backgroundcolor;
 
 	std::vector<std::string> _pieces;
@@ -88,6 +88,8 @@ public:
 		{Piece_Tool::REMOVE, "remove"},
 		{Piece_Tool::ADD_ARROW, "arrow"}
 	};
+
+	std::map<std::string, sf::Vector2i> _squaresizelist;
 
 	std::array<Piece_Tool::Piece_Tool, 13> _tools
 	{
