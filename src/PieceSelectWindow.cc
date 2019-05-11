@@ -188,6 +188,10 @@ Window_Action PieceSelectWindow::handleEvent(
 			case Piece_Tool::INVERT_COLORS:
 				action.state = Window_Action_State::INVERT_PIECE_COLOR;
 				return action;
+			case Piece_Tool::MUSKETEER_STYLE:
+				action.state = Window_Action_State::SET_TOOL_PIECE_STYLE;
+				action.name = "musketeer";
+				return action;
 			case Piece_Tool::ADD_ARROW:
 				action.toolstate = Tool_State::ADD_ARROW;
 				action.state = Window_Action_State::SET_TOOL_STATE;
@@ -396,6 +400,15 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 		{
 			Piece piece = tool.getPieceBrush();
 			piece.invertColors();
+			piece.setSize(_displaysquaresize);
+			piece.setPosition(position);
+			_rendertexture.draw(piece);
+			return;
+		}
+		case Piece_Tool::MUSKETEER_STYLE:
+		{
+			Piece piece = tool.getPieceBrush();
+			piece.setStyle("musketeer");
 			piece.setSize(_displaysquaresize);
 			piece.setPosition(position);
 			_rendertexture.draw(piece);

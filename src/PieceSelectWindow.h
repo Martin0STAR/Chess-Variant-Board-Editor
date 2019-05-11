@@ -21,6 +21,7 @@ namespace Piece_Tool
 		FLIP_HORIZONTAL,
 		FLIP_VERTICAL,
 		INVERT_COLORS,
+		MUSKETEER_STYLE,
 		REMOVE,
 		ADD_ARROW,
 		COLOR_SQUARE,
@@ -91,7 +92,7 @@ public:
 
 	std::map<std::string, sf::Vector2i> _squaresizelist;
 
-	std::array<Piece_Tool::Piece_Tool, 13> _tools
+	std::array<Piece_Tool::Piece_Tool, 14> _tools
 	{
 		Piece_Tool::SELECT,
 		Piece_Tool::REMOVE_SQUARE,
@@ -102,6 +103,7 @@ public:
 		Piece_Tool::FLIP_HORIZONTAL,
 		Piece_Tool::FLIP_VERTICAL,
 		Piece_Tool::INVERT_COLORS,
+		Piece_Tool::MUSKETEER_STYLE,
 		Piece_Tool::ACCESSORY_STAR6POINT,
 		Piece_Tool::ACCESSORY_SHIELD,
 		Piece_Tool::ACCESSORY_SWORD,

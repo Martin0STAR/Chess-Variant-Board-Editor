@@ -290,6 +290,12 @@ void BoardRunner::run(std::default_random_engine & rng)
 				_toolwindow.updateToolImage(_action.isLeftTool);
 				_pieceselectwindow.update(_board, *tool);
 				break;
+			case Window_Action_State::SET_TOOL_PIECE_STYLE:
+				tool->getPieceBrush().setStyle(_action.name);
+				_pieceselectwindow.update(_board, *tool);
+				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
+				_toolwindow.updateToolImage(_action.isLeftTool);
+				break;
 			case Window_Action_State::SET_TOOL_PIECE_TYPE:
 				tool->getPieceBrush().setName(_action.piece.getName());
 				_pieceselectwindow.update(_board, *tool);

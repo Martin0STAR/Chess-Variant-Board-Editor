@@ -315,7 +315,14 @@ bool Piece::hasAccessories() const
 
 void Piece::setStyle(string style)
 {
-	_style = style;
+	if (_style == style)
+	{
+		_style = "bulldog";
+	}
+	else
+	{
+		_style = style;
+	}
 }
 
 void Piece::setName(string name)
@@ -375,8 +382,8 @@ void Piece::setPosition(sf::Vector2f position)
 	}
 	else
 	{
-		xpos = (int)((_drawareasize.x - _pieceimage.getSize().x) / 2);
-		ypos = (int)((_drawareasize.y - _pieceimage.getSize().y) / 2);
+		xpos = (int)(((int)_drawareasize.x - (int)_pieceimage.getSize().x) / 2);
+		ypos = (int)(((int)_drawareasize.y - (int)_pieceimage.getSize().y) / 2);
 	}
 	_inareaposition = sf::Vector2f{ (float)xpos, (float)ypos };
 
