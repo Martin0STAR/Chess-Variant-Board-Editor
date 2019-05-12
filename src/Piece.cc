@@ -9,7 +9,7 @@ Piece::Piece()
 Piece::Piece(string style, string name, PieceColor color, string flags = "")
 	:_style{ style }, _name{ name }, _color{ color },
 	_iscarried{ false }, _ismirrored{ false }, _isupsidedown{ false },
-	_isinvertedcolors{ false }
+	_isinvertedcolors{ false }, _scale{ 1.f, 1.f }
 {
 	for (auto c : flags)
 	{
@@ -38,6 +38,7 @@ Piece::Piece(const Piece & piece)
 	_style = piece._style;
 	_color = piece._color;
 	_name = piece._name;
+	_scale = piece._scale;
 	_iscarried = piece.isCarried();
 	_ismirrored = piece.isMirrored();
 	_isupsidedown = piece.isUpsideDown();
@@ -71,6 +72,7 @@ Piece& Piece::operator =(const Piece& rhs)
 	_style = rhs._style;
 	_color = rhs._color;
 	_name = rhs._name;
+	_scale = rhs._scale;
 	_iscarried = rhs.isCarried();
 	_ismirrored = rhs.isMirrored();
 	_isupsidedown = rhs.isUpsideDown();
@@ -92,6 +94,7 @@ bool Piece::operator ==(const Piece & rhs) const
 	if (_style == rhs._style &&
 		_color == rhs._color &&
 		_name == rhs._name &&
+		_scale == rhs._scale &&
 		_ismirrored == rhs.isMirrored() &&
 		_isupsidedown == rhs.isUpsideDown() &&
 		_isinvertedcolors == rhs._isinvertedcolors)
@@ -365,6 +368,15 @@ void Piece::setSize(sf::Vector2u size)
 	_drawareasize = size;
 }
 
+void Piece::setScale(sf::Vector2f scale)
+{
+	_scale = scale;
+	if (isCarrying())
+	{
+		_pieceontop->setScale(scale);
+	}
+}
+
 void Piece::setPosition(sf::Vector2f position)
 {
 	_drawareaposition = position;
@@ -372,18 +384,18 @@ void Piece::setPosition(sf::Vector2f position)
 	int xpos, ypos;
 	if (isCarrier())
 	{
-		xpos = (int)(((float)_drawareasize.x - _pieceimage.getSize().x) / 2.f);
-		ypos = (int)((float)_drawareasize.y / 2.f);
+		xpos = (int)(((float)_drawareasize.x - (float)_pieceimage.getSize().x * _scale.x) / 2.f);
+		ypos = (int)((float)_drawareasize.y * _scale.y / 2.f);
 	}
 	else if (isCarried())
 	{
-		xpos = (int)(((float)_drawareasize.x - _pieceimage.getSize().x) / 2.f);
-		ypos = (int)((float)_drawareasize.y / 2.f - _pieceimage.getSize().y);
+		xpos = (int)(((float)_drawareasize.x - (float)_pieceimage.getSize().x * _scale.x) / 2.f);
+		ypos = (int)((float)_drawareasize.y / 2.f - (float)_pieceimage.getSize().y * _scale.y );
 	}
 	else
 	{
-		xpos = (int)(((int)_drawareasize.x - (int)_pieceimage.getSize().x) / 2);
-		ypos = (int)(((int)_drawareasize.y - (int)_pieceimage.getSize().y) / 2);
+		xpos = (int)(((int)_drawareasize.x - (int)(_pieceimage.getSize().x * _scale.x)) / 2);
+		ypos = (int)(((int)_drawareasize.y - (int)(_pieceimage.getSize().y * _scale.y)) / 2);
 	}
 	_inareaposition = sf::Vector2f{ (float)xpos, (float)ypos };
 
@@ -564,14 +576,14 @@ void Piece::draw(sf::RenderTarget & target, sf::RenderStates states) const
 	piecetexture.loadFromImage(drawpieceimage);
 	piecetexture.setSmooth(false);
 	sf::Sprite piecesprite{ piecetexture };
-
+	piecesprite.setScale(_scale);
 	if (isCarried())
 	{
 		float piecewidth = (float)drawpieceimage.getSize().x;
 		float pieceheight = (float)drawpieceimage.getSize().y;
 		if ((float)drawpieceimage.getSize().y > (float)_drawareasize.y / 2.f)
 		{
-			piecesprite.setScale(0.5f, 0.5f);
+			piecesprite.scale(0.5f, 0.5f);
 			piecewidth = piecewidth / 2.f;
 			pieceheight = pieceheight / 2.f;
 		}

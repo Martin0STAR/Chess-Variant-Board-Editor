@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "BoardNameHandler.h"
 #include "ToolWindow.h"
+#include "PieceHandler.h"
 #include "PieceSelectWindow.h"
 #include "Window_Action.h"
 #include "Event_handler.h"
@@ -27,6 +28,7 @@ private:
 	PieceSelectWindow _pieceselectwindow;
 	Window_Action _action;
 	Event_handler _event_handler;
+	PieceHandler _piecehandler;
 	Keyboardhandler _keyboardhandler;
 	BoardComponent::Textbox _textbox;
 };

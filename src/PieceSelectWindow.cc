@@ -4,17 +4,15 @@ using namespace std;
 
 PieceSelectWindow::PieceSelectWindow()
 {
-	loadPieces("bulldog");
 	//must run load(board, toolwindow) to work
 }
 
-PieceSelectWindow::PieceSelectWindow(Board & board, Tool & tool)
-	:PieceSelectWindow::PieceSelectWindow{}
+PieceSelectWindow::PieceSelectWindow(PieceHandler& piecehandler, Board& board, Tool& tool)
 {
-	load(board, tool);
+	load(piecehandler, board, tool);
 }
 
-void PieceSelectWindow::load(Board & board, Tool & tool)
+void PieceSelectWindow::load(PieceHandler& piecehandler, Board& board, Tool& tool)
 {
 	_displaysquaresize = board.getImageSquareSize();
 	_numcolumns = 5;
@@ -23,61 +21,13 @@ void PieceSelectWindow::load(Board & board, Tool & tool)
 
 	int numpiecerows = max(
 		tool.getNumColors(),
-		(_pieces.size() + _numcolumns - 2) / (_numcolumns - 1));
+		(piecehandler.getNameList(tool.getPieceBrush().getStyle()).size() + _numcolumns - 2) / (_numcolumns - 1));
 
 	_numrows = _numtoolrows + numpiecerows;
 
 	_rendertexture.create(_displaysquaresize.x*_numcolumns, _displaysquaresize.y*_numrows);
 
-	update(board, tool);
-}
-
-bool PieceSelectWindow::loadPieces(std::string type)
-{
-	_pieces.clear();
-	ifstream ifs;
-	ifs.open(getPieceListFileName(type));
-	string variable_name;
-	char c;
-	sf::Vector2i size;
-	while (ifs >> c)
-	{
-		if (c == '[')
-		{
-			ifs >> variable_name;
-			if (variable_name == "Width")
-			{
-				ifs >> size.x;
-			}
-			else if (variable_name == "Height")
-			{
-				ifs >> size.y;
-			}
-			else if (variable_name == "Names")
-			{
-				string line;
-				ifs >> ws;
-				while (getline(ifs, line))
-				{
-					string names;
-					stringstream ss{ line };
-					ifs >> ws;
-					while (getline(ss, names, ']'))
-					{
-						istringstream iss(names);
-						copy(istream_iterator<string>(iss),
-							istream_iterator<string>(),
-							back_inserter(_pieces));
-						ifs >> ws;
-					}
-					ifs >> ws;
-				}
-			}
-		}
-	}
-	ifs.close();
-	_squaresizelist.insert_or_assign(type, size);
-	return _pieces.size() > 0;
+	update(piecehandler, board, tool);
 }
 
 bool PieceSelectWindow::isOpen()
@@ -85,14 +35,14 @@ bool PieceSelectWindow::isOpen()
 	return _window.isOpen();
 }
 
-void PieceSelectWindow::update(Board & board, Tool & tool)
+void PieceSelectWindow::update(PieceHandler& piecehandler, Board& board, Tool& tool)
 {
 	_rendertexture.clear(_backgroundcolor);
 	for (unsigned int y{ 0 }; y < _numrows; y++)
 	{
 		for (unsigned int x{ 0 }; x < _numcolumns; x++)
 		{
-			drawTool(tool, x, y);
+			drawTool(piecehandler, tool, x, y);
 		}
 	}
 	_rendertexture.display();
@@ -125,9 +75,10 @@ bool PieceSelectWindow::pollEvent(sf::Event & event)
 }
 
 Window_Action PieceSelectWindow::handleEvent(
-	sf::Event event, Board & board,
-	Tool & lefttool, Tool & righttool,
-	Keyboardhandler & keyboardhandler)
+	sf::Event event, Board& board,
+	Tool& lefttool, Tool& righttool,
+	PieceHandler& piecehandler,
+	Keyboardhandler& keyboardhandler)
 {
 	Window_Action action;
 	Tool* tool;
@@ -238,7 +189,7 @@ Window_Action PieceSelectWindow::handleEvent(
 		}
 		else //clicked on piece
 		{
-			action.piece = getPieceFromId(*tool, x, y);
+			action.piece = getPieceFromId(piecehandler, *tool, x, y);
 			if(action.piece.getName() != "" && action.piece.getColor().name != "")
 			{
 				action.state = Window_Action_State::SET_TOOL_PIECE;
@@ -288,7 +239,7 @@ PieceColor PieceSelectWindow::getColorFromId(Tool & tool, int x, int y) const
 	}
 }
 
-string PieceSelectWindow::getTypeFromId(Tool & tool, int x, int y) const
+string PieceSelectWindow::getTypeFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const
 {	
 	if (x == 0)
 	{
@@ -297,9 +248,9 @@ string PieceSelectWindow::getTypeFromId(Tool & tool, int x, int y) const
 
 	unsigned int index = ((y - _numtoolrows) * (_numcolumns - 1) + ((x-1) % (_numcolumns - 1)));
 		
-	if (index < _pieces.size())
+	if (index < piecehandler.getNameList(tool.getPieceBrush().getStyle()).size())
 	{
-		return _pieces.at(index);
+		return piecehandler.getNameList(tool.getPieceBrush().getStyle()).at(index);
 	}
 	else
 	{
@@ -307,7 +258,7 @@ string PieceSelectWindow::getTypeFromId(Tool & tool, int x, int y) const
 	}
 }
 
-Piece PieceSelectWindow::getPieceFromId(Tool & tool, int x, int y) const
+Piece PieceSelectWindow::getPieceFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const
 {
 	Piece piece{ tool.getPieceBrush() };
 	if (x == 0)
@@ -316,7 +267,7 @@ Piece PieceSelectWindow::getPieceFromId(Tool & tool, int x, int y) const
 	}
 	else
 	{
-		piece.setName(getTypeFromId(tool, x, y));
+		piece.setName(getTypeFromId(piecehandler, tool, x, y));
 	}
 	piece.removePieceOnTop();
 	return piece;
@@ -361,7 +312,7 @@ string PieceSelectWindow::getToolFileName(int index) const
 	return "resources/icons/" + getToolName(index) + ".png";
 }
 
-void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
+void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigned int x, unsigned int y)
 {
 	auto square = getEmptySquare(x, y);
 	_rendertexture.draw(square);
@@ -408,8 +359,21 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 		case Piece_Tool::MUSKETEER_STYLE:
 		{
 			Piece piece = tool.getPieceBrush();
-			piece.setStyle("musketeer");
+			if (tool.getPieceBrush().getStyle() != "musketeer")
+			{
+				piece.setStyle("musketeer");
+			}
+			else
+			{
+				piece.setStyle("bulldog");
+			}
+			if (!piece.exists())
+			{
+				piece.setName("pawn");
+			}
+			piece.updateImage();
 			piece.setSize(_displaysquaresize);
+			piece.setScale(piecehandler.getScale(piece.getStyle()));
 			piece.setPosition(position);
 			_rendertexture.draw(piece);
 			return;
@@ -482,7 +446,7 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 					_displaysquaresize, y - _numtoolrows, string(1, tool.getCharAccessory()));
 				return;
 			default:
-				Piece piece = getPieceFromId(tool, x, y);
+				Piece piece = getPieceFromId(piecehandler, tool, x, y);
 				piece.setSize(_displaysquaresize);
 				piece.setPosition(position);
 				_rendertexture.draw(piece);
@@ -491,7 +455,7 @@ void PieceSelectWindow::drawTool(Tool & tool, unsigned int x, unsigned int y)
 		}
 		else
 		{
-			Piece piece = getPieceFromId(tool, x, y);
+			Piece piece = getPieceFromId(piecehandler, tool, x, y);
 			if (piece.exists())
 			{
 				piece.setSize(_displaysquaresize);
@@ -534,9 +498,4 @@ sf::RectangleShape PieceSelectWindow::getEmptySquare(unsigned int x, unsigned in
 		}
 	);
 	return square;
-}
-
-string PieceSelectWindow::getPieceListFileName(string type)
-{
-	return "resources/config_files/pieces/" + type + ".txt";
 }

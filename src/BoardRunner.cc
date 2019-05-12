@@ -3,6 +3,8 @@
 using namespace std;
 BoardRunner::BoardRunner(string setupfilename)
 {
+	_piecehandler.loadStyle("bulldog");
+	_piecehandler.loadStyle("musketeer");
 	if (_boardnamelist.loadNames(setupfilename))
 	{
 		_boardnumber = _boardnamelist.getBoardNumber();
@@ -32,7 +34,7 @@ BoardRunner::BoardRunner(string setupfilename)
 		_mainwindow.setPosition(
 			sf::Vector2i{ _mainwindow.getPosition().x, 0 });
 	}
-	_pieceselectwindow.load(_board, _toolwindow.getTool(true));
+	_pieceselectwindow.load(_piecehandler, _board, _toolwindow.getTool(true));
 
 	if (_numboards == 0)
 	{
@@ -74,6 +76,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_board,
 					_toolwindow.getTool(true),
 					_toolwindow.getTool(false),
+					_piecehandler,
 					_keyboardhandler
 				);
 			}
@@ -264,7 +267,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_toolwindow.setTool(_action.isLeftTool, Tool_State::SELECT);
 					_toolwindow.updateToolImage(_action.isLeftTool);
 				}
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::REMOVE_PROFILE_BOX:
 				if (_board.removeProfileBox(_action.player_id))
@@ -288,24 +291,30 @@ void BoardRunner::run(std::default_random_engine & rng)
 			case Window_Action_State::SET_TOOL_STATE:
 				_toolwindow.setTool(_action.isLeftTool, _action.toolstate);
 				_toolwindow.updateToolImage(_action.isLeftTool);
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::SET_TOOL_PIECE_STYLE:
 				tool->getPieceBrush().setStyle(_action.name);
-				_pieceselectwindow.update(_board, *tool);
+				if ((!tool->getPieceBrush().exists()))
+				{
+					tool->getPieceBrush().setName("pawn");
+				}
+				tool->getPieceBrush().setScale(_piecehandler.getScale(tool->getPieceBrush().getStyle()));
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
+				tool->getPieceBrush().updateImage();
 				_toolwindow.updateToolImage(_action.isLeftTool);
 				break;
 			case Window_Action_State::SET_TOOL_PIECE_TYPE:
 				tool->getPieceBrush().setName(_action.piece.getName());
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
 				_toolwindow.updateToolImage(_action.isLeftTool);
 				break;
 			case Window_Action_State::SET_TOOL_COLOR:
 				tool->setColorIndex(_action.colorindex);
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 
 				switch (tool->getState())
 				{
@@ -327,19 +336,19 @@ void BoardRunner::run(std::default_random_engine & rng)
 
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
 				_toolwindow.updateToolImage(_action.isLeftTool);
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::SET_TOOL_ADD_PIECE_ACCESSORY:
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE_ACCESSORY);
 				tool->setAccessoryName(_action.name);
 				_toolwindow.updateToolImage(_action.isLeftTool);
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::SWAP_TOOLS:
 				_toolwindow.swapTools();
 				_toolwindow.updateToolImage(true);
 				_toolwindow.updateToolImage(false);
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 			case Window_Action_State::ADD_PIECE:
 				if (_board.addPiece(tool->getPieceBrush(),
 					_action.tosquarecoord))
@@ -367,21 +376,21 @@ void BoardRunner::run(std::default_random_engine & rng)
 				break;
 			case Window_Action_State::FLIP_PIECE_HORIZONTAL:
 				tool->flipPieceHorizontally();
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
 				_toolwindow.updateToolImage(_action.isLeftTool);
 				break;
 			case Window_Action_State::FLIP_PIECE_VERTICAL:
 				tool->flipPieceVertically();
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
 				_toolwindow.updateToolImage(_action.isLeftTool);
 				break;
 			case Window_Action_State::INVERT_PIECE_COLOR:
 				tool->invertPieceColor();
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
 				_toolwindow.updateToolImage(_action.isLeftTool);
@@ -401,7 +410,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 				{
 					_toolwindow.updateToolImage(_action.isLeftTool);
 				}
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::SET_PIECE_CHAR_ACCESSORY:
 				tool->setCharAccessory(_action.name.at(0));
@@ -409,7 +418,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 				{
 					_toolwindow.updateToolImage(_action.isLeftTool);
 				}
-				_pieceselectwindow.update(_board, *tool);
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::REMOVE_SQUARE:
 				if (_board.removeSquare(_action.tosquarecoord))

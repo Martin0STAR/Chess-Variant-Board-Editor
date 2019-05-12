@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "PieceHandler.h"
 #include "Board.h"
 #include "Tool.h"
 #include "Window_Action.h"
@@ -38,11 +39,10 @@ class PieceSelectWindow
 {
 public:
 	PieceSelectWindow();
-	PieceSelectWindow(Board& board, Tool& tool);
-	void load(Board& board, Tool& tool);
-	bool loadPieces(std::string type);
+	PieceSelectWindow(PieceHandler& piecehandler, Board& board, Tool& tool);
+	void load(PieceHandler&, Board& board, Tool& tool);
 	bool isOpen();
-	void update(Board& board, Tool& tool);
+	void update(PieceHandler&, Board& board, Tool& tool);
 	void open(sf::RenderWindow& window);
 	void close();
 	void clear();
@@ -50,25 +50,23 @@ public:
 	void display();
 	
 	bool pollEvent(sf::Event& event);
-	Window_Action handleEvent(sf::Event, Board &, Tool &, Tool &, Keyboardhandler &);
+	Window_Action handleEvent(sf::Event, Board&, Tool&, Tool&, PieceHandler&, Keyboardhandler&);
 	
 	private:
 	PieceColor getColorFromId(Tool& tool, int x, int y) const;
-	std::string getTypeFromId(Tool& tool, int x, int y) const;
-	Piece getPieceFromId(Tool& tool, int x, int y) const;
+	std::string getTypeFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const;
+	Piece getPieceFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const;
 	Piece_Tool::Piece_Tool getPieceToolFromId(unsigned int index);
 	Piece_Tool::Piece_Tool getPieceToolFromId(int x, int y);
 	std::string getToolName(Piece_Tool::Piece_Tool piece_tool) const;
 	std::string getToolName(int index) const;
 	std::string getToolName(int x, int y) const;
 	std::string getToolFileName(int index) const;
-	void drawTool(Tool & tool, unsigned int x, unsigned int y);
+	void drawTool(PieceHandler& piecehandler, Tool& tool, unsigned int x, unsigned int y);
 
 	sf::Color getSquareColor(unsigned int x, unsigned int y) const;
 	unsigned int getToolIndex(unsigned int x, unsigned int y) const;
 	sf::RectangleShape getEmptySquare(unsigned int x, unsigned int y) const;
-
-	std::string getPieceListFileName(std::string type);
 
 	unsigned int _numcolumns;
 	unsigned int _numrows;
@@ -79,8 +77,6 @@ public:
 	sf::Vector2u _displaysquaresize;
 	sf::Color _backgroundcolor;
 
-	std::vector<std::string> _pieces;
-
 	std::map<Piece_Tool::Piece_Tool, std::string> _toolnames
 	{
 		{Piece_Tool::SELECT, "select_object"},
@@ -89,8 +85,6 @@ public:
 		{Piece_Tool::REMOVE, "remove"},
 		{Piece_Tool::ADD_ARROW, "arrow"}
 	};
-
-	std::map<std::string, sf::Vector2i> _squaresizelist;
 
 	std::array<Piece_Tool::Piece_Tool, 14> _tools
 	{
