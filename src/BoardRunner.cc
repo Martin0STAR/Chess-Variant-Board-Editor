@@ -301,7 +301,6 @@ void BoardRunner::run(std::default_random_engine & rng)
 				{
 					tool->getPieceBrush().setName("pawn");
 				}
-				tool->getPieceBrush().setScale(_piecehandler.getScale(tool->getPieceBrush().getStyle()));
 				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
 				_toolwindow.updateToolImage(_action.isLeftTool);

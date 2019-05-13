@@ -380,7 +380,6 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 				piece.setName("pawn");
 			}
 			piece.setSize(_displaysquaresize);
-			piece.setScale(piecehandler.getScale(piece.getStyle()));
 			piece.setPosition(position);
 			_rendertexture.draw(piece);
 			return;

@@ -45,7 +45,6 @@ public:
 	void setWidth(unsigned int width);
 	void setHeight(unsigned int height);
 	void setSize(sf::Vector2u size);
-	void setScale(sf::Vector2f scale);
 	void setPosition(sf::Vector2f position);
 	bool addPieceOnTop(Piece);
 	bool addAccessory(std::string accessoryname, sf::Color color);
@@ -69,7 +68,6 @@ private:
 	sf::Vector2u _drawareasize;
 	sf::Vector2f _drawareaposition;
 	sf::Vector2f _inareaposition;
-	sf::Vector2f _scale;
 
 	bool _iscarried;
 	bool _ismirrored;
