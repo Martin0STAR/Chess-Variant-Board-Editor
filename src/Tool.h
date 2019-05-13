@@ -31,7 +31,7 @@ class Tool : public sf::Drawable
 {
 public:
 	Tool();
-	Tool(sf::Vector2u size,
+	Tool(PieceHandler* piecehandler, sf::Vector2u size,
 		Tool_State::Tool_State state, sf::Color squarecolor,
 		sf::Color boardcolor);
 

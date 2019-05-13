@@ -4,10 +4,14 @@ using namespace std;
 
 Board::Board()
 	:_displaysize{ sf::Vector2u{ 500, 500 } }
+{}
+
+Board::Board( PieceHandler* piecehandler)
+	:_displaysize{ sf::Vector2u{ 500, 500 } }, _piecehandler{ piecehandler }
 {}//needs to run load(name)
 
-Board::Board(string name)
-	: Board::Board{}
+Board::Board(PieceHandler* piecehandler, string name)
+	: Board::Board{piecehandler}
 {
 	load(name);
 }
@@ -181,6 +185,11 @@ bool Board::togglegrid()
 void Board::removeDragArrow()
 {
 	_showdragarrow = false;
+}
+
+void Board::setPieceHandler(PieceHandler* piecehandler)
+{
+	_piecehandler = piecehandler;
 }
 
 bool Board::addRowUp()
@@ -1058,7 +1067,7 @@ bool Board::intern_load(string setupfilename)
 			}
 			else if (variable_name == "Piece")
 			{
-				Piece piece;
+				Piece piece{ _piecehandler };
 				std::string notation;
 				ifs >> notation;
 				ifs >> piece;

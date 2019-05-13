@@ -2,13 +2,15 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <filesystem>
+#include "PieceHandler.h"
 #include "PieceColor.h"
 #include "PieceAccessory.h"
 class Piece : public sf::Drawable
 {
 public:
 	Piece();
-	Piece(std::string style, std::string name, PieceColor color, std::string flags);
+	Piece(PieceHandler* piecehandler);
+	Piece(PieceHandler* piecehandler, std::string style, std::string name, PieceColor color, std::string flags);
 	Piece(const Piece &);
 	~Piece();
 	Piece& operator =(const Piece& rhs);
@@ -33,6 +35,7 @@ public:
 	bool colorIsModified() const;
 	bool hasAccessories() const;
 
+	void setHandler(PieceHandler* piecehandler);
 	void setStyle(std::string style);
 	void setName(std::string name);
 	void setColor(PieceColor color);
@@ -51,11 +54,8 @@ public:
 	bool flipHorizontally();
 	bool flipVertically();
 	bool invertColors();
-
-	bool updateImage();
 private:
-
-	std::string getFileName() const;
+	sf::Image getImage() const;
 
 	void invertColor(sf::Image & image) const;
 	void offsetColor(sf::Image & image) const;
@@ -77,7 +77,7 @@ private:
 	bool _isinvertedcolors;
 	Piece* _pieceontop = nullptr;
 
-	sf::Image _pieceimage;
+	PieceHandler* _piecehandler;
 
 	std::vector<PieceAccessory> _accessories;
 };

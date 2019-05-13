@@ -3,11 +3,11 @@
 using namespace std;
 
 Tool::Tool()
-	:Tool::Tool{ sf::Vector2u{1,1}, Tool_State::SELECT,
+	:Tool::Tool{nullptr, sf::Vector2u{1,1}, Tool_State::SELECT,
 	sf::Color{239, 238, 210, 255}, sf::Color(50, 46, 43, 255) }
 {}
 
-Tool::Tool(sf::Vector2u size,
+Tool::Tool(PieceHandler* piecehandler, sf::Vector2u size,
 	Tool_State::Tool_State state, sf::Color squarecolor,
 	sf::Color boardcolor)
 	: _profilesize{ 110, 110 },
@@ -17,10 +17,10 @@ _profilehighlightcolor{ 255, 255, 255, 255 }
 {
 	_size = size;
 	_rendertexture.create(_size.x, _size.y);
+	_piecebrush.setHandler(piecehandler);
 	_piecebrush.setStyle("bulldog");
 	_piecebrush.setColor(_colortool.getPieceColor());
 	_piecebrush.setName("pawn");
-	_piecebrush.updateImage();
 	_squarecolor = squarecolor;
 	_boardcolor = boardcolor;
 	setState(state);
@@ -182,7 +182,6 @@ void Tool::setColorIndex(unsigned int index)
 {
 	_colortool.setIndex(index);
 	_piecebrush.setColor(_colortool.getPieceColor());
-	_piecebrush.updateImage();
 	updateImage();
 }
 

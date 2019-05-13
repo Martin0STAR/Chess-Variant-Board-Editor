@@ -3,13 +3,17 @@
 using namespace std;
 
 Piece::Piece()
-	:Piece::Piece{ "", "", PieceColor{}, ""}
+	:Piece::Piece{nullptr, "", "", PieceColor{}, ""}
 {}
 
-Piece::Piece(string style, string name, PieceColor color, string flags = "")
+Piece::Piece(PieceHandler* piecehandler)
+	: Piece::Piece{ piecehandler, "", "", PieceColor{}, "" }
+{}
+
+Piece::Piece(PieceHandler* piecehandler, string style, string name, PieceColor color, string flags = "")
 	:_style{ style }, _name{ name }, _color{ color },
 	_iscarried{ false }, _ismirrored{ false }, _isupsidedown{ false },
-	_isinvertedcolors{ false }, _scale{ 1.f, 1.f }
+	_isinvertedcolors{ false }, _scale{ 1.f, 1.f }, _piecehandler{piecehandler}
 {
 	for (auto c : flags)
 	{
@@ -30,11 +34,11 @@ Piece::Piece(string style, string name, PieceColor color, string flags = "")
 			_isinvertedcolors = true;
 		}
 	}
-	updateImage();
 }
 
 Piece::Piece(const Piece & piece)
 {
+	_piecehandler = piece._piecehandler;
 	_style = piece._style;
 	_color = piece._color;
 	_name = piece._name;
@@ -54,7 +58,6 @@ Piece::Piece(const Piece & piece)
 	{
 		_accessories.push_back(a);
 	}
-	updateImage();
 }
 
 Piece::~Piece()
@@ -69,6 +72,7 @@ Piece::~Piece()
 
 Piece& Piece::operator =(const Piece& rhs)
 {
+	_piecehandler = rhs._piecehandler;
 	_style = rhs._style;
 	_color = rhs._color;
 	_name = rhs._name;
@@ -85,7 +89,6 @@ Piece& Piece::operator =(const Piece& rhs)
 	{
 		removePieceOnTop();
 	}
-	updateImage();
 	return *this;
 }
 
@@ -166,11 +169,10 @@ istream & operator >> (istream & is, Piece & piece)
 	{
 		is >> ws;
 		is.ignore(1);
-		Piece pieceontop;
+		Piece pieceontop{ piece._piecehandler };
 		is >> pieceontop;
 		piece.addPieceOnTop(pieceontop);
 	}
-	piece.updateImage();
 	return is;
 }
 
@@ -270,7 +272,7 @@ std::vector<PieceAccessory> Piece::getAccessorylist() const
 
 bool Piece::exists() const
 {
-	return std::experimental::filesystem::exists(getFileName());
+	return _piecehandler->exists(_style, _name);
 }
 
 bool Piece::isCarrier() const
@@ -314,6 +316,11 @@ bool Piece::colorIsModified() const
 bool Piece::hasAccessories() const
 {
 	return _accessories.size() != 0;
+}
+
+void Piece::setHandler(PieceHandler* piecehandler)
+{
+	_piecehandler = piecehandler;
 }
 
 void Piece::setStyle(string style)
@@ -384,18 +391,18 @@ void Piece::setPosition(sf::Vector2f position)
 	int xpos, ypos;
 	if (isCarrier())
 	{
-		xpos = (int)(((float)_drawareasize.x - (float)_pieceimage.getSize().x * _scale.x) / 2.f);
+		xpos = (int)(((float)_drawareasize.x - (float)getImage().getSize().x * _scale.x) / 2.f);
 		ypos = (int)((float)_drawareasize.y * _scale.y / 2.f);
 	}
 	else if (isCarried())
 	{
-		xpos = (int)(((float)_drawareasize.x - (float)_pieceimage.getSize().x * _scale.x) / 2.f);
-		ypos = (int)((float)_drawareasize.y / 2.f - (float)_pieceimage.getSize().y * _scale.y );
+		xpos = (int)(((float)_drawareasize.x - (float)getImage().getSize().x * _scale.x) / 2.f);
+		ypos = (int)((float)_drawareasize.y / 2.f - (float)getImage().getSize().y * _scale.y );
 	}
 	else
 	{
-		xpos = (int)(((int)_drawareasize.x - (int)(_pieceimage.getSize().x * _scale.x)) / 2);
-		ypos = (int)(((int)_drawareasize.y - (int)(_pieceimage.getSize().y * _scale.y)) / 2);
+		xpos = (int)(((int)_drawareasize.x - (int)(getImage().getSize().x * _scale.x)) / 2);
+		ypos = (int)(((int)_drawareasize.y - (int)(getImage().getSize().y * _scale.y)) / 2);
 	}
 	_inareaposition = sf::Vector2f{ (float)xpos, (float)ypos };
 
@@ -405,7 +412,7 @@ void Piece::setPosition(sf::Vector2f position)
 	}
 	for (auto &a : _accessories)
 	{
-		a.setPosition(_drawareaposition + _inareaposition, _pieceimage.getSize());
+		a.setPosition(_drawareaposition + _inareaposition, getImage().getSize());
 	}
 }
 
@@ -455,7 +462,7 @@ bool Piece::addAccessory(std::string accessoryname, sf::Color color)
 			_accessories.erase(it2);
 		}
 		PieceAccessory pieceaccessory{ accessoryname, color };
-		pieceaccessory.setPosition(_drawareaposition, _pieceimage.getSize());
+		pieceaccessory.setPosition(_drawareaposition, getImage().getSize());
 		_accessories.push_back(pieceaccessory);
 	}
 	else
@@ -491,12 +498,25 @@ bool Piece::flipVertically()
 	return true;
 }
 
+sf::Image Piece::getImage() const
+{
+	return _piecehandler->getImage(_style, _name, _color.name);
+}
+
 bool Piece::invertColors()
 {
 	_isinvertedcolors = !_isinvertedcolors;
 	return true;
 }
 
+/*
+bool Piece::updateImage(PieceHandler piecehandler)
+{
+	_pieceimage = getImage(piecehandler);
+}
+*/
+
+/*
 bool Piece::updateImage()
 {
 	if (std::experimental::filesystem::exists(getFileName()))
@@ -509,11 +529,14 @@ bool Piece::updateImage()
 		return false;
 	}
 }
+*/
 
+/*
 string Piece::getFileName() const
 {
 	return "resources/pieces/" + _style + "/" + _color.name + "/" + _name + ".png";
 }
+*/
 
 void Piece::invertColor(sf::Image & image) const
 {
@@ -553,7 +576,7 @@ void Piece::offsetColor(sf::Image & image) const
 
 void Piece::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-	sf::Image drawpieceimage{ _pieceimage };
+	sf::Image drawpieceimage{ getImage() };
 	if (isCarrying())
 	{
 		_pieceontop->draw(target, states);

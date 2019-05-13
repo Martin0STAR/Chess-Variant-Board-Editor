@@ -21,7 +21,7 @@ void PieceSelectWindow::load(PieceHandler& piecehandler, Board& board, Tool& too
 
 	int numpiecerows = max(
 		tool.getNumColors(),
-		(piecehandler.getNameList(tool.getPieceBrush().getStyle()).size() + _numcolumns - 2) / (_numcolumns - 1));
+		(piecehandler.getNumPieces(tool.getPieceBrush().getStyle()) + _numcolumns - 2) / (_numcolumns - 1));
 
 	_numrows = _numtoolrows + numpiecerows;
 
@@ -252,9 +252,9 @@ string PieceSelectWindow::getTypeFromId(PieceHandler& piecehandler, Tool& tool, 
 
 	unsigned int index = ((y - _numtoolrows) * (_numcolumns - 1) + ((x-1) % (_numcolumns - 1)));
 		
-	if (index < piecehandler.getNameList(tool.getPieceBrush().getStyle()).size())
+	if (index < piecehandler.getNumPieces(tool.getPieceBrush().getStyle()))
 	{
-		return piecehandler.getNameList(tool.getPieceBrush().getStyle()).at(index);
+		return piecehandler.getName(tool.getPieceBrush().getStyle(), index);
 	}
 	else
 	{
@@ -379,7 +379,6 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 			{
 				piece.setName("pawn");
 			}
-			piece.updateImage();
 			piece.setSize(_displaysquaresize);
 			piece.setScale(piecehandler.getScale(piece.getStyle()));
 			piece.setPosition(position);

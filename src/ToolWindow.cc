@@ -91,6 +91,12 @@ bool ToolWindow::isSaved()
 	return !_modified;
 }
 
+void ToolWindow::setPieceHandler(PieceHandler* piecehandler)
+{
+	_lefttool.getPieceBrush().setHandler(piecehandler);
+	_righttool.getPieceBrush().setHandler(piecehandler);
+}
+
 void ToolWindow::setTool(bool islefttool, Tool_State::Tool_State state)
 {
 	if (islefttool)

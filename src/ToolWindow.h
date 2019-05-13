@@ -3,6 +3,7 @@
 #include <string>
 #include "Board.h"
 #include <array>
+#include "PieceHandler.h"
 #include "Piece.h"
 #include "Tool.h"
 
@@ -31,6 +32,7 @@ public:
 
 	bool isIconArea(const ToolWindowComponent::Icon & icon, sf::Vector2f pixelcoord) const;
 	bool isSaved();
+	void setPieceHandler(PieceHandler* piecehandler);
 	void setTool(bool islefttool, Tool_State::Tool_State state);
 	void setSaveIconSaved();
 	void setSaveIconNotSaved();

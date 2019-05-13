@@ -5,6 +5,8 @@ BoardRunner::BoardRunner(string setupfilename)
 {
 	_piecehandler.loadStyle("bulldog");
 	_piecehandler.loadStyle("musketeer");
+	_board.setPieceHandler(&_piecehandler);
+	_toolwindow.setPieceHandler(&_piecehandler);
 	if (_boardnamelist.loadNames(setupfilename))
 	{
 		_boardnumber = _boardnamelist.getBoardNumber();
@@ -302,7 +304,6 @@ void BoardRunner::run(std::default_random_engine & rng)
 				tool->getPieceBrush().setScale(_piecehandler.getScale(tool->getPieceBrush().getStyle()));
 				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				_toolwindow.setTool(_action.isLeftTool, Tool_State::ADD_PIECE);
-				tool->getPieceBrush().updateImage();
 				_toolwindow.updateToolImage(_action.isLeftTool);
 				break;
 			case Window_Action_State::SET_TOOL_PIECE_TYPE:

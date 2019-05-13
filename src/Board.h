@@ -11,6 +11,7 @@
 #include <vector>
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "PieceHandler.h"
 #include "Square.h"
 #include "BoardCoord.h"
 #include "Piece.h"
@@ -24,7 +25,8 @@ class Board : public sf::Drawable
 {
 	public:
 		Board();
-		Board(std::string name);
+		Board(PieceHandler* piecehandler);
+		Board(PieceHandler* piecehandler, std::string name);
 		bool load(std::string);
 		bool initLoad(std::string);
 		~Board();
@@ -55,6 +57,8 @@ class Board : public sf::Drawable
 
 		bool togglegrid();
 		void removeDragArrow();
+
+		void setPieceHandler(PieceHandler* piecehandler);
 
 		bool addRowUp();
 		bool addRowDown();
@@ -132,6 +136,8 @@ class Board : public sf::Drawable
 		bool drawCoordinates();
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+		PieceHandler* _piecehandler;
 
 		unsigned int _numrows;
 		unsigned int _numcolumns;
