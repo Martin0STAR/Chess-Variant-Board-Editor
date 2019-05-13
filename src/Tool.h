@@ -3,6 +3,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "Piece.h"
+#include "Line.h"
 #include "Arrow.h"
 #include "Colortool.h"
 #include "PieceColor.h"
@@ -15,6 +16,7 @@ namespace Tool_State
 		SELECT,
 		SET_SQUARE_COLOR,
 		ADD_PIECE,
+		ADD_LINE,
 		ADD_ARROW,
 		ADD_PROFILE_BOX,
 		ADD_PIECE_ACCESSORY,
@@ -76,6 +78,11 @@ public:
 		sf::Vector2u size);
 
 	void drawSetSquareColorTool(
+		sf::RenderTarget & target, sf::Vector2f position,
+		sf::Vector2u size,
+		unsigned int colorindex);
+
+	void drawLineTool(
 		sf::RenderTarget & target, sf::Vector2f position,
 		sf::Vector2u size,
 		unsigned int colorindex);

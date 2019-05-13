@@ -239,6 +239,11 @@ void Tool::updateImage()
 		drawSetSquareColorTool(_rendertexture, sf::Vector2f{ 0.f, 0.f },
 			_size, getColorIndex());
 		break;
+	case Tool_State::ADD_LINE:
+		_rendertexture.clear(_squarecolor);
+		drawLineTool(_rendertexture, sf::Vector2f{ 0.f, 0.f },
+			_size, getColorIndex());
+		break;
 	case Tool_State::ADD_ARROW:
 	{
 		_rendertexture.clear(_squarecolor);
@@ -309,6 +314,19 @@ void Tool::drawSetSquareColorTool(
 	shape.setFillColor(_colortool.getSquareColor(colorindex));
 	shape.setPosition(position);
 	target.draw(shape);
+}
+
+void Tool::drawLineTool(
+	sf::RenderTarget & target, sf::Vector2f position,
+	sf::Vector2u size,
+	unsigned int colorindex)
+{
+	Line line{
+		position + sf::Vector2f{(float)size.x / 2.f, (float)size.y},
+		position + sf::Vector2f{(float)size.x / 2.f, 0.f},
+		getArrowColor(colorindex)
+	};
+	target.draw(line);
 }
 
 void Tool::drawArrowTool(

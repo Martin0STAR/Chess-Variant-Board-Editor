@@ -15,6 +15,7 @@
 #include "BoardCoord.h"
 #include "Piece.h"
 #include "PieceAccessory.h"
+#include "Line.h"
 #include "Arrow.h"
 #include "ProfileBox.h"
 #include "PieceColor.h"
@@ -75,6 +76,9 @@ class Board : public sf::Drawable
 		bool removePieceOnTop(BoardComponent::Coord);
 		bool addPieceAccessory(BoardComponent::Coord coord, std::string accessoryname, sf::Color color);
 
+		bool addLine(BoardComponent::Coord, BoardComponent::Coord, sf::Color);
+		bool removeLine(Line& line);
+
 		bool addArrow(BoardComponent::Coord, BoardComponent::Coord, sf::Color);
 		bool removeArrow(Arrow &);
 
@@ -99,6 +103,7 @@ class Board : public sf::Drawable
 		bool drawEmptySquare(BoardComponent::Coord);
 		bool drawGrid();
 		bool drawPiece(Piece&, BoardComponent::Coord);
+		bool drawLine(Line&);
 		bool drawArrow(Arrow&);
 		bool drawColoredSquare(sf::Color, BoardComponent::Coord);
 		bool drawProfileBox(BoardComponent::ProfileBox);
@@ -156,6 +161,7 @@ class Board : public sf::Drawable
 		std::map<BoardComponent::Coord, sf::Color> _colored_square_list;
 		std::map<BoardComponent::Coord, sf::Color> _highlighted_square_list;
 		std::map<BoardComponent::Coord, Piece> _piece_list;
+		std::vector<Line> _line_list;
 		std::vector<Arrow> _arrow_list;
 		std::vector<BoardComponent::ProfileBox> _profile_box_list;
 };

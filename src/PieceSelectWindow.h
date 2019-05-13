@@ -24,6 +24,7 @@ namespace Piece_Tool
 		INVERT_COLORS,
 		MUSKETEER_STYLE,
 		REMOVE,
+		ADD_LINE,
 		ADD_ARROW,
 		COLOR_SQUARE,
 		ADD_PROFILE_BOX,
@@ -86,18 +87,19 @@ public:
 		{Piece_Tool::ADD_ARROW, "arrow"}
 	};
 
-	std::array<Piece_Tool::Piece_Tool, 14> _tools
+	std::array<Piece_Tool::Piece_Tool, 15> _tools
 	{
 		Piece_Tool::SELECT,
-		Piece_Tool::REMOVE_SQUARE,
-		Piece_Tool::ADD_PROFILE_BOX,
-		Piece_Tool::COLOR_SQUARE,
-		Piece_Tool::ADD_ARROW,
 		Piece_Tool::REMOVE,
+		Piece_Tool::REMOVE_SQUARE,
+		Piece_Tool::COLOR_SQUARE,
+		Piece_Tool::ADD_PROFILE_BOX,
+		Piece_Tool::MUSKETEER_STYLE,
+		Piece_Tool::ADD_LINE,
+		Piece_Tool::ADD_ARROW,
 		Piece_Tool::FLIP_HORIZONTAL,
 		Piece_Tool::FLIP_VERTICAL,
 		Piece_Tool::INVERT_COLORS,
-		Piece_Tool::MUSKETEER_STYLE,
 		Piece_Tool::ACCESSORY_STAR6POINT,
 		Piece_Tool::ACCESSORY_SHIELD,
 		Piece_Tool::ACCESSORY_SWORD,

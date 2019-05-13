@@ -27,6 +27,7 @@ Board::~Board()
 	_piece_list.clear();
 	_colored_square_list.clear();
 	_highlighted_square_list.clear();
+	_line_list.clear();
 	_arrow_list.clear();
 	_removed_square_list.clear();
 	_profile_box_list.clear();
@@ -402,6 +403,40 @@ bool Board::addPieceAccessory(
 	return _piece_list.at(coord).addAccessory(accessoryname, color);
 }
 
+bool Board::addLine(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoord, sf::Color color)
+{
+	sf::Vector2f frompos{ getCenterPosition(fromcoord) };
+	sf::Vector2f topos{ getCenterPosition(tocoord) };
+
+	Line newline{ frompos, topos, color };
+
+	auto it = find_if(_line_list.begin(), _line_list.end(), [newline](Line oldline)
+	{
+		return oldline.getFromCoord() == newline.getFromCoord() &&
+			oldline.getToCoord() == newline.getToCoord();
+	});
+
+	if (it == _line_list.end())
+	{
+		_line_list.push_back(newline);
+	}
+	else if (*it == newline)
+	{
+		removeLine(newline);
+	}
+	else
+	{
+		removeLine(*it);
+		_line_list.push_back(newline);
+	}
+	return true;
+}
+
+bool Board::removeLine(Line & line)
+{
+	_line_list.erase(remove(_line_list.begin(), _line_list.end(), line), _line_list.end());
+	return true;
+}
 
 bool Board::addArrow(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoord, sf::Color color)
 {
@@ -531,6 +566,11 @@ bool Board::moveAll(BoardComponent::Coord movecoord)
 		(float)(movecoord.getVector().y * (float)_squaresize.y)
 	};
 
+	for (auto & line : _line_list)
+	{
+		line.move(pixelvector);
+	}
+
 	for (auto & arrow : _arrow_list)
 	{
 		arrow.move(pixelvector);
@@ -657,6 +697,11 @@ void Board::updateImage()
 		drawPiece(piece.second, piece.first);
 	}
 
+	for (auto & line : _line_list)
+	{
+		drawLine(line);
+	}
+
 	for (auto & arrow : _arrow_list)
 	{
 		drawArrow(arrow);
@@ -771,6 +816,17 @@ bool Board::drawPiece(Piece & piece, BoardComponent::Coord coord)
 	return true;
 }
 
+bool Board::drawLine(Line & line)
+{
+	if (!isWithinPixelBoard(line.getFromCoord()) ||
+		!isWithinPixelBoard(line.getToCoord()))
+	{
+		return false;
+	}
+	_rendertexture.draw(line);
+	return true;
+}
+
 bool Board::drawArrow(Arrow & arrow)
 {
 	if (!isWithinPixelBoard(arrow.getFromCoord()) ||
@@ -865,6 +921,11 @@ void Board::save(string name)
 			<< " " << elem.first.getNotation(getNumRows()) << "]\n";
 	}
 
+	for (auto line : _line_list)
+	{
+		ofs << "[Line " << line << "]\n";
+	}
+
 	for (auto arrow : _arrow_list)
 	{
 		ofs << "[Arrow " << arrow << "]\n";
@@ -914,6 +975,7 @@ bool Board::intern_load(string setupfilename)
 	_colored_square_list.clear();
 	_highlighted_square_list.clear();
 	_piece_list.clear();
+	_line_list.clear();
 	_arrow_list.clear();
 	_profile_box_list.clear();
 
@@ -1022,6 +1084,12 @@ bool Board::intern_load(string setupfilename)
 				ifs >> notation;
 				BoardComponent::Coord coord{ getNumRows(), notation };
 				_highlighted_square_list.insert({ coord, color });
+			}
+			else if (variable_name == "Line")
+			{
+				Line line;
+				ifs >> line;
+				_line_list.push_back(line);
 			}
 			else if (variable_name == "Arrow")
 			{

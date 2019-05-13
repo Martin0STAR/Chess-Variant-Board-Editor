@@ -122,6 +122,17 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 					case Tool_State::ADD_PIECE:
 						action.state = Window_Action_State::ADD_PIECE;
 						return action;
+					case Tool_State::ADD_LINE:
+						if (action.fromsquarecoord == action.tosquarecoord)
+						{
+							action.state = Window_Action_State::HIGHLIGHT_SQUARE;
+							return action;
+						}
+						else
+						{
+							action.state = Window_Action_State::ADD_LINE;
+							return action;
+						}
 					case Tool_State::ADD_ARROW:
 						if (action.fromsquarecoord == action.tosquarecoord)
 						{
@@ -351,8 +362,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 					return action;
 				}
 				break;
+			case Tool_State::ADD_LINE:
 			case Tool_State::ADD_ARROW:
-				
 				action.tosquarecoord = BoardComponent::Coord{
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),

@@ -143,6 +143,10 @@ Window_Action PieceSelectWindow::handleEvent(
 				action.state = Window_Action_State::SET_TOOL_PIECE_STYLE;
 				action.name = "musketeer";
 				return action;
+			case Piece_Tool::ADD_LINE:
+				action.toolstate = Tool_State::ADD_LINE;
+				action.state = Window_Action_State::SET_TOOL_STATE;
+				return action;
 			case Piece_Tool::ADD_ARROW:
 				action.toolstate = Tool_State::ADD_ARROW;
 				action.state = Window_Action_State::SET_TOOL_STATE;
@@ -329,6 +333,10 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 	{
 		switch (_tools.at(toolindex))
 		{
+		case Piece_Tool::ADD_LINE:
+			tool.drawLineTool(_rendertexture, position,
+				_displaysquaresize, tool.getColorIndex());
+			return;
 		case Piece_Tool::ADD_ARROW:
 		{
 			tool.drawArrowTool(_rendertexture, position,
@@ -425,6 +433,10 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 		{
 			switch (tool.getState())
 			{
+			case Tool_State::ADD_LINE:
+				tool.drawLineTool(_rendertexture, position,
+					_displaysquaresize, y - _numtoolrows);
+				return;
 			case Tool_State::ADD_ARROW:
 				tool.drawArrowTool(_rendertexture, position,
 					_displaysquaresize, y - _numtoolrows);

@@ -318,6 +318,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 
 				switch (tool->getState())
 				{
+				case Tool_State::ADD_LINE:
 				case Tool_State::ADD_ARROW:
 				case Tool_State::ADD_PIECE:
 				case Tool_State::ADD_PROFILE_BOX:
@@ -422,6 +423,17 @@ void BoardRunner::run(std::default_random_engine & rng)
 				break;
 			case Window_Action_State::REMOVE_SQUARE:
 				if (_board.removeSquare(_action.tosquarecoord))
+				{
+					_board.updateImage();
+					_toolwindow.setSaveIconNotSaved();
+				}
+				break;
+			case Window_Action_State::ADD_LINE:
+				_board.removeDragArrow();
+				if (_board.addLine(
+					_action.fromsquarecoord,
+					_action.tosquarecoord,
+					tool->getArrowColor()))
 				{
 					_board.updateImage();
 					_toolwindow.setSaveIconNotSaved();
