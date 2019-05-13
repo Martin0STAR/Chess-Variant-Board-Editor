@@ -509,35 +509,6 @@ bool Piece::invertColors()
 	return true;
 }
 
-/*
-bool Piece::updateImage(PieceHandler piecehandler)
-{
-	_pieceimage = getImage(piecehandler);
-}
-*/
-
-/*
-bool Piece::updateImage()
-{
-	if (std::experimental::filesystem::exists(getFileName()))
-	{
-		_pieceimage.loadFromFile(getFileName());
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-*/
-
-/*
-string Piece::getFileName() const
-{
-	return "resources/pieces/" + _style + "/" + _color.name + "/" + _name + ".png";
-}
-*/
-
 void Piece::invertColor(sf::Image & image) const
 {
 	for (unsigned int x{ 0 }; x < image.getSize().x; x++)
