@@ -15,28 +15,38 @@ BoardComponent::Coord::Coord(sf::Vector2i coord, BoardComponent::Orientation ori
 		_coord.x--;
 		_isgridright = true;
 		_isgridtop = true;
+		break;
 	case TOP:
 		_isgridtop = true;
+		break;
 	case TOPRIGHT:
 		_isgridright = true;
 		_isgridtop = true;
+		break;
 	case LEFT:
 		_coord.x--;
 		_isgridright = true;
+		break;
 	case RIGHT:
 		_isgridright = true;
+		break;
 	case BOTTOMLEFT:
 		_coord.x--;
 		_coord.y++;
 		_isgridright = true;
 		_isgridtop = true;
+		break;
 	case BOTTOM:
 		_coord.y++;
 		_isgridtop = true;
+		break;
 	case BOTTOMRIGHT:
 		_coord.y++;
 		_isgridright = true;
 		_isgridtop = true;
+		break;
+	default:
+		break;
 	}
 }
 
