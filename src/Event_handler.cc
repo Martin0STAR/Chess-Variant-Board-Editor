@@ -3,7 +3,7 @@
 using namespace std;
 
 Event_handler::Event_handler()
-	:_scalex{ 1.0 }, _scaley{ 1.0 }
+	:_scalex{ 1.0 }, _scaley{ 1.0 }, _allowintersections{ false }
 {}
 
 Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
@@ -51,7 +51,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 			action.tosquarecoord = BoardComponent::Coord{
 				board.getDisplaySquareOffset(),
 				board.getDisplaySquareSize(),
-				displaytopos
+				displaytopos,
+				_allowintersections
 			};
 
 			if (event.mouseButton.button == sf::Mouse::Left)
@@ -65,7 +66,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 				action.fromsquarecoord = BoardComponent::Coord{
 				board.getDisplaySquareOffset(),
 				board.getDisplaySquareSize(),
-				displayfrompos
+				displayfrompos,
+				_allowintersections
 				};
 			}
 			else if (event.mouseButton.button == sf::Mouse::Right)
@@ -79,7 +81,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 				action.fromsquarecoord = BoardComponent::Coord{
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
-					displayfrompos
+					displayfrompos,
+					_allowintersections
 				};
 			}
 			else
@@ -325,7 +328,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 				action.fromsquarecoord = BoardComponent::Coord{
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
-					displayfrompos
+					displayfrompos,
+					_allowintersections
 				};
 			}
 			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -339,7 +343,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 				action.fromsquarecoord = BoardComponent::Coord{
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
-					displayfrompos
+					displayfrompos,
+					_allowintersections
 				};
 			}
 			else
@@ -354,7 +359,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 				action.tosquarecoord = BoardComponent::Coord{
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
-					displaytopos
+					displaytopos,
+					_allowintersections
 				};
 				if (board.isValidSquare(action.tosquarecoord) && !(board.isEmptySquare(action.fromsquarecoord)))
 				{
@@ -367,7 +373,8 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 				action.tosquarecoord = BoardComponent::Coord{
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
-					displaytopos
+					displaytopos,
+					_allowintersections
 				};
 				if (board.isValidSquare(action.tosquarecoord))
 				{
@@ -383,4 +390,9 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 			break;
 	}
 	return action;
+}
+
+void Event_handler::toggleGridSelect()
+{
+	_allowintersections = !_allowintersections;
 }

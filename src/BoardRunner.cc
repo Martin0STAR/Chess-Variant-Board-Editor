@@ -512,6 +512,9 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_toolwindow.setSaveIconNotSaved();
 				}
 				break;
+			case Window_Action_State::TOGGLE_GRID_SELECT:
+				_event_handler.toggleGridSelect();
+				break;
 			case Window_Action_State::GENERATE_COLORED_BOARD:
 				if (_board.generateColoredBoard(rng))
 				{

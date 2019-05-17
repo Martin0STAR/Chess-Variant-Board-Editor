@@ -5,15 +5,29 @@
 #include <SFML/Graphics.hpp>
 namespace BoardComponent
 {
+	enum Orientation
+	{
+		TOPLEFT,
+		TOP,
+		TOPRIGHT,
+		LEFT,
+		CENTER,
+		RIGHT,
+		BOTTOMLEFT,
+		BOTTOM,
+		BOTTOMRIGHT
+	};
+
 	class Coord
 	{
 	public:
 		Coord();
-		Coord(sf::Vector2i coord);
+		Coord(sf::Vector2i coord, Orientation orientation = BoardComponent::CENTER);
 		Coord(unsigned int numrows, std::string notation);
 		Coord(sf::Vector2f offset,
 			sf::Vector2f squaresize,
-			sf::Vector2f pixelpos);
+			sf::Vector2f pixelpos,
+			bool allowintersections = false);
 
 		bool operator ==(const Coord &) const;
 		bool operator <(const Coord &) const;
@@ -27,12 +41,15 @@ namespace BoardComponent
 		std::string getNotationX() const;
 		std::string getNotationY(unsigned int numrows) const;
 	private:
-		sf::Vector2i getCoordFromNotation(unsigned int numrows, std::string notation);
-		sf::Vector2i getCoordFromPixelPosition(
+		void setCoordByNotation(unsigned int numrows, std::string notation);
+		void setCoordByPixelPosition(
 			sf::Vector2f offset,
 			sf::Vector2f squaresize,
-			sf::Vector2f pixelpos);
+			sf::Vector2f pixelpos,
+			bool allowintersections);
 
 		sf::Vector2i _coord;
+		bool _isgridright;
+		bool _isgridtop;
 	};
 }
