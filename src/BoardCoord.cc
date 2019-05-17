@@ -187,6 +187,26 @@ string BoardComponent::Coord::getNotationY(unsigned int numrows) const
 	return notationy;
 }
 
+BoardComponent::Orientation BoardComponent::Coord::getOrientation() const
+{
+	if (_isgridright && _isgridtop)
+	{
+		return BoardComponent::Orientation::TOPRIGHT;
+	}
+	if (_isgridright)
+	{
+		return BoardComponent::Orientation::RIGHT;
+	}
+	if (_isgridtop)
+	{
+		return BoardComponent::Orientation::TOP;
+	}
+	else
+	{
+		return BoardComponent::Orientation::CENTER;
+	}
+}
+
 void BoardComponent::Coord::setCoordByNotation(unsigned int numrows, string notation)
 {
 	sf::Vector2i coord{ 0,0 };

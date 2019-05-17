@@ -40,6 +40,7 @@ namespace BoardComponent
 		std::string getNotation(unsigned int numrows) const;
 		std::string getNotationX() const;
 		std::string getNotationY(unsigned int numrows) const;
+		Orientation getOrientation() const;
 	private:
 		void setCoordByNotation(unsigned int numrows, std::string notation);
 		void setCoordByPixelPosition(

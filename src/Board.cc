@@ -143,9 +143,9 @@ std::vector<BoardComponent::ProfileBox> Board::getProfileBoxList() const
 bool Board::isWithinPixelBoard(sf::Vector2f pixelpos) const
 {
 	return pixelpos.x >= (float)_leftofboardwidth &&
-		pixelpos.x < (float)_rendertexture.getSize().x - (float)_rightofboardwidth &&
+		pixelpos.x <= (float)_rendertexture.getSize().x - (float)_rightofboardwidth &&
 		pixelpos.y >= (float)_topofboardheight &&
-		pixelpos.y < (float)_rendertexture.getSize().y - (float)_bottomofboardheight;
+		pixelpos.y <= (float)_rendertexture.getSize().y - (float)_bottomofboardheight;
 }
 
 bool Board::isWithinBoard(sf::Vector2i coord) const
@@ -158,7 +158,24 @@ bool Board::isWithinBoard(sf::Vector2i coord) const
 
 bool Board::isWithinBoard(BoardComponent::Coord coord) const
 {
-	return isWithinBoard(coord.getVector());
+	if (isWithinBoard(coord.getVector()))
+	{
+		return true;
+	}
+	switch (coord.getOrientation())
+	{
+	case BoardComponent::TOPRIGHT:
+		return isWithinBoard(coord.getVector() + sf::Vector2i{ 1, 0 }) ||
+			isWithinBoard(coord.getVector() + sf::Vector2i{ 0, -1 }) ||
+			isWithinBoard(coord.getVector() + sf::Vector2i{ 1, -1 });
+	case BoardComponent::RIGHT:
+		return isWithinBoard(coord.getVector() + sf::Vector2i{ 1, 0 });
+	case BoardComponent::TOP:
+		return isWithinBoard(coord.getVector() + sf::Vector2i{ 0, -1 });
+	default:
+		return false;
+	}
+	return false;
 }
 
 bool Board::isValidSquare(BoardComponent::Coord coord) const
