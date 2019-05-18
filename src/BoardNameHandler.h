@@ -10,18 +10,18 @@ class BoardNameHandler
 {
 	public:
 		BoardNameHandler();
-		BoardNameHandler(std::string);
-		bool loadNames(std::string);
-		std::string getName(unsigned int);
-		std::string getInitBoardName(std::string);
+		BoardNameHandler(std::string setupfilename);
+		bool loadNames(std::string setupfilename);
+		std::string getName(unsigned int id);
+		std::string getInitBoardName(std::string type);
 		unsigned int getBoardNumber();
 		unsigned int getNumBoards();
 		bool setName(unsigned int index, std::string name);
-		void save(int);
-		void push_back(std::string);
-		void remove(int);
+		void save(int current_board);
+		void push_back(std::string name);
+		void remove(int board_number);
 	private:
-		std::string getAvailableName(std::string);
+		std::string getAvailableName(std::string name);
 
 		std::string _setupfilename;
 		unsigned int _current_board;

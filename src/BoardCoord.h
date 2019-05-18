@@ -29,10 +29,10 @@ namespace BoardComponent
 			sf::Vector2f pixelpos,
 			bool allowintersections = false);
 
-		bool operator ==(const Coord &) const;
-		bool operator <(const Coord &) const;
-		bool operator >(const Coord &) const;
-		Coord operator +(const Coord &) const;
+		bool operator ==(const Coord & rhs) const;
+		bool operator <(const Coord & rhs) const;
+		bool operator >(const Coord & rhs) const;
+		Coord operator +(const Coord & rhs) const;
 
 		sf::Vector2i getVector() const;
 		sf::Vector2f getPixelPosition(sf::Vector2f offset, sf::Vector2f squaresize) const;
