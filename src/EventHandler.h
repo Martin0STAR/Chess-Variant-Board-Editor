@@ -7,10 +7,10 @@
 #include "BoardCoord.h"
 #include "Keyboardhandler.h"
 
-class Event_handler
+class EventHandler
 {
 public:
-	Event_handler();
+	EventHandler();
 	
 	Window_Action handleEvent(sf::Event event, Board & board,
 		ToolWindow & toolwindow, Keyboardhandler & keyboardhandler);

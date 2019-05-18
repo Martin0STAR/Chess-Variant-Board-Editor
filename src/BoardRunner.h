@@ -7,7 +7,7 @@
 #include "PieceHandler.h"
 #include "PieceSelectWindow.h"
 #include "Window_Action.h"
-#include "Event_handler.h"
+#include "EventHandler.h"
 #include "Keyboardhandler.h"
 #include "Textbox.h"
 
@@ -27,7 +27,7 @@ private:
 	sf::RenderWindow _mainwindow;
 	PieceSelectWindow _pieceselectwindow;
 	Window_Action _action;
-	Event_handler _event_handler;
+	EventHandler _eventhandler;
 	PieceHandler _piecehandler;
 	Keyboardhandler _keyboardhandler;
 	BoardComponent::Textbox _textbox;

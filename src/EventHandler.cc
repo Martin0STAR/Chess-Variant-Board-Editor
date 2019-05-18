@@ -1,12 +1,12 @@
-#include "Event_handler.h"
+#include "EventHandler.h"
 
 using namespace std;
 
-Event_handler::Event_handler()
+EventHandler::EventHandler()
 	:_scalex{ 1.0 }, _scaley{ 1.0 }, _allowintersections{ false }
 {}
 
-Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
+Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 	ToolWindow & toolwindow, Keyboardhandler & keyboardhandler)
 {
 	Window_Action action;
@@ -392,7 +392,7 @@ Window_Action Event_handler::handleEvent(sf::Event event, Board & board,
 	return action;
 }
 
-void Event_handler::toggleGridSelect()
+void EventHandler::toggleGridSelect()
 {
 	_allowintersections = !_allowintersections;
 }

@@ -65,7 +65,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 		{
 			if (_mainwindow.pollEvent(event))
 			{
-				_action = _event_handler.handleEvent(
+				_action = _eventhandler.handleEvent(
 					event,
 					_board,
 					_toolwindow,
@@ -513,7 +513,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 				}
 				break;
 			case Window_Action_State::TOGGLE_GRID_SELECT:
-				_event_handler.toggleGridSelect();
+				_eventhandler.toggleGridSelect();
 				break;
 			case Window_Action_State::GENERATE_COLORED_BOARD:
 				if (_board.generateColoredBoard(rng))
