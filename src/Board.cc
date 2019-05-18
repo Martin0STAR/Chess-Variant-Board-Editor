@@ -983,8 +983,11 @@ void Board::save(string name)
 void Board::newNameSave(string newname, string oldname)
 {
 	save(newname);
-	std::remove(("savedboards\\" + oldname + ".png").c_str());
-	std::remove(("savedboards/setup/" + oldname + ".txt").c_str());
+	if (newname != oldname)
+	{
+		std::remove(("savedboards\\" + oldname + ".png").c_str());
+		std::remove(("savedboards/setup/" + oldname + ".txt").c_str());
+	}
 }
 
 bool Board::intern_load(string setupfilename)

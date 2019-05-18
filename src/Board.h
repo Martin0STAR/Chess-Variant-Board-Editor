@@ -27,8 +27,8 @@ class Board : public sf::Drawable
 		Board();
 		Board(PieceHandler* piecehandler);
 		Board(PieceHandler* piecehandler, std::string name);
-		bool load(std::string);
-		bool initLoad(std::string);
+		bool load(std::string name);
+		bool initLoad(std::string name);
 		~Board();
 
 		sf::Vector2u getImageSize() const;
@@ -44,16 +44,16 @@ class Board : public sf::Drawable
 		unsigned int getNumColumns() const;
 		sf::Color getBoardColor() const;
 		sf::Color getSquareColor(unsigned int index) const;
-		sf::Color getSquareColor(BoardComponent::Coord) const;
+		sf::Color getSquareColor(BoardComponent::Coord coord) const;
 		BoardComponent::Square getSquare(BoardComponent::Coord coord) const;
 		Piece getPiece(BoardComponent::Coord coord) const;
 		std::vector<BoardComponent::ProfileBox> getProfileBoxList() const;
 		
 		bool isWithinPixelBoard(sf::Vector2f pixelpos) const;
-		bool isWithinBoard(sf::Vector2i) const;
-		bool isWithinBoard(BoardComponent::Coord) const;
-		bool isValidSquare(BoardComponent::Coord) const;
-		bool isEmptySquare(BoardComponent::Coord) const;
+		bool isWithinBoard(sf::Vector2i coord) const;
+		bool isWithinBoard(BoardComponent::Coord coord) const;
+		bool isValidSquare(BoardComponent::Coord coord) const;
+		bool isEmptySquare(BoardComponent::Coord coord) const;
 
 		bool togglegrid();
 		void removeDragArrow();
@@ -69,29 +69,29 @@ class Board : public sf::Drawable
 		bool removeColumnLeft();
 		bool removeColumnRight();
 
-		bool setSquareColor(BoardComponent::Coord, sf::Color);
-		bool removeSquare(BoardComponent::Coord);
-		bool addHighlightSquare(BoardComponent::Coord, sf::Color);
-		bool removeHighlightSquare(BoardComponent::Coord);
+		bool setSquareColor(BoardComponent::Coord coord, sf::Color color);
+		bool removeSquare(BoardComponent::Coord coord);
+		bool addHighlightSquare(BoardComponent::Coord coord, sf::Color color);
+		bool removeHighlightSquare(BoardComponent::Coord coord);
 
-		bool addPiece(Piece &, BoardComponent::Coord);
-		bool removePiece(BoardComponent::Coord);
-		bool addPieceOnTop(Piece&, BoardComponent::Coord);
-		bool removePieceOnTop(BoardComponent::Coord);
+		bool addPiece(Piece &, BoardComponent::Coord coord);
+		bool removePiece(BoardComponent::Coord coord);
+		bool addPieceOnTop(Piece&, BoardComponent::Coord coord);
+		bool removePieceOnTop(BoardComponent::Coord coord);
 		bool addPieceAccessory(BoardComponent::Coord coord, std::string accessoryname, sf::Color color);
 
-		bool addLine(BoardComponent::Coord, BoardComponent::Coord, sf::Color);
+		bool addLine(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoord, sf::Color color);
 		bool removeLine(Line& line);
 
-		bool addArrow(BoardComponent::Coord, BoardComponent::Coord, sf::Color);
-		bool removeArrow(Arrow &);
+		bool addArrow(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoord, sf::Color color);
+		bool removeArrow(Arrow & arrow);
 
 		bool addProfileBox(BoardComponent::ProfileBox profilebox, BoardComponent::Coord coord);
 		bool removeProfileBox(unsigned int playerid);
-		bool highlightPlayerBox(unsigned int);
+		bool highlightPlayerBox(unsigned int playerid);
 		
-		bool movePiece(BoardComponent::Coord, BoardComponent::Coord);
-		bool moveAll(BoardComponent::Coord);
+		bool movePiece(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoord);
+		bool moveAll(BoardComponent::Coord movecoord);
 		bool moveAllUp();
 		bool moveAllDown();
 		bool moveAllLeft();
@@ -100,27 +100,27 @@ class Board : public sf::Drawable
 		bool generateColoredBoard(std::default_random_engine & rng);
 
 		void updateImage();
-		void updateDragArrow(BoardComponent::Coord, BoardComponent::Coord);
+		void updateDragArrow(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoord);
 		bool updateProfileBox(unsigned int id, std::string name, sf::Color bordercolor);
 
 		bool drawEmptyBoard();
-		bool drawEmptySquare(BoardComponent::Coord);
+		bool drawEmptySquare(BoardComponent::Coord coord);
 		bool drawGrid();
-		bool drawPiece(Piece&, BoardComponent::Coord);
-		bool drawLine(Line&);
-		bool drawArrow(Arrow&);
-		bool drawColoredSquare(sf::Color, BoardComponent::Coord);
-		bool drawProfileBox(BoardComponent::ProfileBox);
+		bool drawPiece(Piece& piece, BoardComponent::Coord coord);
+		bool drawLine(Line& line);
+		bool drawArrow(Arrow& arrow);
+		bool drawColoredSquare(sf::Color color, BoardComponent::Coord coord);
+		bool drawProfileBox(BoardComponent::ProfileBox profilebox);
 		
-		void save(std::string);
+		void save(std::string name);
 		void newNameSave(std::string newname, std::string oldname);
 	private:
 		bool intern_load(std::string setupfilename);
 
-		std::string getInitFileName(std::string) const;
-		std::string getInitSetupFileName(std::string) const;
-		std::string getImageFileName(std::string) const;
-		std::string getSetupFileName(std::string) const;
+		std::string getInitFileName(std::string type) const;
+		std::string getInitSetupFileName(std::string name) const;
+		std::string getImageFileName(std::string name) const;
+		std::string getSetupFileName(std::string name) const;
 		std::string getFontFileName();
 
 		sf::Vector2f getPosition(BoardComponent::Coord);
@@ -128,10 +128,10 @@ class Board : public sf::Drawable
 		sf::Vector2f getDisplayPosition(BoardComponent::Coord);
 		sf::Vector2f getDisplayCenterPosition(BoardComponent::Coord);
 
-		bool isTopLeft(BoardComponent::Coord) const;
-		bool isBottomLeft(BoardComponent::Coord) const;
-		bool isTopRight(BoardComponent::Coord) const;
-		bool isBottomRight(BoardComponent::Coord) const;
+		bool isTopLeft(BoardComponent::Coord coord) const;
+		bool isBottomLeft(BoardComponent::Coord coord) const;
+		bool isTopRight(BoardComponent::Coord coord) const;
+		bool isBottomRight(BoardComponent::Coord coord) const;
 		
 		bool drawCoordinates();
 
