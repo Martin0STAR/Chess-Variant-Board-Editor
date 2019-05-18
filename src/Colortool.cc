@@ -1,4 +1,4 @@
-#include "Colortool.h"
+#include "ColorTool.h"
 
 using namespace std;
 
