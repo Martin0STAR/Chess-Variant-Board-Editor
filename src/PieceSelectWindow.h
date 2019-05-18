@@ -9,7 +9,7 @@
 #include "Tool.h"
 #include "Window_Action.h"
 #include "Arrow.h"
-#include "Keyboardhandler.h"
+#include "KeyboardHandler.h"
 #include "PieceColor.h"
 #include "PieceAccessory.h"
 
@@ -51,7 +51,7 @@ public:
 	void display();
 	
 	bool pollEvent(sf::Event& event);
-	Window_Action handleEvent(sf::Event, Board&, Tool&, Tool&, PieceHandler&, Keyboardhandler&);
+	Window_Action handleEvent(sf::Event, Board&, Tool&, Tool&, PieceHandler&, KeyboardHandler&);
 	
 	private:
 	PieceColor getColorFromId(Tool& tool, int x, int y) const;

@@ -14,10 +14,10 @@ namespace Keyboard
 	};
 }
 
-class Keyboardhandler
+class KeyboardHandler
 {
 public:
-	Keyboardhandler();
+	KeyboardHandler();
 
 	void setState(Keyboard::State state);
 

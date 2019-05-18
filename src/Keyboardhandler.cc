@@ -1,17 +1,17 @@
-#include "Keyboardhandler.h"
+#include "KeyboardHandler.h"
 
 using namespace std;
 
-Keyboardhandler::Keyboardhandler()
+KeyboardHandler::KeyboardHandler()
 	:_state{ Keyboard::State::NORMAL }
 {}
 
-void Keyboardhandler::setState(Keyboard::State state)
+void KeyboardHandler::setState(Keyboard::State state)
 {
 	_state = state;
 }
 
-Window_Action Keyboardhandler::handleKeyPress(sf::Keyboard::Key key)
+Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 {
 	Window_Action action;
 	switch (_state)
@@ -261,7 +261,7 @@ Window_Action Keyboardhandler::handleKeyPress(sf::Keyboard::Key key)
 	return action;
 }
 
-Window_Action Keyboardhandler::handleTextEntered(sf::String inputtext)
+Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 {
 	Window_Action action;
 	switch (_state)
@@ -312,7 +312,7 @@ Window_Action Keyboardhandler::handleTextEntered(sf::String inputtext)
 	}
 }
 
-string Keyboardhandler::removeIllegalBoardNameChars(std::string & text)
+string KeyboardHandler::removeIllegalBoardNameChars(std::string & text)
 {
 	text.erase(remove_if(text.begin(), text.end(), [this](char c)
 	{
@@ -321,7 +321,7 @@ string Keyboardhandler::removeIllegalBoardNameChars(std::string & text)
 	return text;
 }
 
-string Keyboardhandler::removeIllegalPlayerNameChars(std::string & text)
+string KeyboardHandler::removeIllegalPlayerNameChars(std::string & text)
 {
 	text.erase(remove_if(text.begin(), text.end(), [this](char c)
 	{

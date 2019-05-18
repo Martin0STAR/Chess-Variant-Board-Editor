@@ -7,7 +7,7 @@ EventHandler::EventHandler()
 {}
 
 Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
-	ToolWindow & toolwindow, Keyboardhandler & keyboardhandler)
+	ToolWindow & toolwindow, KeyboardHandler & keyboardhandler)
 {
 	Window_Action action;
 	switch(event.type)

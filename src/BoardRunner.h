@@ -8,7 +8,7 @@
 #include "PieceSelectWindow.h"
 #include "Window_Action.h"
 #include "EventHandler.h"
-#include "Keyboardhandler.h"
+#include "KeyboardHandler.h"
 #include "Textbox.h"
 
 class BoardRunner
@@ -29,6 +29,6 @@ private:
 	Window_Action _action;
 	EventHandler _eventhandler;
 	PieceHandler _piecehandler;
-	Keyboardhandler _keyboardhandler;
+	KeyboardHandler _keyboardhandler;
 	BoardComponent::Textbox _textbox;
 };

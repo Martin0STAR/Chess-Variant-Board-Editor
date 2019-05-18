@@ -78,7 +78,7 @@ Window_Action PieceSelectWindow::handleEvent(
 	sf::Event event, Board& board,
 	Tool& lefttool, Tool& righttool,
 	PieceHandler& piecehandler,
-	Keyboardhandler& keyboardhandler)
+	KeyboardHandler& keyboardhandler)
 {
 	Window_Action action;
 	Tool* tool;

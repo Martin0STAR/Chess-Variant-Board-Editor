@@ -5,7 +5,7 @@
 #include "ToolWindow.h"
 #include "Window_Action.h"
 #include "BoardCoord.h"
-#include "Keyboardhandler.h"
+#include "KeyboardHandler.h"
 
 class EventHandler
 {
@@ -13,7 +13,7 @@ public:
 	EventHandler();
 	
 	Window_Action handleEvent(sf::Event event, Board & board,
-		ToolWindow & toolwindow, Keyboardhandler & keyboardhandler);
+		ToolWindow & toolwindow, KeyboardHandler & keyboardhandler);
 	void toggleGridSelect();
 	
 private:
