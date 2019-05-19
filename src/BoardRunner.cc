@@ -261,6 +261,20 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_toolwindow.setSaveIconNotSaved();
 				}
 				break;
+			case Window_Action_State::FLIP_BOARD_HORIZONTALLY:
+				if (_board.flipHorizontally())
+				{
+					_board.updateImage();
+					_toolwindow.setSaveIconNotSaved();
+				}
+				break;
+			case Window_Action_State::FLIP_BOARD_VERTICALLY:
+				if (_board.flipVertically())
+				{
+					_board.updateImage();
+					_toolwindow.setSaveIconNotSaved();
+				}
+				break;
 			case Window_Action_State::ADD_PROFILE_BOX:
 				if(_board.addProfileBox(tool->getProfileBox() ,_action.tosquarecoord))
 				{

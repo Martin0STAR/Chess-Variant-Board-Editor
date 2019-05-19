@@ -55,6 +55,8 @@ class Board : public sf::Drawable
 		bool isValidSquare(BoardComponent::Coord coord) const;
 		bool isEmptySquare(BoardComponent::Coord coord) const;
 
+		bool flipHorizontally();
+		bool flipVertically();
 		bool togglegrid();
 		void removeDragArrow();
 
@@ -143,6 +145,8 @@ class Board : public sf::Drawable
 		unsigned int _numcolumns;
 		bool _showgrid;
 		bool _showdragarrow;
+		bool _ishorizontalflipped;
+		bool _isverticalflipped;
 
 		sf::RenderTexture _rendertexture;
 		Arrow _dragarrow;

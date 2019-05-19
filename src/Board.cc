@@ -193,6 +193,18 @@ bool Board::isEmptySquare(BoardComponent::Coord coord) const
 	return _piece_list.find(coord) == _piece_list.end();
 }
 
+bool Board::flipHorizontally()
+{
+	_ishorizontalflipped = !_ishorizontalflipped;
+	return true;
+}
+
+bool Board::flipVertically()
+{
+	_isverticalflipped = !_isverticalflipped;
+	return true;
+}
+
 bool Board::togglegrid()
 {
 	_showgrid = !_showgrid;
@@ -928,6 +940,14 @@ void Board::save(string name)
 	{
 		ofs << "[Grid_On]\n";
 	}
+	if (_ishorizontalflipped)
+	{
+		ofs << "[Horizontalflipped]\n";
+	}
+	if (_isverticalflipped)
+	{
+		ofs << "[Verticalflipped]\n";
+	}
 
 	for (auto elem : _piece_list)
 	{
@@ -998,6 +1018,8 @@ bool Board::intern_load(string setupfilename)
 	}
 	_showgrid = false;
 	_showdragarrow = false;
+	_ishorizontalflipped = false;
+	_isverticalflipped = false;
 
 	_squarecolors.clear();
 	_removed_square_list.clear();
@@ -1159,6 +1181,14 @@ bool Board::intern_load(string setupfilename)
 			{
 				_showgrid = true;
 			}
+			else if (variable_name == "Horizontalflipped")
+			{
+				_ishorizontalflipped = true;
+			}
+			else if (variable_name == "Verticalflipped")
+			{
+				_isverticalflipped = true;
+			}
 		}
 	}
 	ifs.close();
@@ -1271,7 +1301,16 @@ bool Board::drawCoordinates()
 	
 	for (unsigned int x{ 0 }; x < _numcolumns; x++)
 	{
-		BoardComponent::Coord coord{ sf::Vector2i{(int)x, 0} };
+		unsigned int drawxcoord;
+		if (_ishorizontalflipped)
+		{
+			drawxcoord = _numcolumns - x - 1;
+		}
+		else
+		{
+			drawxcoord = x;
+		}
+		BoardComponent::Coord coord{ sf::Vector2i{(int)drawxcoord, 0} };
 		string filetext = coord.getNotationX();
 		text.setString(filetext);
 		sf::FloatRect textRect = text.getLocalBounds();
@@ -1289,7 +1328,16 @@ bool Board::drawCoordinates()
 
 	for (unsigned int y{ 0 }; y < _numrows; y++)
 	{
-		BoardComponent::Coord coord{ sf::Vector2i{0, (int)y} };
+		unsigned int drawycoord;
+		if (_isverticalflipped)
+		{
+			drawycoord = _numrows - y - 1;
+		}
+		else
+		{
+			drawycoord = y;
+		}
+		BoardComponent::Coord coord{ sf::Vector2i{0, (int)drawycoord} };
 		string filetext = coord.getNotationY(_numrows);
 		text.setString(filetext);
 		sf::FloatRect textRect = text.getLocalBounds();
