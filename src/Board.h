@@ -49,6 +49,8 @@ class Board : public sf::Drawable
 		Piece getPiece(BoardComponent::Coord coord) const;
 		std::vector<BoardComponent::ProfileBox> getProfileBoxList() const;
 		
+		bool isHorizontalflipped() const;
+		bool isVerticalflipped() const;
 		bool isWithinPixelBoard(sf::Vector2f pixelpos) const;
 		bool isWithinBoard(sf::Vector2i coord) const;
 		bool isWithinBoard(BoardComponent::Coord coord) const;

@@ -60,10 +60,22 @@ BoardComponent::Coord::Coord(
 	sf::Vector2f offset,
 	sf::Vector2f squaresize,
 	sf::Vector2f pixelpos,
+	unsigned int numcolumns,
+	unsigned int numrows,
+	bool ishorizontalflipped,
+	bool isverticalflipped,
 	bool allowintersections)
 	: BoardComponent::Coord::Coord{}
 {
-	setCoordByPixelPosition(offset, squaresize, pixelpos, allowintersections);
+	setCoordByPixelPosition(
+		offset,
+		squaresize,
+		pixelpos,
+		numcolumns,
+		numrows,
+		ishorizontalflipped,
+		isverticalflipped,
+		allowintersections);
 }
 
 bool BoardComponent::Coord::operator ==(const Coord & rhs) const
@@ -120,8 +132,47 @@ sf::Vector2i BoardComponent::Coord::getVector() const
 }
 
 sf::Vector2f BoardComponent::Coord::getPixelPosition(
-	sf::Vector2f offset, sf::Vector2f squaresize) const
+	sf::Vector2f offset, sf::Vector2f squaresize,
+	unsigned int numrows, unsigned int numcolumns,
+	bool ishorizontalflipped, bool isverticalflipped) const
 {
+	float x = offset.x;
+	float y = offset.y;
+
+	if (ishorizontalflipped)
+	{
+		x += (float)(numcolumns - _coord.x - 1) * squaresize.x;
+		if (_isgridright)
+		{
+			x -= squaresize.x / 2.f;
+		}
+	}
+	else
+	{
+		x += (float)_coord.x * squaresize.x;
+		if (_isgridright)
+		{
+			x += squaresize.x / 2.f;
+		}
+	}
+	if (isverticalflipped)
+	{
+		y += (float)(numrows - _coord.y - 1) * squaresize.y;
+		if (_isgridtop)
+		{
+			y -= squaresize.y / 2.f;
+		}
+	}
+	else
+	{
+		y += (float)_coord.y * squaresize.y;
+		if (_isgridtop)
+		{
+			y += squaresize.y / 2.f;
+		}
+	}
+
+	/*
 	float x = offset.x + (float)_coord.x * squaresize.x;
 	float y = offset.y + (float)_coord.y * squaresize.y;
 	if (_isgridright)
@@ -132,6 +183,7 @@ sf::Vector2f BoardComponent::Coord::getPixelPosition(
 	{
 		y -= squaresize.y / 2.f;
 	}
+	*/
 	return sf::Vector2f{ x, y };
 }
 
@@ -247,6 +299,10 @@ void BoardComponent::Coord::setCoordByPixelPosition(
 	sf::Vector2f offset,
 	sf::Vector2f squaresize,
 	sf::Vector2f pixelpos,
+	unsigned int numcolumns,
+	unsigned int numrows,
+	bool ishorizontalflipped,
+	bool isverticalflipped,
 	bool allowintersections)
 {
 	int xpos = int((pixelpos.x - offset.x) / squaresize.x);
@@ -275,6 +331,14 @@ void BoardComponent::Coord::setCoordByPixelPosition(
 		{
 			_isgridtop = true;
 			_coord.y++;
+		}
+		if (ishorizontalflipped)
+		{
+			_coord.x = numcolumns - _coord.x - 1;
+		}
+		if (isverticalflipped)
+		{
+			_coord.y = numrows - _coord.y - 1;
 		}
 	}
 }

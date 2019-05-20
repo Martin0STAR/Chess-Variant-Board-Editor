@@ -140,6 +140,16 @@ std::vector<BoardComponent::ProfileBox> Board::getProfileBoxList() const
 	return _profile_box_list;
 }
 
+bool Board::isHorizontalflipped() const
+{
+	return _ishorizontalflipped;
+}
+
+bool Board::isVerticalflipped() const
+{
+	return _isverticalflipped;
+}
+
 bool Board::isWithinPixelBoard(sf::Vector2f pixelpos) const
 {
 	return pixelpos.x >= (float)_leftofboardwidth &&
@@ -800,15 +810,30 @@ bool Board::drawEmptySquare(BoardComponent::Coord coord)
 	{
 		return false;
 	}
+	bool istopleft = isTopLeft(coord);
+	bool istopright = isTopRight(coord);
+	bool isbottomleft = isBottomLeft(coord);
+	bool isbottomright = isBottomRight(coord);
+
+	if (_ishorizontalflipped)
+	{
+		std::swap(istopleft, istopright);
+		std::swap(isbottomleft, isbottomright);
+	}
+	if (_isverticalflipped)
+	{
+		std::swap(istopleft, isbottomleft);
+		std::swap(istopright, isbottomright);
+	}
 
 	BoardComponent::Square square{
 		getSquareColor(coord),
 		_squaresize,
 		_squarecornersize,
-		isTopLeft(coord),
-		isTopRight(coord),
-		isBottomLeft(coord),
-		isBottomRight(coord)
+		istopleft,
+		istopright,
+		isbottomleft,
+		isbottomright
 	};
 	square.setPosition(getPosition(coord));
 	_rendertexture.draw(square);
@@ -1228,7 +1253,8 @@ sf::Vector2f Board::getPosition(BoardComponent::Coord coord)
 {
 	return coord.getPixelPosition(
 		sf::Vector2f{ (float)_leftofboardwidth, (float)_topofboardheight },
-		sf::Vector2f{ (float)_squaresize.x, (float)_squaresize.y });
+		sf::Vector2f{ (float)_squaresize.x, (float)_squaresize.y },
+		_numrows, _numcolumns, _ishorizontalflipped, _isverticalflipped);
 }
 
 sf::Vector2f Board::getCenterPosition(BoardComponent::Coord coord)
@@ -1245,7 +1271,10 @@ sf::Vector2f Board::getDisplayPosition(BoardComponent::Coord coord)
 {
 	return coord.getPixelPosition(
 		getDisplaySquareOffset(),
-		getDisplaySquareSize());
+		getDisplaySquareSize(),
+		_numrows, _numcolumns,
+		_ishorizontalflipped,
+		_isverticalflipped);
 }
 
 sf::Vector2f Board::getDisplayCenterPosition(BoardComponent::Coord coord)

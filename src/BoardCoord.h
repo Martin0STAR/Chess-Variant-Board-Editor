@@ -27,6 +27,10 @@ namespace BoardComponent
 		Coord(sf::Vector2f offset,
 			sf::Vector2f squaresize,
 			sf::Vector2f pixelpos,
+			unsigned int numcolumns,
+			unsigned int numrows,
+			bool ishorizontalflipped,
+			bool isverticalflipped,
 			bool allowintersections = false);
 
 		bool operator ==(const Coord & rhs) const;
@@ -35,7 +39,10 @@ namespace BoardComponent
 		Coord operator +(const Coord & rhs) const;
 
 		sf::Vector2i getVector() const;
-		sf::Vector2f getPixelPosition(sf::Vector2f offset, sf::Vector2f squaresize) const;
+		sf::Vector2f getPixelPosition(
+			sf::Vector2f offset, sf::Vector2f squaresize,
+			unsigned int numrows, unsigned int numcolumns,
+			bool ishorizontalflipped, bool isverticalflipped) const;
 		int getColorId(unsigned int numcolors) const;
 		std::string getNotation(unsigned int numrows) const;
 		std::string getNotationX() const;
@@ -47,6 +54,10 @@ namespace BoardComponent
 			sf::Vector2f offset,
 			sf::Vector2f squaresize,
 			sf::Vector2f pixelpos,
+			unsigned int numcolumns,
+			unsigned int numrows,
+			bool ishorizontalflipped,
+			bool isverticalflipped,
 			bool allowintersections);
 
 		sf::Vector2i _coord;

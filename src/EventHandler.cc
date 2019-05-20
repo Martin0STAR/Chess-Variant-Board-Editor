@@ -52,6 +52,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 				board.getDisplaySquareOffset(),
 				board.getDisplaySquareSize(),
 				displaytopos,
+				board.getNumColumns(),
+				board.getNumRows(),
+				board.isHorizontalflipped(),
+				board.isVerticalflipped(),
 				_allowintersections
 			};
 
@@ -67,6 +71,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 				board.getDisplaySquareOffset(),
 				board.getDisplaySquareSize(),
 				displayfrompos,
+				board.getNumColumns(),
+				board.getNumRows(),
+				board.isHorizontalflipped(),
+				board.isVerticalflipped(),
 				_allowintersections
 				};
 			}
@@ -82,6 +90,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
 					displayfrompos,
+					board.getNumColumns(),
+					board.getNumRows(),
+					board.isHorizontalflipped(),
+					board.isVerticalflipped(),
 					_allowintersections
 				};
 			}
@@ -329,6 +341,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
 					displayfrompos,
+					board.getNumColumns(),
+					board.getNumRows(),
+					board.isHorizontalflipped(),
+					board.isVerticalflipped(),
 					_allowintersections
 				};
 			}
@@ -344,6 +360,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
 					displayfrompos,
+					board.getNumColumns(),
+					board.getNumRows(),
+					board.isHorizontalflipped(),
+					board.isVerticalflipped(),
 					_allowintersections
 				};
 			}
@@ -360,6 +380,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
 					displaytopos,
+					board.getNumColumns(),
+					board.getNumRows(),
+					board.isHorizontalflipped(),
+					board.isVerticalflipped(),
 					_allowintersections
 				};
 				if (board.isValidSquare(action.tosquarecoord) && !(board.isEmptySquare(action.fromsquarecoord)))
@@ -374,6 +398,10 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getDisplaySquareOffset(),
 					board.getDisplaySquareSize(),
 					displaytopos,
+					board.getNumColumns(),
+					board.getNumRows(),
+					board.isHorizontalflipped(),
+					board.isVerticalflipped(),
 					_allowintersections
 				};
 				if (board.isValidSquare(action.tosquarecoord))
