@@ -461,7 +461,9 @@ bool Board::addLine(BoardComponent::Coord fromcoord, BoardComponent::Coord tocoo
 	auto it = find_if(_line_list.begin(), _line_list.end(), [newline](Line oldline)
 	{
 		return oldline.getFromCoord() == newline.getFromCoord() &&
-			oldline.getToCoord() == newline.getToCoord();
+			oldline.getToCoord() == newline.getToCoord() ||
+			oldline.getFromCoord() == newline.getToCoord() &&
+			oldline.getToCoord() == newline.getFromCoord();
 	});
 
 	if (it == _line_list.end())

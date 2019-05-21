@@ -17,9 +17,11 @@ Line::Line(sf::Vector2f frompos, sf::Vector2f topos, sf::Color color)
 bool Line::operator ==(const Line & rhs) const
 {
 	return
-		_line.getPosition() == rhs._line.getPosition() &&
+		(_line.getPosition() == rhs._line.getPosition() &&
+		_to == rhs._to ||
+		_line.getPosition() == rhs._to &&
+		_to == rhs._line.getPosition()) &&
 		_line.getSize() == rhs._line.getSize() &&
-		_line.getRotation() == rhs._line.getRotation() &&
 		_line.getFillColor() == rhs._line.getFillColor();
 }
 
