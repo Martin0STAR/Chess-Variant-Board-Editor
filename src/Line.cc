@@ -7,22 +7,21 @@ Line::Line()
 {}
 
 Line::Line(sf::Vector2f frompos, sf::Vector2f topos, sf::Color color)
-	: _thickness{ 5.f },	_line{ sf::Vector2f{1.f, 1.f} }
+	: _thickness{ 5.f }
 {
-	_line.setFillColor(color);
-	_line.setOrigin(0, _thickness / 2);
+	_shape.setFillColor(color);
+	_shape.setOrigin(0, _thickness / 2);
 	setPosition(frompos, topos);
 }
 
 bool Line::operator ==(const Line & rhs) const
 {
 	return
-		(_line.getPosition() == rhs._line.getPosition() &&
+		(_shape.getPosition() == rhs._shape.getPosition() &&
 		_to == rhs._to ||
-		_line.getPosition() == rhs._to &&
-		_to == rhs._line.getPosition()) &&
-		_line.getSize() == rhs._line.getSize() &&
-		_line.getFillColor() == rhs._line.getFillColor();
+		_shape.getPosition() == rhs._to &&
+		_to == rhs._shape.getPosition()) &&
+		_shape.getFillColor() == rhs._shape.getFillColor();
 }
 
 std::istream& operator>> (istream& is, Line & line)
@@ -49,7 +48,7 @@ std::ostream& operator<< (ostream& os, const Line & line)
 
 sf::Vector2f Line::getFromCoord() const
 {
-	return _line.getPosition();
+	return _shape.getPosition();
 }
 
 sf::Vector2f Line::getToCoord() const
@@ -59,33 +58,66 @@ sf::Vector2f Line::getToCoord() const
 
 sf::Color Line::getColor() const
 {
-	return _line.getFillColor();
+	return _shape.getFillColor();
 }
 
 void Line::setPosition(sf::Vector2f frompos, sf::Vector2f topos)
 {
+	_shape.setPosition(frompos);
 	_to = topos;
-	float x = _to.x - frompos.x;
-	float y = _to.y - frompos.y;
-	float length = sqrt(x*x + y * y);
-	float rotation = atan2(y, x);
-	_line.setSize(sf::Vector2f(length, _thickness));
-	_line.setRotation(rotation*180.f / 3.14f);
-	_line.setPosition(frompos);
+	updateShape();
 }
 
 void Line::setColor(sf::Color color)
 {
-	_line.setFillColor(color);
+	_shape.setFillColor(color);
 }
 
 void Line::move(const sf::Vector2f& offset)
 {
 	_to += offset;
-	_line.move(offset);
+	_shape.move(offset);
+}
+
+void Line::updateShape()
+{
+	float x = _to.x - _shape.getPosition().x;
+	float y = _to.y - _shape.getPosition().y;
+	float length = sqrt(x*x + y * y);
+
+	const unsigned int precision{ (unsigned int)_thickness*2 };
+
+	_shape.setPointCount(precision * 2);
+	size_t index{ 0 };
+	_shape.setPoint(index, sf::Vector2f{ 0.f,0.f });
+	index++;
+	_shape.setPoint(index, sf::Vector2f{ length, 0.f });
+	index++;
+	for (unsigned int i{ 1 }; i < precision - 1; i++)
+	{
+		float radious = ((float)i / (float)precision) * 3.14f;
+		float xpos = length + sin(radious) * _thickness/2.f;
+		float ypos = (1 - cos(radious)) * _thickness/2.f;
+		_shape.setPoint(index, sf::Vector2f{ xpos, ypos });
+		index++;
+	}
+	_shape.setPoint(index, sf::Vector2f{ length, _thickness });
+	index++;
+	_shape.setPoint(index, sf::Vector2f{ 0.f, _thickness });
+	for (unsigned int i{ 1 }; i < precision - 1; i++)
+	{
+		float radious = ((float)i / (float)precision) * 3.14f;
+		float xpos = (- sin(radious)) * _thickness / 2.f;
+		float ypos = _thickness - (1 - cos(radious)) * _thickness / 2.f;
+		_shape.setPoint(index, sf::Vector2f{ xpos, ypos });
+		index++;
+	}
+
+	float rotation = atan2(y, x);
+	_shape.setRotation(rotation*180.f / 3.14f);
 }
 
 void Line::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(_line);
+	target.draw(_shape);
 }

@@ -19,9 +19,10 @@ public:
 	void move(const sf::Vector2f &);
 
 private:
+	void updateShape();
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::Vector2f _to;
 	float _thickness;
-	sf::RectangleShape _line;
+	sf::ConvexShape _shape;
 };
