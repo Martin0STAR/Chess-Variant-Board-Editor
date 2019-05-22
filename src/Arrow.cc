@@ -10,7 +10,7 @@ Arrow::Arrow()
 
 Arrow::Arrow(sf::Vector2f frompos, sf::Vector2f topos, sf::Color color)
 	: _hide{ false }, _thickness{ 5.f }, _headsize{ 15.f },
-	_line{ sf::Vector2f{1.f, 1.f} }, _head{ 50,3 }
+	_head{ 50,3 }
 {
 	_line.setFillColor(color);
 	_line.setOrigin(0, _thickness / 2);
@@ -24,8 +24,7 @@ bool Arrow::operator ==(const Arrow & rhs) const
 {
 	return
 		_line.getPosition() == rhs._line.getPosition() &&
-		_line.getSize() == rhs._line.getSize() &&
-		_line.getRotation() == rhs._line.getRotation() &&
+		_to == rhs._to &&
 		_line.getFillColor() == rhs._line.getFillColor();
 }
 
@@ -68,19 +67,9 @@ sf::Color Arrow::getColor() const
 
 void Arrow::setPosition(sf::Vector2f frompos, sf::Vector2f topos)
 {
-	_to = topos;
-	float x = _to.x - frompos.x;
-	float y = _to.y - frompos.y;
-	float length = sqrt(x*x + y * y);
-	float rotation = atan2(y, x);
-	_line.setSize(sf::Vector2f(1.f + length - _headsize * 3.f / 2.f, _thickness));
-	_line.setRotation(rotation*180.f / 3.14f);
 	_line.setPosition(frompos);
-	_head.setRotation(90 + rotation * 180.f / 3.14f);
-	_head.setPosition(
-		frompos.x + (cos(rotation))* (length - _headsize),
-		frompos.y + (sin(rotation))* (length - _headsize)
-	);
+	_to = topos;
+	updateShape();
 	_hide = false;
 }
 
@@ -95,6 +84,41 @@ void Arrow::move(const sf::Vector2f& offset)
 	_to += offset;
 	_line.move(offset);
 	_head.move(offset);
+}
+
+void Arrow::updateShape()
+{
+	float x = _to.x - _line.getPosition().x;
+	float y = _to.y - _line.getPosition().y;
+	float length = sqrt(x*x + y * y);
+
+	const unsigned int precision{ (unsigned int)_thickness * 2 };
+
+	_line.setPointCount(precision + 2);
+	size_t index{ 0 };
+	_line.setPoint(index, sf::Vector2f{ 0.f,0.f });
+	index++;
+	_line.setPoint(index, sf::Vector2f{ 1.f + length - _headsize * 3.f / 2.f, 0.f });
+	index++;
+	_line.setPoint(index, sf::Vector2f{ 1.f + length - _headsize * 3.f / 2.f, _thickness });
+	index++;
+	_line.setPoint(index, sf::Vector2f{ 0.f, _thickness });
+	for (unsigned int i{ 1 }; i < precision - 1; i++)
+	{
+		float radious = ((float)i / (float)precision) * 3.14f;
+		float xpos = (-sin(radious)) * _thickness / 2.f;
+		float ypos = _thickness - (1 - cos(radious)) * _thickness / 2.f;
+		_line.setPoint(index, sf::Vector2f{ xpos, ypos });
+		index++;
+	}
+
+	float rotation = atan2(y, x);
+	_line.setRotation(rotation*180.f / 3.14f);
+	_head.setRotation(90 + rotation * 180.f / 3.14f);
+	_head.setPosition(
+		_line.getPosition().x + (cos(rotation))* (length - _headsize),
+		_line.getPosition().y + (sin(rotation))* (length - _headsize)
+	);
 }
 
 void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const

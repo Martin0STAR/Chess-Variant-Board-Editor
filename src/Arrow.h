@@ -19,12 +19,13 @@ public:
 	void move(const sf::Vector2f & offset);
 
 private:
+	void updateShape();
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	bool _hide;
 	sf::Vector2f _to;
 	float _thickness;
 	float _headsize;
-	sf::RectangleShape _line;
+	sf::ConvexShape _line;
 	sf::CircleShape _head;
 };
