@@ -29,10 +29,10 @@ namespace Piece_Tool
 		COLOR_SQUARE,
 		ADD_PROFILE_BOX,
 		REMOVE_SQUARE,
-		ACCESSORY_STAR6POINT,
-		ACCESSORY_SHIELD,
-		ACCESSORY_SWORD,
-		ACCESSORY_CHAR
+		ADD_ACCESSORY,
+		ADD_CHAR_ACCESSORY,
+		SET_COLOR,
+		ADD_PIECE
 	};
 }
 
@@ -53,16 +53,11 @@ public:
 	bool pollEvent(sf::Event& event);
 	Window_Action handleEvent(sf::Event, Board&, Tool&, Tool&, PieceHandler&, KeyboardHandler&);
 	
-	private:
-	PieceColor getColorFromId(Tool& tool, int x, int y) const;
-	std::string getTypeFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const;
-	Piece getPieceFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const;
-	Piece_Tool::Piece_Tool getPieceToolFromId(unsigned int index);
-	Piece_Tool::Piece_Tool getPieceToolFromId(int x, int y);
-	std::string getToolName(Piece_Tool::Piece_Tool piece_tool) const;
-	std::string getToolName(int index) const;
-	std::string getToolName(int x, int y) const;
-	std::string getToolFileName(int index) const;
+private:
+	void initToolList();
+	std::string getTypeFromId(PieceHandler& piecehandler, Tool& tool, unsigned int index) const;
+	Piece getPieceFromId(PieceHandler& piecehandler, Tool& tool, unsigned int index) const;
+	std::string getToolFileName(Piece_Tool::Piece_Tool tool) const;
 	void drawTool(PieceHandler& piecehandler, Tool& tool, unsigned int x, unsigned int y);
 
 	sf::Color getSquareColor(unsigned int x, unsigned int y) const;
@@ -71,7 +66,6 @@ public:
 
 	unsigned int _numcolumns;
 	unsigned int _numrows;
-	unsigned int _numtoolrows;
 
 	sf::RenderTexture _rendertexture;
 	sf::RenderWindow _window;
@@ -87,23 +81,18 @@ public:
 		{Piece_Tool::ADD_ARROW, "arrow"}
 	};
 
-	std::array<Piece_Tool::Piece_Tool, 15> _tools
+	std::array<std::string, 3> _accessorynames
 	{
-		Piece_Tool::SELECT,
-		Piece_Tool::REMOVE,
-		Piece_Tool::REMOVE_SQUARE,
-		Piece_Tool::COLOR_SQUARE,
-		Piece_Tool::ADD_PROFILE_BOX,
-		Piece_Tool::MUSKETEER_STYLE,
-		Piece_Tool::ADD_LINE,
-		Piece_Tool::ADD_ARROW,
-		Piece_Tool::FLIP_HORIZONTAL,
-		Piece_Tool::FLIP_VERTICAL,
-		Piece_Tool::INVERT_COLORS,
-		Piece_Tool::ACCESSORY_STAR6POINT,
-		Piece_Tool::ACCESSORY_SHIELD,
-		Piece_Tool::ACCESSORY_SWORD,
-		Piece_Tool::ACCESSORY_CHAR
+		"star6point",
+		"shield",
+		"sword"
 	};
 
+	struct Container
+	{
+		Piece_Tool::Piece_Tool tool;
+		unsigned int id;
+	};
+
+	std::vector<Container> _toollist;
 };

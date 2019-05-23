@@ -4,10 +4,12 @@ using namespace std;
 
 PieceSelectWindow::PieceSelectWindow()
 {
+	initToolList();
 	//must run load(board, toolwindow) to work
 }
 
 PieceSelectWindow::PieceSelectWindow(PieceHandler& piecehandler, Board& board, Tool& tool)
+	:PieceSelectWindow::PieceSelectWindow{}
 {
 	load(piecehandler, board, tool);
 }
@@ -17,13 +19,12 @@ void PieceSelectWindow::load(PieceHandler& piecehandler, Board& board, Tool& too
 	_displaysquaresize = board.getImageSquareSize();
 	_numcolumns = 5;
 	_backgroundcolor = sf::Color{ 180, 180, 180 };
-	_numtoolrows = (_tools.size() + _numcolumns - 1) / _numcolumns;
 
 	int numpiecerows = max(
 		tool.getNumColors(),
 		(piecehandler.getNumPieces(tool.getPieceBrush().getStyle()) + _numcolumns - 2) / (_numcolumns - 1));
 
-	_numrows = _numtoolrows + numpiecerows;
+	_numrows = 14;
 
 	_rendertexture.create(_displaysquaresize.x*_numcolumns, _displaysquaresize.y*_numrows);
 
@@ -118,83 +119,65 @@ Window_Action PieceSelectWindow::handleEvent(
 			action.state = Window_Action_State::NOTHING;
 			return action;
 		}
-		else if (y < (int)_numtoolrows) //clicked on a tool
+		int id = y * _numcolumns + x;
+		switch (_toollist.at(id).tool)
 		{
-			switch (getPieceToolFromId(x, y))
-			{
-			case Piece_Tool::SELECT:
-				action.toolstate = Tool_State::SELECT;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::REMOVE:
-				action.toolstate = Tool_State::REMOVE;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::FLIP_HORIZONTAL:
-				action.state = Window_Action_State::FLIP_PIECE_HORIZONTAL;
-				return action;
-			case Piece_Tool::FLIP_VERTICAL:
-				action.state = Window_Action_State::FLIP_PIECE_VERTICAL;
-				return action;
-			case Piece_Tool::INVERT_COLORS:
-				action.state = Window_Action_State::INVERT_PIECE_COLOR;
-				return action;
-			case Piece_Tool::MUSKETEER_STYLE:
-				action.state = Window_Action_State::SET_TOOL_PIECE_STYLE;
-				action.name = "musketeer";
-				return action;
-			case Piece_Tool::ADD_LINE:
-				action.toolstate = Tool_State::ADD_LINE;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::ADD_ARROW:
-				action.toolstate = Tool_State::ADD_ARROW;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::REMOVE_SQUARE:
-				action.toolstate = Tool_State::REMOVE_SQUARE;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::COLOR_SQUARE:
-				action.toolstate = Tool_State::SET_SQUARE_COLOR;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::ADD_PROFILE_BOX:
-				action.toolstate = Tool_State::ADD_PROFILE_BOX;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			case Piece_Tool::ACCESSORY_STAR6POINT:
-				action.state = Window_Action_State::SET_TOOL_ADD_PIECE_ACCESSORY;
-				action.name = "star6point";
-				return action;
-			case Piece_Tool::ACCESSORY_SHIELD:
-				action.state = Window_Action_State::SET_TOOL_ADD_PIECE_ACCESSORY;
-				action.name = "shield";
-				return action;
-			case Piece_Tool::ACCESSORY_SWORD:
-				action.state = Window_Action_State::SET_TOOL_ADD_PIECE_ACCESSORY;
-				action.name = "sword";
-				return action;
-			case Piece_Tool::ACCESSORY_CHAR:
-				action.toolstate = Tool_State::ADD_PIECE_CHAR_ACCESSORY;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			default:
-				action.toolstate = Tool_State::REMOVE;
-				action.state = Window_Action_State::SET_TOOL_STATE;
-				return action;
-			}
-		}
-		else if (x == 0) //clicked on a color
-		{
-			action.colorindex = y - _numtoolrows;
+		case Piece_Tool::SELECT:
+			action.toolstate = Tool_State::SELECT;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::REMOVE:
+			action.toolstate = Tool_State::REMOVE;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::FLIP_HORIZONTAL:
+			action.state = Window_Action_State::FLIP_PIECE_HORIZONTAL;
+			return action;
+		case Piece_Tool::FLIP_VERTICAL:
+			action.state = Window_Action_State::FLIP_PIECE_VERTICAL;
+			return action;
+		case Piece_Tool::INVERT_COLORS:
+			action.state = Window_Action_State::INVERT_PIECE_COLOR;
+			return action;
+		case Piece_Tool::MUSKETEER_STYLE:
+			action.state = Window_Action_State::SET_TOOL_PIECE_STYLE;
+			action.name = "musketeer";
+			return action;
+		case Piece_Tool::ADD_LINE:
+			action.toolstate = Tool_State::ADD_LINE;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::ADD_ARROW:
+			action.toolstate = Tool_State::ADD_ARROW;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::REMOVE_SQUARE:
+			action.toolstate = Tool_State::REMOVE_SQUARE;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::COLOR_SQUARE:
+			action.toolstate = Tool_State::SET_SQUARE_COLOR;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::ADD_PROFILE_BOX:
+			action.toolstate = Tool_State::ADD_PROFILE_BOX;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::ADD_ACCESSORY:
+			action.state = Window_Action_State::SET_TOOL_ADD_PIECE_ACCESSORY;
+			action.name = _accessorynames[_toollist.at(id).id];
+			return action;
+		case Piece_Tool::ADD_CHAR_ACCESSORY:
+			action.toolstate = Tool_State::ADD_PIECE_CHAR_ACCESSORY;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
+		case Piece_Tool::SET_COLOR:
+			action.colorindex = _toollist.at(id).id;
 			action.state = Window_Action_State::SET_TOOL_COLOR;
 			return action;
-		}
-		else //clicked on piece
-		{
-			action.piece = getPieceFromId(piecehandler, *tool, x, y);
-			if(action.piece.getName() != "" && action.piece.getColor().name != "")
+		case Piece_Tool::ADD_PIECE:
+			action.piece = getPieceFromId(piecehandler, *tool, _toollist.at(id).id);
+			if (action.piece.getName() != "" && action.piece.getColor().name != "")
 			{
 				action.state = Window_Action_State::SET_TOOL_PIECE;
 				return action;
@@ -205,6 +188,10 @@ Window_Action PieceSelectWindow::handleEvent(
 				action.state = Window_Action_State::SET_TOOL_STATE;
 				return action;
 			}
+		default:
+			action.toolstate = Tool_State::REMOVE;
+			action.state = Window_Action_State::SET_TOOL_STATE;
+			return action;
 		}
 	}
 	action.state = Window_Action_State::NOTHING;
@@ -226,32 +213,82 @@ void PieceSelectWindow::display()
 	_window.display();
 }
 
-PieceColor PieceSelectWindow::getColorFromId(Tool & tool, int x, int y) const
+void PieceSelectWindow::initToolList()
 {
-	if(x != 0)
-	{
-		return tool.getPieceBrush().getColor();
-	}
-	unsigned int index = y - _numtoolrows;
-	if(index < tool.getNumColors())
-	{
-		return tool.getPieceColor(index);
-	}
-	else
-	{
-		return tool.getPieceColor(0);
-	}
+	_toollist.push_back(Container{ Piece_Tool::SELECT, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE_SQUARE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::COLOR_SQUARE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PROFILE_BOX, 0 });
+	_toollist.push_back(Container{ Piece_Tool::MUSKETEER_STYLE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_LINE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_ARROW, 0 });
+	_toollist.push_back(Container{ Piece_Tool::FLIP_HORIZONTAL, 0 });
+	_toollist.push_back(Container{ Piece_Tool::FLIP_VERTICAL, 0 });
+	_toollist.push_back(Container{ Piece_Tool::INVERT_COLORS, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 1 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 2 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_CHAR_ACCESSORY, 0 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 1 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 2 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 3 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 1 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 4 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 5 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 6 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 7 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 2 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 8 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 9 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 10 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 11 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 3 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 12 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 13 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 14 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 15 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 4 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 16 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 17 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 18 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 19 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 5 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 20 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 21 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 22 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 23 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 6 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 24 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 25 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 26 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 27 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 7 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 28 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 29 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 30 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 31 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 8 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 32 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 33 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 34 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 35 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 9 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 36 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 37 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 38 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 39 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 10 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 40 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 41 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 42 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 43 });
 }
 
-string PieceSelectWindow::getTypeFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const
+string PieceSelectWindow::getTypeFromId(PieceHandler& piecehandler, Tool& tool, unsigned int index) const
 {	
-	if (x == 0)
-	{
-		return tool.getPieceBrush().getName();
-	}
-
-	unsigned int index = ((y - _numtoolrows) * (_numcolumns - 1) + ((x-1) % (_numcolumns - 1)));
-		
 	if (index < piecehandler.getNumPieces(tool.getPieceBrush().getStyle()))
 	{
 		return piecehandler.getName(tool.getPieceBrush().getStyle(), index);
@@ -262,76 +299,34 @@ string PieceSelectWindow::getTypeFromId(PieceHandler& piecehandler, Tool& tool, 
 	}
 }
 
-Piece PieceSelectWindow::getPieceFromId(PieceHandler& piecehandler, Tool& tool, int x, int y) const
+Piece PieceSelectWindow::getPieceFromId(PieceHandler& piecehandler, Tool& tool, unsigned int index) const
 {
 	Piece piece{ tool.getPieceBrush() };
-	if (x == 0)
-	{
-		piece.setColor(getColorFromId(tool, x, y));
-	}
-	else
-	{
-		piece.setName(getTypeFromId(piecehandler, tool, x, y));
-	}
+	piece.setName(getTypeFromId(piecehandler, tool, index));
 	piece.removePieceOnTop();
 	return piece;
 }
 
-Piece_Tool::Piece_Tool PieceSelectWindow::getPieceToolFromId(unsigned int index)
+string PieceSelectWindow::getToolFileName(Piece_Tool::Piece_Tool tool) const
 {
-	if (index < _tools.size())
-	{
-		return _tools.at(index);
-	}
-	else
-	{
-		return Piece_Tool::INVALID;
-	}
+	return "resources/icons/" + _toolnames.at(tool) + ".png";
 }
 
-Piece_Tool::Piece_Tool PieceSelectWindow::getPieceToolFromId(int x, int y)
-{
-	int index = (y * _numcolumns + (x % _numcolumns));
-	return getPieceToolFromId(index);
-}
-
-string PieceSelectWindow::getToolName(Piece_Tool::Piece_Tool piece_tool) const
-{
-	return _toolnames.at(piece_tool);
-}
-
-string PieceSelectWindow::getToolName(int index) const
-{
-	return getToolName(_tools.at(index));
-}
-
-string PieceSelectWindow::getToolName(int x, int y) const
-{
-	int index = (y * _numcolumns + (x % _numcolumns));
-	return getToolName(index);
-}
-
-string PieceSelectWindow::getToolFileName(int index) const
-{
-	return "resources/icons/" + getToolName(index) + ".png";
-}
 
 void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigned int x, unsigned int y)
 {
 	auto square = getEmptySquare(x, y);
 	_rendertexture.draw(square);
 
-	sf::Color squarecolor = getSquareColor(x, y);
-	unsigned int toolindex = getToolIndex(x, y);
 	sf::Vector2f position{
 		float(_displaysquaresize.x*x),
 		float(_displaysquaresize.y*y)
 	};
 
-	sf::Image toolimage;
-	if (toolindex < _tools.size())
+	unsigned int id = y * _numcolumns + x;
+	if (id < _toollist.size())
 	{
-		switch (_tools.at(toolindex))
+		switch (_toollist.at(id).tool)
 		{
 		case Piece_Tool::ADD_LINE:
 			tool.drawLineTool(_rendertexture, position,
@@ -384,29 +379,68 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 			_rendertexture.draw(piece);
 			return;
 		}
-		case Piece_Tool::ACCESSORY_STAR6POINT:
+		case Piece_Tool::ADD_ACCESSORY:
 			tool.drawAccessoryTool(
 				_rendertexture, position, _displaysquaresize,
-				tool.getColorIndex(), "star6point");
+				tool.getColorIndex(), _accessorynames[_toollist.at(id).id]);
 			return;
-		case Piece_Tool::ACCESSORY_SHIELD:
-			tool.drawAccessoryTool(
-				_rendertexture, position, _displaysquaresize,
-				tool.getColorIndex(), "shield");
-			return;
-		case Piece_Tool::ACCESSORY_SWORD:
-			tool.drawAccessoryTool(
-				_rendertexture, position, _displaysquaresize,
-				tool.getColorIndex(), "sword");
-			return;
-		case Piece_Tool::ACCESSORY_CHAR:
+		case Piece_Tool::ADD_CHAR_ACCESSORY:
 			tool.drawAccessoryTool(
 				_rendertexture, position, _displaysquaresize,
 				tool.getColorIndex(), string(1, tool.getCharAccessory()));
 			return;
+		case Piece_Tool::SET_COLOR:
+			switch (tool.getState())
+			{
+			case Tool_State::ADD_LINE:
+				tool.drawLineTool(_rendertexture, position,
+					_displaysquaresize, _toollist.at(id).id);
+				return;
+			case Tool_State::ADD_ARROW:
+				tool.drawArrowTool(_rendertexture, position,
+					_displaysquaresize, _toollist.at(id).id);
+				return;
+			case Tool_State::SET_SQUARE_COLOR:
+				tool.drawSetSquareColorTool(_rendertexture, position,
+					_displaysquaresize, _toollist.at(id).id);
+				return;
+			case Tool_State::ADD_PROFILE_BOX:
+				tool.drawAddProfileBoxTool(_rendertexture, position,
+					_displaysquaresize, _toollist.at(id).id);
+				return;
+			case Tool_State::ADD_PIECE_ACCESSORY:
+				tool.drawAccessoryTool(_rendertexture, position,
+					_displaysquaresize, _toollist.at(id).id, tool.getAccessoryName());
+				return;
+			case Tool_State::ADD_PIECE_CHAR_ACCESSORY:
+				tool.drawAccessoryTool(_rendertexture, position,
+					_displaysquaresize, _toollist.at(id).id, string(1, tool.getCharAccessory()));
+				return;
+			default:
+				Piece piece = tool.getPieceBrush();
+				piece.setColor(tool.getPieceColor(_toollist.at(id).id));
+				piece.setSize(_displaysquaresize);
+				piece.setPosition(position);
+				_rendertexture.draw(piece);
+				return;
+			}
+		case Piece_Tool::ADD_PIECE:
+		{
+			Piece piece = tool.getPieceBrush();
+			piece.setName(getTypeFromId(piecehandler, tool, _toollist.at(id).id));
+			if (piece.exists())
+			{
+				piece.setSize(_displaysquaresize);
+				piece.setPosition(position);
+				_rendertexture.draw(piece);
+			}
+			return;
+		}
 		default:
-			string imagefilename = getToolFileName(toolindex);
+			string imagefilename = getToolFileName(_toollist.at(id).tool);
 			sf::Image icon;
+			sf::Color squarecolor = getSquareColor(x, y);
+			sf::Image toolimage;
 			toolimage.create(_displaysquaresize.x, _displaysquaresize.y, squarecolor);
 			if (std::experimental::filesystem::exists(imagefilename))
 			{
@@ -414,7 +448,7 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 			}
 			else
 			{
-				icon.loadFromFile(getToolFileName(0));
+				icon.loadFromFile(getToolFileName(Piece_Tool::REMOVE));
 			}
 			toolimage.copy(icon, 0, 0, sf::IntRect(0, 0, 0, 0), true);
 			sf::Texture texture;
@@ -422,56 +456,6 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 			sf::Sprite sprite{ texture };
 			sprite.setPosition(position);
 			_rendertexture.draw(sprite);
-			return;
-		}
-	}
-	else if (y >= _numtoolrows)
-	{
-		if (x == 0)
-		{
-			switch (tool.getState())
-			{
-			case Tool_State::ADD_LINE:
-				tool.drawLineTool(_rendertexture, position,
-					_displaysquaresize, y - _numtoolrows);
-				return;
-			case Tool_State::ADD_ARROW:
-				tool.drawArrowTool(_rendertexture, position,
-					_displaysquaresize, y - _numtoolrows);
-				return;
-			case Tool_State::SET_SQUARE_COLOR:
-				tool.drawSetSquareColorTool(_rendertexture, position,
-					_displaysquaresize, y - _numtoolrows);
-				return;
-			case Tool_State::ADD_PROFILE_BOX:
-				tool.drawAddProfileBoxTool(_rendertexture, position,
-					_displaysquaresize, y - _numtoolrows);
-				return;
-			case Tool_State::ADD_PIECE_ACCESSORY:
-				tool.drawAccessoryTool(_rendertexture, position,
-					_displaysquaresize, y - _numtoolrows, tool.getAccessoryName());
-				return;
-			case Tool_State::ADD_PIECE_CHAR_ACCESSORY:
-				tool.drawAccessoryTool(_rendertexture, position,
-					_displaysquaresize, y - _numtoolrows, string(1, tool.getCharAccessory()));
-				return;
-			default:
-				Piece piece = getPieceFromId(piecehandler, tool, x, y);
-				piece.setSize(_displaysquaresize);
-				piece.setPosition(position);
-				_rendertexture.draw(piece);
-				return;
-			}
-		}
-		else
-		{
-			Piece piece = getPieceFromId(piecehandler, tool, x, y);
-			if (piece.exists())
-			{
-				piece.setSize(_displaysquaresize);
-				piece.setPosition(position);
-				_rendertexture.draw(piece);
-			}
 			return;
 		}
 	}
