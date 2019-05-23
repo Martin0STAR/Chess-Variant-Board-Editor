@@ -18,16 +18,10 @@ void PieceSelectWindow::load(PieceHandler& piecehandler, Board& board, Tool& too
 {
 	_displaysquaresize = board.getImageSquareSize();
 	_numcolumns = 5;
+	_numrows = 14;
 	_backgroundcolor = sf::Color{ 180, 180, 180 };
 
-	int numpiecerows = max(
-		tool.getNumColors(),
-		(piecehandler.getNumPieces(tool.getPieceBrush().getStyle()) + _numcolumns - 2) / (_numcolumns - 1));
-
-	_numrows = 14;
-
 	_rendertexture.create(_displaysquaresize.x*_numcolumns, _displaysquaresize.y*_numrows);
-
 	update(piecehandler, board, tool);
 }
 
