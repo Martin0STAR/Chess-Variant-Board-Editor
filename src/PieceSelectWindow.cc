@@ -473,11 +473,6 @@ sf::Color PieceSelectWindow::getSquareColor(unsigned int x, unsigned int y) cons
 	}
 }
 
-unsigned int PieceSelectWindow::getToolIndex(unsigned int x, unsigned int y) const
-{
-	return y * _numcolumns + x;
-}
-
 sf::RectangleShape PieceSelectWindow::getEmptySquare(unsigned int x, unsigned int y) const
 {
 	sf::RectangleShape square{

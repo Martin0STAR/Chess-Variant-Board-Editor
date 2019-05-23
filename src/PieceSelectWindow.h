@@ -61,7 +61,6 @@ private:
 	void drawTool(PieceHandler& piecehandler, Tool& tool, unsigned int x, unsigned int y);
 
 	sf::Color getSquareColor(unsigned int x, unsigned int y) const;
-	unsigned int getToolIndex(unsigned int x, unsigned int y) const;
 	sf::RectangleShape getEmptySquare(unsigned int x, unsigned int y) const;
 
 	unsigned int _numcolumns;
