@@ -17,8 +17,8 @@ PieceSelectWindow::PieceSelectWindow(PieceHandler& piecehandler, Board& board, T
 void PieceSelectWindow::load(PieceHandler& piecehandler, Board& board, Tool& tool)
 {
 	_displaysquaresize = board.getImageSquareSize();
-	_numcolumns = 5;
-	_numrows = 14;
+	_numcolumns = 6;
+	_numrows = 11;
 	_backgroundcolor = sf::Color{ 180, 180, 180 };
 
 	_rendertexture.create(_displaysquaresize.x*_numcolumns, _displaysquaresize.y*_numrows);
@@ -214,71 +214,78 @@ void PieceSelectWindow::initToolList()
 	_toollist.push_back(Container{ Piece_Tool::REMOVE_SQUARE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::COLOR_SQUARE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PROFILE_BOX, 0 });
-	_toollist.push_back(Container{ Piece_Tool::MUSKETEER_STYLE, 0 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_LINE, 0 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_ARROW, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
+
 	_toollist.push_back(Container{ Piece_Tool::FLIP_HORIZONTAL, 0 });
 	_toollist.push_back(Container{ Piece_Tool::FLIP_VERTICAL, 0 });
-	_toollist.push_back(Container{ Piece_Tool::INVERT_COLORS, 0 });
+	
 	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 1 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 2 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_CHAR_ACCESSORY, 0 });
+
+	_toollist.push_back(Container{ Piece_Tool::MUSKETEER_STYLE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::INVERT_COLORS, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_LINE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::ADD_ARROW, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
+
 	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 0 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 1 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 1 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 2 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 3 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 1 });
+	
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 2 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 3 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 4 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 5 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 6 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 7 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 2 });
+	
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 4 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 5 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 8 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 9 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 10 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 11 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 3 });
+	
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 6 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 7 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 12 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 13 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 14 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 15 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 4 });
+	
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 8 });
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 9 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 16 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 17 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 18 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 19 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 5 });
+	
+	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 10 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 20 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 21 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 22 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 23 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 6 });
+	
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 24 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 25 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 26 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 27 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 7 });
+
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
+	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 28 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 29 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 30 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 31 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 8 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 32 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 33 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 34 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 35 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 9 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 36 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 37 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 38 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 39 });
-	_toollist.push_back(Container{ Piece_Tool::SET_COLOR, 10 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 40 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 41 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 42 });
-	_toollist.push_back(Container{ Piece_Tool::ADD_PIECE, 43 });
 }
 
 string PieceSelectWindow::getTypeFromId(PieceHandler& piecehandler, Tool& tool, unsigned int index) const
