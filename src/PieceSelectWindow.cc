@@ -218,7 +218,6 @@ void PieceSelectWindow::initToolList()
 
 	_toollist.push_back(Container{ Piece_Tool::FLIP_HORIZONTAL, 0 });
 	_toollist.push_back(Container{ Piece_Tool::FLIP_VERTICAL, 0 });
-	
 	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 1 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_ACCESSORY, 2 });
