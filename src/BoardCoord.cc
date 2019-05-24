@@ -160,7 +160,7 @@ sf::Vector2f BoardComponent::Coord::getPixelPosition(
 		y += (float)(numrows - _coord.y - 1) * squaresize.y;
 		if (_isgridtop)
 		{
-			y -= squaresize.y / 2.f;
+			y += squaresize.y / 2.f;
 		}
 	}
 	else
@@ -168,22 +168,9 @@ sf::Vector2f BoardComponent::Coord::getPixelPosition(
 		y += (float)_coord.y * squaresize.y;
 		if (_isgridtop)
 		{
-			y += squaresize.y / 2.f;
+			y -= squaresize.y / 2.f;
 		}
 	}
-
-	/*
-	float x = offset.x + (float)_coord.x * squaresize.x;
-	float y = offset.y + (float)_coord.y * squaresize.y;
-	if (_isgridright)
-	{
-		x += squaresize.x / 2.f;
-	}
-	if (_isgridtop)
-	{
-		y -= squaresize.y / 2.f;
-	}
-	*/
 	return sf::Vector2f{ x, y };
 }
 
@@ -223,7 +210,7 @@ string BoardComponent::Coord::getNotationX() const
 	}
 	if (_isgridright)
 	{
-		notationx.push_back('+');
+		notationx.push_back('\'');
 	}
 	return notationx;
 }
@@ -234,7 +221,7 @@ string BoardComponent::Coord::getNotationY(unsigned int numrows) const
 	notationy = to_string((int)numrows - _coord.y);
 	if (_isgridtop)
 	{
-		notationy.push_back('+');
+		notationy.push_back('\'');
 	}
 	return notationy;
 }
@@ -279,7 +266,7 @@ void BoardComponent::Coord::setCoordByNotation(unsigned int numrows, string nota
 	{
 		coord.x = -coord.x - 1;
 	}
-	if (ns.peek() == '+')
+	if (ns.peek() == '\'')
 	{
 		ns.ignore(1);
 		_isgridright = true;
@@ -287,7 +274,7 @@ void BoardComponent::Coord::setCoordByNotation(unsigned int numrows, string nota
 	int yvalue{ 0 };
 	ns >> yvalue;
 	coord.y = numrows - yvalue;
-	if (ns.peek() == '+')
+	if (ns.peek() == '\'')
 	{
 		ns.ignore(1);
 		_isgridtop = true;
