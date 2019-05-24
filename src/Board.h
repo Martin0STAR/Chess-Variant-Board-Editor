@@ -61,6 +61,7 @@ class Board : public sf::Drawable
 		bool flipVertically();
 		bool togglegrid();
 		void removeDragArrow();
+		bool clearContent();
 
 		void setPieceHandler(PieceHandler* piecehandler);
 

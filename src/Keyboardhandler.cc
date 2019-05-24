@@ -218,6 +218,14 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 				return action;
 			}
 			break;
+		case sf::Keyboard::E:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+			{
+				action.state = Window_Action_State::CLEAR_BOARD;
+				return action;
+			}
+			break;
 		case sf::Keyboard::G:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))

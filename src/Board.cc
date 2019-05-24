@@ -113,8 +113,11 @@ sf::Color Board::getSquareColor(BoardComponent::Coord coord) const
 	{
 		return it->second;
 	}
-
-	return _squarecolors.at(coord.getColorId(_squarecolors.size()));
+	if (_squarecolors.size() > 0)
+	{
+		return _squarecolors.at(coord.getColorId(_squarecolors.size()));
+	}
+	return sf::Color::White;
 }
 
 BoardComponent::Square Board::getSquare(BoardComponent::Coord coord) const
@@ -224,6 +227,19 @@ bool Board::togglegrid()
 void Board::removeDragArrow()
 {
 	_showdragarrow = false;
+}
+
+bool Board::clearContent()
+{
+	_showgrid = false;
+	_removed_square_list.clear();
+	_colored_square_list.clear();
+	_highlighted_square_list.clear();
+	_piece_list.clear();
+	_line_list.clear();
+	_arrow_list.clear();
+	_profile_box_list.clear();
+	return true;
 }
 
 void Board::setPieceHandler(PieceHandler* piecehandler)

@@ -148,6 +148,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_board.initLoad(_boardtype);
 					_toolwindow.setSaveIconSaved();
 				}
+				break;
 			case Window_Action_State::LOAD_BOARD_LEFT:
 				if (_numboards > 0)
 				{
@@ -270,6 +271,13 @@ void BoardRunner::run(std::default_random_engine & rng)
 				break;
 			case Window_Action_State::REMOVE_COLUMN_RIGHT:
 				if (_board.removeColumnRight())
+				{
+					_board.updateImage();
+					_toolwindow.setSaveIconNotSaved();
+				}
+				break;
+			case Window_Action_State::CLEAR_BOARD:
+				if (_board.clearContent())
 				{
 					_board.updateImage();
 					_toolwindow.setSaveIconNotSaved();
