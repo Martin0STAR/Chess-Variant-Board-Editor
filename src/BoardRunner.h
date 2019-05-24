@@ -22,6 +22,8 @@ private:
 	unsigned int _boardnumber;
 	unsigned int _numboards;
 	std::string _boardname;
+	std::string _boardtype;
+	std::string _defaultboardname;
 	Board _board;
 	ToolWindow _toolwindow;
 	sf::RenderWindow _mainwindow;

@@ -2,6 +2,7 @@
 
 using namespace std;
 BoardRunner::BoardRunner(string setupfilename)
+	:_boardtype{"chess"}, _defaultboardname{"board"}
 {
 	_piecehandler.loadStyle("bulldog");
 	_piecehandler.loadStyle("musketeer");
@@ -18,8 +19,8 @@ BoardRunner::BoardRunner(string setupfilename)
 	{
 		_boardnumber = 0;
 		_numboards = 0;
-		_boardname = "board";
-		_board.initLoad("chess");
+		_boardname = _defaultboardname;
+		_board.initLoad(_boardtype);
 	}
 	
 	_toolwindow.load(_board);
@@ -40,7 +41,7 @@ BoardRunner::BoardRunner(string setupfilename)
 
 	if (_numboards == 0)
 	{
-		_mainwindow.setTitle("board");
+		_mainwindow.setTitle(_defaultboardname);
 		_toolwindow.setSaveIconNotSaved();
 	}
 
@@ -110,7 +111,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 				{
 					_numboards++;
 					_boardnumber = _numboards;
-					_boardnamelist.push_back("board");
+					_boardnamelist.push_back(_defaultboardname);
 					_board.save(_boardnamelist.getName(_boardnumber));
 					_toolwindow.setSaveIconSaved();
 					_mainwindow.setTitle(_boardnamelist.getName(_boardnumber));
@@ -144,7 +145,7 @@ void BoardRunner::run(std::default_random_engine & rng)
 				}
 				else
 				{
-					_board.initLoad("chess");
+					_board.initLoad(_boardtype);
 					_toolwindow.setSaveIconSaved();
 				}
 			case Window_Action_State::LOAD_BOARD_LEFT:
@@ -186,9 +187,8 @@ void BoardRunner::run(std::default_random_engine & rng)
 			{
 				_numboards++;
 				_boardnumber = _numboards;
-				string boardtype = "chess";
-				_board.initLoad(boardtype);
-				_boardnamelist.push_back("board");
+				_board.initLoad(_boardtype);
+				_boardnamelist.push_back(_defaultboardname);
 				_board.save(_boardnamelist.getName(_boardnumber));
 				_toolwindow.setSaveIconSaved();
 				_mainwindow.setTitle(_boardnamelist.getName(_boardnumber));
@@ -209,13 +209,13 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_boardnamelist.remove(_boardnumber);
 					_numboards--;
 					_boardnumber = 0;
-					_board.initLoad("chess");
+					_board.initLoad(_boardtype);
 					_toolwindow.setSaveIconNotSaved();
-					_mainwindow.setTitle("board");
+					_mainwindow.setTitle(_defaultboardname);
 				}
 				else
 				{
-					_board.initLoad("chess");
+					_board.initLoad(_boardtype);
 					_toolwindow.setSaveIconNotSaved();
 				}
 				break;
