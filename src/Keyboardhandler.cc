@@ -210,6 +210,14 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 		case sf::Keyboard::F12:
 			action.state = Window_Action_State::ENTER_SAVE_AS_BOARDNAME;
 			return action;
+		case sf::Keyboard::L:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+			{
+				action.state = Window_Action_State::LOAD_CURRENT_BOARD;
+				return action;
+			}
+			break;
 		case sf::Keyboard::G:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))

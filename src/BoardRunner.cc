@@ -133,6 +133,20 @@ void BoardRunner::run(std::default_random_engine & rng)
 					}
 				}
 				break;
+			case Window_Action_State::LOAD_CURRENT_BOARD:
+				if (_numboards > 0)
+				{
+					if (_board.load(_boardnamelist.getName(_boardnumber)))
+					{
+						_toolwindow.setSaveIconSaved();
+						_mainwindow.setTitle(_boardnamelist.getName(_boardnumber));
+					}
+				}
+				else
+				{
+					_board.initLoad("chess");
+					_toolwindow.setSaveIconSaved();
+				}
 			case Window_Action_State::LOAD_BOARD_LEFT:
 				if (_numboards > 0)
 				{
