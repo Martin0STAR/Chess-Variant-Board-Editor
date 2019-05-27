@@ -14,115 +14,68 @@ void KeyboardHandler::setState(Keyboard::State state)
 Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 {
 	Window_Action action;
+	string prevtext{ _text };
 	switch (_state)
 	{
 	case Keyboard::State::ENTER_BOARD_NAME:
-		switch (key)
+		if (handleTextWithKey(key, illegalBoardNameChars))
 		{
-		case sf::Keyboard::Enter:
 			action.name = _text;
-			_state = Keyboard::State::NORMAL;
 			_text = "";
 			action.state = Window_Action_State::SET_BOARD_NAME;
 			return action;
-		case sf::Keyboard::BackSpace:
-			if (_text.size() > 0)
-			{
-				_text.pop_back();
-				action.name = _text;
-				action.state = Window_Action_State::DISPLAY_ENTERED_BOARD_NAME;
-				return action;
-			}
-			action.state = Window_Action_State::NOTHING;
+		}
+		else if(_text != prevtext)
+		{
+			action.name = _text;
+			action.state = Window_Action_State::DISPLAY_ENTERED_BOARD_NAME;
 			return action;
-		case sf::Keyboard::V:
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			{
-				string clipboardtext = sf::Clipboard::getString();
-				removeIllegalBoardNameChars(clipboardtext);
-				_text += clipboardtext;
-				action.name = _text;
-				action.state = Window_Action_State::DISPLAY_ENTERED_BOARD_NAME;
-				return action;
-			}
-			action.state = Window_Action_State::NOTHING;
-			return action;
-		default:
+		}
+		else
+		{
 			action.state = Window_Action_State::NOTHING;
 			return action;
 		}
+
 	case Keyboard::State::ENTER_SAVE_AS_BOARDNAME:
-		switch (key)
+		if (handleTextWithKey(key, illegalBoardNameChars))
 		{
-		case sf::Keyboard::Enter:
 			action.name = _text;
-			_state = Keyboard::State::NORMAL;
 			_text = "";
 			action.state = Window_Action_State::SAVE_BOARD_AS;
 			return action;
-		case sf::Keyboard::BackSpace:
-			if (_text.size() > 0)
-			{
-				_text.pop_back();
-				action.name = _text;
-				action.state = Window_Action_State::DISPLAY_SAVE_AS_BOARDNAME;
-				return action;
-			}
-			action.state = Window_Action_State::NOTHING;
+		}
+		else if (_text != prevtext)
+		{
+			action.name = _text;
+			action.state = Window_Action_State::DISPLAY_SAVE_AS_BOARDNAME;
 			return action;
-		case sf::Keyboard::V:
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			{
-				string clipboardtext = sf::Clipboard::getString();
-				removeIllegalBoardNameChars(clipboardtext);
-				_text += clipboardtext;
-				action.name = _text;
-				action.state = Window_Action_State::DISPLAY_SAVE_AS_BOARDNAME;
-				return action;
-			}
-			action.state = Window_Action_State::NOTHING;
-			return action;
-		default:
+		}
+		else
+		{
 			action.state = Window_Action_State::NOTHING;
 			return action;
 		}
+
 	case Keyboard::State::ENTER_PROFILE_NAME:
-		switch (key)
+		if (handleTextWithKey(key, illegalPlayerNameChars))
 		{
-		case sf::Keyboard::Enter:
 			action.name = _text;
-			_state = Keyboard::State::NORMAL;
 			_text = "";
 			action.state = Window_Action_State::SET_PROFILE_IMAGE;
 			return action;
-		case sf::Keyboard::BackSpace:
-			if (_text.size() > 0)
-			{
-				_text.pop_back();
-				action.name = _text;
-				action.state = Window_Action_State::DISPLAY_ENTERED_PROFILE_NAME;
-				return action;
-			}
-			action.state = Window_Action_State::NOTHING;
+		}
+		else if (_text != prevtext)
+		{
+			action.name = _text;
+			action.state = Window_Action_State::DISPLAY_ENTERED_PROFILE_NAME;
 			return action;
-		case sf::Keyboard::V:
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			{
-				string clipboardtext = sf::Clipboard::getString();
-				removeIllegalPlayerNameChars(clipboardtext);
-				_text += clipboardtext;
-				action.name = _text;
-				action.state = Window_Action_State::DISPLAY_ENTERED_PROFILE_NAME;
-				return action;
-			}
+		}
+		else
+		{
 			action.state = Window_Action_State::NOTHING;
 			return action;
 		}
-		action.state = Window_Action_State::NOTHING;
-		return action;
 	default:
 		switch (key)
 		{
@@ -344,20 +297,38 @@ Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 	}
 }
 
-string KeyboardHandler::removeIllegalBoardNameChars(std::string & text)
+bool KeyboardHandler::handleTextWithKey(sf::Keyboard::Key key, std::string illegalchars)
 {
-	text.erase(remove_if(text.begin(), text.end(), [this](char c)
+	switch (key)
 	{
-		return illegalBoardNameChars.find(c) != string::npos;
-	}), text.end());
-	return text;
+	case sf::Keyboard::Enter:
+		_state = Keyboard::State::NORMAL;
+		return true;
+	case sf::Keyboard::BackSpace:
+		if (_text.size() > 0)
+		{
+			_text.pop_back();
+		}
+		return false;
+	case sf::Keyboard::V:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+			sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+		{
+			string clipboardtext = sf::Clipboard::getString();
+			removeIllegalChars(clipboardtext, illegalchars);
+			_text += clipboardtext;
+		}
+		return false;
+	default:
+		return false;
+	}
 }
 
-string KeyboardHandler::removeIllegalPlayerNameChars(std::string & text)
+string KeyboardHandler::removeIllegalChars(string & text, const std::string illegalchars)
 {
-	text.erase(remove_if(text.begin(), text.end(), [this](char c)
+	text.erase(remove_if(text.begin(), text.end(), [illegalchars](char c)
 	{
-		return illegalPlayerNameChars.find(c) != string::npos;
+		return illegalchars.find(c) != string::npos;
 	}), text.end());
 	return text;
 }

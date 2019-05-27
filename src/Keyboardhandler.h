@@ -26,8 +26,9 @@ public:
 	Window_Action handleTextEntered(sf::String inputtext);
 
 private:
-	std::string removeIllegalBoardNameChars(std::string &);
-	std::string removeIllegalPlayerNameChars(std::string &);
+	bool handleTextWithKey(sf::Keyboard::Key key, std::string illegalchars);
+	std::string removeIllegalChars(std::string & text, const std::string illegalchars);
+
 	Keyboard::State _state;
 	std::string _text;
 	const std::string illegalBoardNameChars = "\\/:?\"<>|\xe\b *.\x10\x16";
