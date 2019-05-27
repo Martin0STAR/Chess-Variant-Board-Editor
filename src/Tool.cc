@@ -10,10 +10,11 @@ Tool::Tool()
 Tool::Tool(PieceHandler* piecehandler, sf::Vector2u size,
 	Tool_State::Tool_State state, sf::Color squarecolor,
 	sf::Color boardcolor)
-	: _profilesize{ 110, 110 },
-_profileborder1width{ 5 },
-_profileborder2width{ 5 },
-_profilehighlightcolor{ 255, 255, 255, 255 }
+	: _precision{PrecisionState::MIDDLE},
+	_profilesize{ 110, 110 },
+	_profileborder1width{ 5 },
+	_profileborder2width{ 5 },
+	_profilehighlightcolor{ 255, 255, 255, 255 }
 {
 	_size = size;
 	_rendertexture.create(_size.x, _size.y);
@@ -78,6 +79,11 @@ void Tool::load(sf::Vector2u size,
 	_boardcolor = boardcolor;
 	setState(state);
 	_accessoryname = "star6point";
+}
+
+PrecisionState::PrecisionState Tool::getPrecision() const
+{
+	return _precision;
 }
 
 sf::Color Tool::getBackgroundColor() const
@@ -203,6 +209,19 @@ void Tool::setCharAccessory(char character)
 void Tool::setPlayerName(string name)
 {
 	_playername = name;
+}
+
+void Tool::setNextPrecision()
+{
+	switch (_precision)
+	{
+	case PrecisionState::MIDDLE:
+		_precision = PrecisionState::EDGES_AND_MIDDLE;
+		break;
+	case PrecisionState::EDGES_AND_MIDDLE:
+		_precision = PrecisionState::MIDDLE;
+		break;
+	}
 }
 
 void Tool::flipPieceHorizontally()

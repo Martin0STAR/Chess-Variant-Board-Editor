@@ -6,6 +6,7 @@
 #include "Window_Action.h"
 #include "BoardCoord.h"
 #include "KeyboardHandler.h"
+#include "PrecisionState.h"
 
 class EventHandler
 {
@@ -14,14 +15,11 @@ public:
 	
 	Window_Action handleEvent(sf::Event event, Board & board,
 		ToolWindow & toolwindow, KeyboardHandler & keyboardhandler);
-	void toggleGridSelect();
 	
 private:
 		
 	float _scalex;
 	float _scaley;
-
-	bool _allowintersections;
 
 	int _dragleftfromx;
 	int _dragleftfromy;

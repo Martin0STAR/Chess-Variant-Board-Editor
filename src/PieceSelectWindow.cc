@@ -120,6 +120,9 @@ Window_Action PieceSelectWindow::handleEvent(
 			action.toolstate = Tool_State::SELECT;
 			action.state = Window_Action_State::SET_TOOL_STATE;
 			return action;
+		case Piece_Tool::CHANGE_PRECISION:
+			action.state = Window_Action_State::CHANGE_PRECISION;
+			return action;
 		case Piece_Tool::REMOVE:
 			action.toolstate = Tool_State::REMOVE;
 			action.state = Window_Action_State::SET_TOOL_STATE;
@@ -210,11 +213,11 @@ void PieceSelectWindow::display()
 void PieceSelectWindow::initToolList()
 {
 	_toollist.push_back(Container{ Piece_Tool::SELECT, 0 });
+	_toollist.push_back(Container{ Piece_Tool::CHANGE_PRECISION, 0 });
 	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::REMOVE_SQUARE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::COLOR_SQUARE, 0 });
 	_toollist.push_back(Container{ Piece_Tool::ADD_PROFILE_BOX, 0 });
-	_toollist.push_back(Container{ Piece_Tool::REMOVE, 0 });
 
 	_toollist.push_back(Container{ Piece_Tool::FLIP_HORIZONTAL, 0 });
 	_toollist.push_back(Container{ Piece_Tool::FLIP_VERTICAL, 0 });
@@ -328,6 +331,9 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 	{
 		switch (_toollist.at(id).tool)
 		{
+		case Piece_Tool::CHANGE_PRECISION:
+			drawPrecisionTool(tool.getPrecision(), position);
+			return;
 		case Piece_Tool::ADD_LINE:
 			tool.drawLineTool(_rendertexture, position,
 				_displaysquaresize, tool.getColorIndex());
@@ -487,4 +493,36 @@ sf::RectangleShape PieceSelectWindow::getEmptySquare(unsigned int x, unsigned in
 		}
 	);
 	return square;
+}
+
+void PieceSelectWindow::drawPrecisionTool(PrecisionState::PrecisionState state, sf::Vector2f position)
+{
+	sf::CircleShape circle{ 4.f, 16 };
+	circle.setFillColor(sf::Color{ 255,100,100 });
+	switch (state)
+	{
+	case PrecisionState::MIDDLE:
+		circle.setPosition(position + sf::Vector2f
+			{
+				(_displaysquaresize.x - 8.f) / 2.f,
+				(_displaysquaresize.y - 8.f) / 2.f
+			}
+		);
+		_rendertexture.draw(circle);
+		return;
+	case PrecisionState::EDGES_AND_MIDDLE:
+		for (unsigned int x{ 0 }; x < 3; x++)
+		{
+			for (unsigned int y{ 0 }; y < 3; y++)
+			{
+				sf::Vector2f onsquarepos{
+					x * (_displaysquaresize.x - 8.f) / 2.f,
+					y * (_displaysquaresize.y - 8.f) / 2.f
+				};
+				circle.setPosition(position + onsquarepos);
+				_rendertexture.draw(circle);
+			}
+		}
+		return;
+	}
 }

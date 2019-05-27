@@ -8,6 +8,7 @@
 #include "Colortool.h"
 #include "PieceColor.h"
 #include "ProfileBox.h"
+#include "PrecisionState.h"
 
 namespace Tool_State
 {
@@ -43,6 +44,7 @@ public:
 		Tool_State::Tool_State state, sf::Color squarecolor,
 		sf::Color boardcolor);
 
+	PrecisionState::PrecisionState getPrecision() const;
 	sf::Color getBackgroundColor() const;
 	Piece& getPieceBrush();
 	unsigned int getNumColors();
@@ -68,6 +70,7 @@ public:
 	void setCharAccessory(char character);
 	void setPlayerName(std::string name);
 
+	void setNextPrecision();
 	void flipPieceHorizontally();
 	void flipPieceVertically();
 	void invertPieceColor();
@@ -109,6 +112,7 @@ private:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	PrecisionState::PrecisionState _precision;
 	sf::Vector2u _size;
 	Tool_State::Tool_State _state;
 	Piece _piecebrush;

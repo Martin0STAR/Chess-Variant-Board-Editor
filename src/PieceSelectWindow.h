@@ -19,6 +19,7 @@ namespace Piece_Tool
 	{
 		INVALID,
 		SELECT,
+		CHANGE_PRECISION,
 		FLIP_HORIZONTAL,
 		FLIP_VERTICAL,
 		INVERT_COLORS,
@@ -62,6 +63,8 @@ private:
 
 	sf::Color getSquareColor(unsigned int x, unsigned int y) const;
 	sf::RectangleShape getEmptySquare(unsigned int x, unsigned int y) const;
+
+	void drawPrecisionTool(PrecisionState::PrecisionState state, sf::Vector2f position);
 
 	unsigned int _numcolumns;
 	unsigned int _numrows;

@@ -3,7 +3,7 @@
 using namespace std;
 
 EventHandler::EventHandler()
-	:_scalex{ 1.0 }, _scaley{ 1.0 }, _allowintersections{ false }
+	:_scalex{ 1.0 }, _scaley{ 1.0 }
 {}
 
 Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
@@ -48,17 +48,6 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 				(float)event.mouseButton.y * _scaley
 			};
 
-			action.tosquarecoord = BoardComponent::Coord{
-				board.getDisplaySquareOffset(),
-				board.getDisplaySquareSize(),
-				displaytopos,
-				board.getNumColumns(),
-				board.getNumRows(),
-				board.isHorizontalflipped(),
-				board.isVerticalflipped(),
-				_allowintersections
-			};
-
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
 				action.isLeftTool = true;
@@ -75,7 +64,7 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 				board.getNumRows(),
 				board.isHorizontalflipped(),
 				board.isVerticalflipped(),
-				_allowintersections
+				toolwindow.getTool(true).getPrecision()
 				};
 			}
 			else if (event.mouseButton.button == sf::Mouse::Right)
@@ -94,7 +83,7 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getNumRows(),
 					board.isHorizontalflipped(),
 					board.isVerticalflipped(),
-					_allowintersections
+					toolwindow.getTool(false).getPrecision()
 				};
 			}
 			else
@@ -102,6 +91,17 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 				action.state = Window_Action_State::NOTHING;
 				return action;
 			}
+
+			action.tosquarecoord = BoardComponent::Coord{
+				board.getDisplaySquareOffset(),
+				board.getDisplaySquareSize(),
+				displaytopos,
+				board.getNumColumns(),
+				board.getNumRows(),
+				board.isHorizontalflipped(),
+				board.isVerticalflipped(),
+				toolwindow.getTool(action.isLeftTool).getPrecision()
+			};
 
 			if (board.isWithinBoard(action.tosquarecoord))
 			{
@@ -345,7 +345,7 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getNumRows(),
 					board.isHorizontalflipped(),
 					board.isVerticalflipped(),
-					_allowintersections
+					toolwindow.getTool(true).getPrecision()
 				};
 			}
 			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -364,7 +364,7 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getNumRows(),
 					board.isHorizontalflipped(),
 					board.isVerticalflipped(),
-					_allowintersections
+					toolwindow.getTool(false).getPrecision()
 				};
 			}
 			else
@@ -384,7 +384,7 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getNumRows(),
 					board.isHorizontalflipped(),
 					board.isVerticalflipped(),
-					_allowintersections
+					toolwindow.getTool(action.isLeftTool).getPrecision()
 				};
 				if (board.isValidSquare(action.tosquarecoord) && !(board.isEmptySquare(action.fromsquarecoord)))
 				{
@@ -402,7 +402,7 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 					board.getNumRows(),
 					board.isHorizontalflipped(),
 					board.isVerticalflipped(),
-					_allowintersections
+					toolwindow.getTool(action.isLeftTool).getPrecision()
 				};
 				if (board.isValidSquare(action.tosquarecoord))
 				{
@@ -418,9 +418,4 @@ Window_Action EventHandler::handleEvent(sf::Event event, Board & board,
 			break;
 	}
 	return action;
-}
-
-void EventHandler::toggleGridSelect()
-{
-	_allowintersections = !_allowintersections;
 }

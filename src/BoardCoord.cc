@@ -64,7 +64,7 @@ BoardComponent::Coord::Coord(
 	unsigned int numrows,
 	bool ishorizontalflipped,
 	bool isverticalflipped,
-	bool allowintersections)
+	PrecisionState::PrecisionState precision)
 	: BoardComponent::Coord::Coord{}
 {
 	setCoordByPixelPosition(
@@ -75,7 +75,7 @@ BoardComponent::Coord::Coord(
 		numrows,
 		ishorizontalflipped,
 		isverticalflipped,
-		allowintersections);
+		precision);
 }
 
 bool BoardComponent::Coord::operator ==(const Coord & rhs) const
@@ -290,14 +290,15 @@ void BoardComponent::Coord::setCoordByPixelPosition(
 	unsigned int numrows,
 	bool ishorizontalflipped,
 	bool isverticalflipped,
-	bool allowintersections)
+	PrecisionState::PrecisionState precision)
 {
 	int xpos = int((pixelpos.x - offset.x) / squaresize.x);
 	int ypos = int((pixelpos.y - offset.y) / squaresize.y);
 	_coord = sf::Vector2i{ xpos, ypos };
 	_isgridright = false;
 	_isgridtop = false;
-	if (allowintersections)
+	
+	if (precision == PrecisionState::EDGES_AND_MIDDLE)
 	{
 		float insidexpos = pixelpos.x - offset.x - xpos * squaresize.x;
 		float insideypos = pixelpos.y - offset.y - ypos * squaresize.y;

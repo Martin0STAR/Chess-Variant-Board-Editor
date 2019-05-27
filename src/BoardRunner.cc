@@ -50,8 +50,6 @@ BoardRunner::BoardRunner(string setupfilename)
 		(float)_board.getDisplaySize().y / 2.f });
 }
 
-
-
 BoardRunner::~BoardRunner()
 {
 }
@@ -219,6 +217,10 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_board.initLoad(_boardtype);
 					_toolwindow.setSaveIconNotSaved();
 				}
+				break;
+			case Window_Action_State::CHANGE_PRECISION:
+				tool->setNextPrecision();
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::ADD_ROW_UP:
 				if (_board.addRowUp())
@@ -549,7 +551,9 @@ void BoardRunner::run(std::default_random_engine & rng)
 				}
 				break;
 			case Window_Action_State::TOGGLE_GRID_SELECT:
-				_eventhandler.toggleGridSelect();
+				_toolwindow.getTool(true).setNextPrecision();
+				_toolwindow.getTool(false).setNextPrecision();
+				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::GENERATE_COLORED_BOARD:
 				if (_board.generateColoredBoard(rng))

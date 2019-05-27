@@ -3,6 +3,7 @@
 #include <cctype>
 #include <sstream>
 #include <SFML/Graphics.hpp>
+#include "PrecisionState.h"
 namespace BoardComponent
 {
 	enum Orientation
@@ -31,7 +32,7 @@ namespace BoardComponent
 			unsigned int numrows,
 			bool ishorizontalflipped,
 			bool isverticalflipped,
-			bool allowintersections = false);
+			PrecisionState::PrecisionState = PrecisionState::MIDDLE);
 
 		bool operator ==(const Coord & rhs) const;
 		bool operator <(const Coord & rhs) const;
@@ -58,7 +59,7 @@ namespace BoardComponent
 			unsigned int numrows,
 			bool ishorizontalflipped,
 			bool isverticalflipped,
-			bool allowintersections);
+			PrecisionState::PrecisionState precision);
 
 		sf::Vector2i _coord;
 		bool _isgridright;
