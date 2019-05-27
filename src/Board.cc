@@ -758,14 +758,14 @@ void Board::updateImage()
 
 	drawCoordinates();
 
-	for (auto & piece : _piece_list)
-	{
-		drawPiece(piece.second, piece.first);
-	}
-
 	for (auto & line : _line_list)
 	{
 		drawLine(line);
+	}
+
+	for (auto & piece : _piece_list)
+	{
+		drawPiece(piece.second, piece.first);
 	}
 
 	for (auto & arrow : _arrow_list)
