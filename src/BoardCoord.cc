@@ -256,11 +256,20 @@ void BoardComponent::Coord::setCoordByNotation(unsigned int numrows, string nota
 		xnegative = true;
 		ns.ignore(1);
 	}
+	bool isfirstalpha{ true };
 	while (isalpha(ns.peek()))
 	{
 		char c;
 		ns >> c;
-		coord.x = coord.x * ('z' - 'a') + c - 'a';
+		if (isfirstalpha)
+		{
+			coord.x = c - 'a';
+			isfirstalpha = false;
+		}
+		else
+		{
+			coord.x = (coord.x+1) * ('z' - 'a') + c - 'a' + 1;
+		}
 	}
 	if (xnegative)
 	{
