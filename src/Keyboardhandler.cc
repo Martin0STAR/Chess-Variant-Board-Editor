@@ -277,6 +277,7 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 {
 	Window_Action action;
+	action.isLeftTool = true;
 	switch (_state)
 	{
 	case Keyboard::State::ENTER_BOARD_NAME:
