@@ -27,6 +27,7 @@ public:
 	Window_Action handleTextEntered(sf::String inputtext);
 
 private:
+	bool internHandleTextEntered(std::string inputtext, std::string illegalchars);
 	bool handleTextWithKey(sf::Keyboard::Key key, std::string illegalchars);
 	std::string removeIllegalChars(std::string & text, const std::string illegalchars);
 
@@ -35,4 +36,5 @@ private:
 	const std::string illegalBoardNameChars = "\\/:?\"<>|\xe\b *.\x10\x16\v\r\n";
 	const std::string illegalPlayerNameChars = "\\/:?\"<>|\xe\b*.\x10\x16\v\r\n";
 	const std::string illegalLinkChars = "\x10\x16\v\r\n";
+	const std::string illegalAccessoryChars = " \x10\x16\v\r\n";
 };

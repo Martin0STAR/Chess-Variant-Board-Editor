@@ -288,53 +288,29 @@ Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 	switch (_state)
 	{
 	case Keyboard::State::ENTER_BOARD_NAME:
-		for (auto it = inputtext.begin(); it < inputtext.end(); it++)
-		{
-			if (illegalBoardNameChars.find(*it) == string::npos)
-			{
-				_text += *it;
-			}
-		}
+		internHandleTextEntered(inputtext, illegalBoardNameChars);
 		action.name = _text;
 		action.state = Window_Action_State::DISPLAY_ENTERED_BOARD_NAME;
 		return action;
 	case Keyboard::State::ENTER_SAVE_AS_BOARDNAME:
-		for (auto it = inputtext.begin(); it < inputtext.end(); it++)
-		{
-			if (illegalBoardNameChars.find(*it) == string::npos)
-			{
-				_text += *it;
-			}
-		}
+		internHandleTextEntered(inputtext, illegalBoardNameChars);
 		action.name = _text;
 		action.state = Window_Action_State::DISPLAY_SAVE_AS_BOARDNAME;
 		return action;
 	case Keyboard::State::ENTER_PROFILE_NAME:
-		for (auto it = inputtext.begin(); it < inputtext.end(); it++)
-		{
-			if (illegalPlayerNameChars.find(*it) == string::npos)
-			{
-				_text += *it;
-			}
-		}
+		internHandleTextEntered(inputtext, illegalPlayerNameChars);
 		action.name = _text;
 		action.state = Window_Action_State::DISPLAY_ENTERED_PROFILE_NAME;
 		return action;
 	case Keyboard::State::ENTER_GAME_LINK:
-		for (auto it = inputtext.begin(); it < inputtext.end(); it++)
-		{
-			if (illegalLinkChars.find(*it) == string::npos)
-			{
-				_text += *it;
-			}
-		}
+		internHandleTextEntered(inputtext, illegalLinkChars);
 		action.name = _text;
 		action.state = Window_Action_State::DISPLAY_ENTERED_GAME_LINK;
 		return action;
 	default:
 		action.name = inputtext;
 		if (action.name.size() == 1 &&
-			action.name != " ")
+			illegalAccessoryChars.find(action.name.at(0)) == string::npos)
 		{
 			action.state = Window_Action_State::SET_PIECE_CHAR_ACCESSORY;
 			return action;
@@ -342,6 +318,18 @@ Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 		action.state = Window_Action_State::NOTHING;
 		return action;
 	}
+}
+
+bool KeyboardHandler::internHandleTextEntered(std::string inputtext, std::string illegalchars)
+{
+	for (auto it = inputtext.begin(); it < inputtext.end(); it++)
+	{
+		if (illegalchars.find(*it) == string::npos)
+		{
+			_text += *it;
+		}
+	}
+	return true;
 }
 
 bool KeyboardHandler::handleTextWithKey(sf::Keyboard::Key key, std::string illegalchars)
