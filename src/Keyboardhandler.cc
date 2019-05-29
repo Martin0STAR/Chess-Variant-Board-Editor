@@ -231,14 +231,6 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 				return action;
 			}
 			break;
-		case sf::Keyboard::I:
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			{
-				action.state = Window_Action_State::TOGGLE_GRID_SELECT;
-				return action;
-			}
-			break;
 		case sf::Keyboard::Q:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))

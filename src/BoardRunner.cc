@@ -550,11 +550,6 @@ void BoardRunner::run(std::default_random_engine & rng)
 					_toolwindow.setSaveIconNotSaved();
 				}
 				break;
-			case Window_Action_State::TOGGLE_GRID_SELECT:
-				_toolwindow.getTool(true).setNextPrecision();
-				_toolwindow.getTool(false).setNextPrecision();
-				_pieceselectwindow.update(_piecehandler, _board, *tool);
-				break;
 			case Window_Action_State::GENERATE_COLORED_BOARD:
 				if (_board.generateColoredBoard(rng))
 				{
