@@ -630,6 +630,22 @@ void BoardRunner::run(std::default_random_engine & rng)
 				_textbox.setText("");
 				_textbox.hideText();
 				break;
+			case Window_Action_State::ENTER_GAME_LINK:
+				_keyboardhandler.setState(Keyboard::State::ENTER_GAME_LINK);
+				_textbox.setText("Enter game link:\n");
+				_textbox.showText();
+				break;
+			case Window_Action_State::DISPLAY_ENTERED_GAME_LINK:
+				_textbox.setText("Enter game link:\n" + _action.name);
+				break;
+			case Window_Action_State::SET_GAME_LINK:
+				_board.setLink(_action.name);
+				_textbox.setText("");
+				_textbox.hideText();
+				break;
+			case Window_Action_State::DISPLAY_GAME_LINK:
+				cout << _board.getLink() << endl;
+				break;
 			default:
 				break;
 			}

@@ -38,6 +38,11 @@ Board::~Board()
 	_squarecolors.clear();
 }
 
+string Board::getLink() const
+{
+	return _link;
+}
+
 sf::Vector2u Board::getImageSize() const
 {
 	return _rendertexture.getSize();
@@ -245,6 +250,11 @@ bool Board::clearContent()
 void Board::setPieceHandler(PieceHandler* piecehandler)
 {
 	_piecehandler = piecehandler;
+}
+
+void Board::setLink(std::string link)
+{
+	_link = link;
 }
 
 bool Board::addRowUp()
@@ -975,7 +985,7 @@ void Board::save(string name)
 		ofs << " " << elem.toInteger();
 	}
 	ofs << "]\n";
-
+	ofs << "[Link " << _link << "]\n";
 	ofs << "[NotationSize " << _notationsize << "]\n"
 		<< "[NotationColor " << _notationcolor.toInteger() << "]\n";
 
@@ -1072,6 +1082,7 @@ bool Board::intern_load(string setupfilename)
 	_line_list.clear();
 	_arrow_list.clear();
 	_profile_box_list.clear();
+	_link = "";
 
 	ifstream ifs;
 	ifs.open(setupfilename);
@@ -1139,6 +1150,10 @@ bool Board::intern_load(string setupfilename)
 				_squarecolors.push_back(sf::Color{ intcolor });
 				ifs >> intcolor;
 				_squarecolors.push_back(sf::Color{ intcolor });
+			}
+			else if (variable_name == "Link")
+			{
+				ifs >> _link;
 			}
 			else if (variable_name == "NotationSize")
 			{

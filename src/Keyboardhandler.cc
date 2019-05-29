@@ -76,6 +76,26 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 			action.state = Window_Action_State::NOTHING;
 			return action;
 		}
+
+	case Keyboard::State::ENTER_GAME_LINK:
+		if (handleTextWithKey(key, illegalLinkChars))
+		{
+			action.name = _text;
+			_text = "";
+			action.state = Window_Action_State::SET_GAME_LINK;
+			return action;
+		}
+		else if (_text != prevtext)
+		{
+			action.name = _text;
+			action.state = Window_Action_State::DISPLAY_ENTERED_GAME_LINK;
+			return action;
+		}
+		else
+		{
+			action.state = Window_Action_State::NOTHING;
+			return action;
+		}
 	default:
 		switch (key)
 		{
@@ -235,6 +255,22 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 				return action;
 			}
 			break;
+		case sf::Keyboard::K:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+			{
+				action.state = Window_Action_State::ENTER_GAME_LINK;
+				return action;
+			}
+			break;
+		case sf::Keyboard::J:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+			{
+				action.state = Window_Action_State::DISPLAY_GAME_LINK;
+				return action;
+			}
+			break;
 		default:
 			action.state = Window_Action_State::NOTHING;
 			return action;
@@ -283,6 +319,17 @@ Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 		}
 		action.name = _text;
 		action.state = Window_Action_State::DISPLAY_ENTERED_PROFILE_NAME;
+		return action;
+	case Keyboard::State::ENTER_GAME_LINK:
+		for (auto it = inputtext.begin(); it < inputtext.end(); it++)
+		{
+			if (illegalLinkChars.find(*it) == string::npos)
+			{
+				_text += *it;
+			}
+		}
+		action.name = _text;
+		action.state = Window_Action_State::DISPLAY_ENTERED_GAME_LINK;
 		return action;
 	default:
 		action.name = inputtext;

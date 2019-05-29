@@ -10,7 +10,8 @@ namespace Keyboard
 		NORMAL,
 		ENTER_BOARD_NAME,
 		ENTER_PROFILE_NAME,
-		ENTER_SAVE_AS_BOARDNAME
+		ENTER_SAVE_AS_BOARDNAME,
+		ENTER_GAME_LINK
 	};
 }
 
@@ -31,6 +32,7 @@ private:
 
 	Keyboard::State _state;
 	std::string _text;
-	const std::string illegalBoardNameChars = "\\/:?\"<>|\xe\b *.\x10\x16";
-	const std::string illegalPlayerNameChars = "\\/:?\"<>|\xe\b*.\x10\x16";
+	const std::string illegalBoardNameChars = "\\/:?\"<>|\xe\b *.\x10\x16\v\r\n";
+	const std::string illegalPlayerNameChars = "\\/:?\"<>|\xe\b*.\x10\x16\v\r\n";
+	const std::string illegalLinkChars = "\x10\x16\v\r\n";
 };

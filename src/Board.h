@@ -31,6 +31,7 @@ class Board : public sf::Drawable
 		bool initLoad(std::string name);
 		~Board();
 
+		std::string getLink() const;
 		sf::Vector2u getImageSize() const;
 		sf::Vector2u getDisplaySize() const;
 		sf::Vector2u getImageSquareSize() const;
@@ -64,6 +65,7 @@ class Board : public sf::Drawable
 		bool clearContent();
 
 		void setPieceHandler(PieceHandler* piecehandler);
+		void setLink(std::string link);
 
 		bool addRowUp();
 		bool addRowDown();
@@ -143,6 +145,7 @@ class Board : public sf::Drawable
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 		PieceHandler* _piecehandler;
+		std::string _link;
 
 		unsigned int _numrows;
 		unsigned int _numcolumns;
