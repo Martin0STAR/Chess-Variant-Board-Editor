@@ -308,10 +308,10 @@ Window_Action KeyboardHandler::handleTextEntered(sf::String inputtext)
 		action.state = Window_Action_State::DISPLAY_ENTERED_GAME_LINK;
 		return action;
 	default:
-		action.name = inputtext;
-		if (action.name.size() == 1 &&
-			illegalAccessoryChars.find(action.name.at(0)) == string::npos)
+		if (((std::string)inputtext).size() == 1 &&
+			illegalAccessoryChars.find(((std::string)inputtext).at(0)) == string::npos)
 		{
+			action.name = inputtext;
 			action.state = Window_Action_State::SET_PIECE_CHAR_ACCESSORY;
 			return action;
 		}
