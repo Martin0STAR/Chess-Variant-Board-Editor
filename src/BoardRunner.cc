@@ -86,6 +86,8 @@ void BoardRunner::run(std::default_random_engine & rng)
 				break;
 			}
 			Tool* tool = &(_toolwindow.getTool(_action.isLeftTool));
+			Tool* lefttool = &(_toolwindow.getTool(true));
+			Tool* righttool = &(_toolwindow.getTool(false));
 			switch (_action.state)
 			{
 			case Window_Action_State::CLOSE_WINDOW:
@@ -452,12 +454,18 @@ void BoardRunner::run(std::default_random_engine & rng)
 				_pieceselectwindow.update(_piecehandler, _board, *tool);
 				break;
 			case Window_Action_State::SET_PIECE_CHAR_ACCESSORY:
-				tool->setCharAccessory(_action.name.at(0));
-				if (tool->getState() == Tool_State::ADD_PIECE_CHAR_ACCESSORY)
+				lefttool->setCharAccessory(_action.name.at(0));
+				righttool->setCharAccessory(_action.name.at(0));
+
+				if (lefttool->getState() == Tool_State::ADD_PIECE_CHAR_ACCESSORY)
 				{
-					_toolwindow.updateToolImage(_action.isLeftTool);
+					_toolwindow.updateToolImage(true);
 				}
-				_pieceselectwindow.update(_piecehandler, _board, *tool);
+				if (righttool->getState() == Tool_State::ADD_PIECE_CHAR_ACCESSORY)
+				{
+					_toolwindow.updateToolImage(false);
+				}
+				_pieceselectwindow.update(_piecehandler, _board, *lefttool);
 				break;
 			case Window_Action_State::REMOVE_SQUARE:
 				if (_board.removeSquare(_action.tosquarecoord))
