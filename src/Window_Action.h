@@ -63,7 +63,6 @@ namespace Window_Action_State {
 	};
 }
 
-
 struct Window_Action
 {
 	Window_Action_State::Window_Action_State state{Window_Action_State::NOTHING};
