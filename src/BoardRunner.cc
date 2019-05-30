@@ -551,6 +551,13 @@ void BoardRunner::run(std::default_random_engine & rng)
 				}
 				break;
 			}
+			case Window_Action_State::TOGGLE_SHOW_EDGES:
+				if (_board.toggleShowEdges())
+				{
+					_board.updateImage();
+					_toolwindow.setSaveIconNotSaved();
+				}
+				break;
 			case Window_Action_State::TOGGLE_GRID:
 				if (_board.togglegrid())
 				{

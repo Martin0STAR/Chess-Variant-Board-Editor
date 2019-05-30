@@ -68,15 +68,26 @@ sf::Vector2f Board::getDisplaySquareSize() const
 
 sf::Vector2u Board:: getImageSquareOffset() const
 {
-	return sf::Vector2u{ _leftofboardwidth, _topofboardheight };
+	unsigned int x{ 0 };
+	unsigned int y{ 0 };
+	if (_showedges)
+	{
+		x = _leftofboardwidth;
+		y = _topofboardheight;
+	}
+	return sf::Vector2u{ x, y };
 }
 
 sf::Vector2f Board::getDisplaySquareOffset() const
 {
-	return sf::Vector2f{
-		(float)(_leftofboardwidth * _displaysize.x) / (float)_rendertexture.getSize().x,
-		(float)(_topofboardheight * _displaysize.y) / (float)_rendertexture.getSize().y
-	};
+	float x{ 0.f };
+	float y{ 0.f };
+	if (_showedges)
+	{
+		x = (float)(_leftofboardwidth * _displaysize.x) / (float)_rendertexture.getSize().x;
+		y = (float)(_topofboardheight * _displaysize.y) / (float)_rendertexture.getSize().y;
+	}
+	return sf::Vector2f{x, y};
 }
 
 sf::Vector2i Board::getImageCoordFromDisplayCoord(sf::Vector2f displaypos) const
@@ -160,10 +171,10 @@ bool Board::isVerticalflipped() const
 
 bool Board::isWithinPixelBoard(sf::Vector2f pixelpos) const
 {
-	return pixelpos.x >= (float)_leftofboardwidth &&
-		pixelpos.x <= (float)_rendertexture.getSize().x - (float)_rightofboardwidth &&
-		pixelpos.y >= (float)_topofboardheight &&
-		pixelpos.y <= (float)_rendertexture.getSize().y - (float)_bottomofboardheight;
+	return pixelpos.x >= (float)getImageSquareOffset().x &&
+		pixelpos.x <= (float)_rendertexture.getSize().x - (float)getRightOfBoardWidth() &&
+		pixelpos.y >= (float)getImageSquareOffset().y &&
+		pixelpos.y <= (float)_rendertexture.getSize().y - (float)getBottomOfBoardHeight();
 }
 
 bool Board::isWithinBoard(sf::Vector2i coord) const
@@ -220,6 +231,25 @@ bool Board::flipHorizontally()
 bool Board::flipVertically()
 {
 	_isverticalflipped = !_isverticalflipped;
+	return true;
+}
+
+bool Board::toggleShowEdges()
+{
+	if (_showedges)
+	{
+		_showedges = false;
+		_rendertexture.create(
+			_rendertexture.getSize().x - _leftofboardwidth - _rightofboardwidth,
+			_rendertexture.getSize().y - _topofboardheight - _bottomofboardheight);
+	}
+	else
+	{
+		_showedges = true;
+		_rendertexture.create(
+			_rendertexture.getSize().x + _leftofboardwidth + _rightofboardwidth,
+			_rendertexture.getSize().y + _topofboardheight + _bottomofboardheight);
+	}
 	return true;
 }
 
@@ -766,7 +796,10 @@ void Board::updateImage()
 		drawGrid();
 	}
 
-	drawCoordinates();
+	if (_showedges)
+	{
+		drawCoordinates();
+	}
 
 	for (auto & line : _line_list)
 	{
@@ -876,8 +909,8 @@ bool Board::drawGrid()
 	for (unsigned int i{ 1 }; i < _numcolumns; i++)
 	{
 		verticalline.setPosition(
-			(float)(_leftofboardwidth + _squaresize.x * i - 1),
-			(float)_topofboardheight);
+			(float)(getImageSquareOffset().x + _squaresize.x * i - 1),
+			(float)getImageSquareOffset().y);
 		_rendertexture.draw(verticalline);
 	}
 
@@ -887,8 +920,8 @@ bool Board::drawGrid()
 	for (unsigned int i{ 1 }; i < _numrows; i++)
 	{
 		horizontalline.setPosition(
-			(float)_leftofboardwidth,
-			(float)(_topofboardheight + _squaresize.y * i - 1));
+			(float)getImageSquareOffset().x,
+			(float)(getImageSquareOffset().y + _squaresize.y * i - 1));
 		_rendertexture.draw(horizontalline);
 	}
 	return true;
@@ -989,6 +1022,11 @@ void Board::save(string name)
 	ofs << "[NotationSize " << _notationsize << "]\n"
 		<< "[NotationColor " << _notationcolor.toInteger() << "]\n";
 
+	if (!(_showedges))
+	{
+		ofs << "[Edges_Off]\n";
+	}
+
 	if (_showgrid)
 	{
 		ofs << "[Grid_On]\n";
@@ -1069,6 +1107,7 @@ bool Board::intern_load(string setupfilename)
 	{
 		return false;
 	}
+	_showedges = true;
 	_showgrid = false;
 	_showdragarrow = false;
 	_ishorizontalflipped = false;
@@ -1235,6 +1274,10 @@ bool Board::intern_load(string setupfilename)
 				ifs >> profilebox;
 				_profile_box_list.push_back(profilebox);
 			}
+			else if (variable_name == "Edges_Off")
+			{
+				_showedges = false;
+			}
 			else if (variable_name == "Grid_On")
 			{
 				_showgrid = true;
@@ -1251,10 +1294,34 @@ bool Board::intern_load(string setupfilename)
 	}
 	ifs.close();
 	_rendertexture.create(
-		_leftofboardwidth + _rightofboardwidth + _numcolumns * _squaresize.x,
-		_topofboardheight + _bottomofboardheight + _numrows * _squaresize.y);
+		getImageSquareOffset().x + getRightOfBoardWidth() + _numcolumns * _squaresize.x,
+		getImageSquareOffset().y + getBottomOfBoardHeight() + _numrows * _squaresize.y);
 	updateImage();
 	return true;
+}
+
+int Board::getRightOfBoardWidth() const
+{
+	if (_showedges)
+	{
+		return _rightofboardwidth;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int Board::getBottomOfBoardHeight() const
+{
+	if (_showedges)
+	{
+		return _bottomofboardheight;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 string Board::getInitFileName(string type) const
@@ -1285,7 +1352,7 @@ std::string Board::getFontFileName()
 sf::Vector2f Board::getPosition(BoardComponent::Coord coord)
 {
 	return coord.getPixelPosition(
-		sf::Vector2f{ (float)_leftofboardwidth, (float)_topofboardheight },
+		sf::Vector2f{ (float)getImageSquareOffset().x, (float)getImageSquareOffset().y },
 		sf::Vector2f{ (float)_squaresize.x, (float)_squaresize.y },
 		_numrows, _numcolumns, _ishorizontalflipped, _isverticalflipped);
 }
@@ -1406,8 +1473,8 @@ bool Board::drawCoordinates()
 		text.setOrigin(textRect.left + textRect.width / 2.f,
 			textRect.top + textRect.height / 2.f);
 
-		float xpos = (float)_leftofboardwidth / 2.f;
-		float ypos = (float)_topofboardheight +
+		float xpos = (float)getImageSquareOffset().x / 2.f;
+		float ypos = (float)getImageSquareOffset().y +
 			(float)y * _squaresize.y +
 			(float)_squaresize.y / 2.f;
 		text.setPosition(xpos, ypos);

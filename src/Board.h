@@ -60,6 +60,7 @@ class Board : public sf::Drawable
 
 		bool flipHorizontally();
 		bool flipVertically();
+		bool toggleShowEdges();
 		bool togglegrid();
 		void removeDragArrow();
 		bool clearContent();
@@ -124,6 +125,9 @@ class Board : public sf::Drawable
 	private:
 		bool intern_load(std::string setupfilename);
 
+		int getRightOfBoardWidth() const;
+		int getBottomOfBoardHeight() const;
+
 		std::string getInitFileName(std::string type) const;
 		std::string getInitSetupFileName(std::string name) const;
 		std::string getImageFileName(std::string name) const;
@@ -149,6 +153,7 @@ class Board : public sf::Drawable
 
 		unsigned int _numrows;
 		unsigned int _numcolumns;
+		bool _showedges;
 		bool _showgrid;
 		bool _showdragarrow;
 		bool _ishorizontalflipped;

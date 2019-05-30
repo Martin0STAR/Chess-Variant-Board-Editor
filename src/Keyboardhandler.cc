@@ -263,6 +263,16 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 				return action;
 			}
 			break;
+		case sf::Keyboard::D:
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+			{
+				action.state = Window_Action_State::TOGGLE_SHOW_EDGES;
+				return action;
+			}
+			break;
+		}
 		default:
 			action.state = Window_Action_State::NOTHING;
 			return action;
