@@ -259,7 +259,7 @@ Window_Action KeyboardHandler::handleKeyPress(sf::Keyboard::Key key)
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
 			{
-				action.state = Window_Action_State::DISPLAY_GAME_LINK;
+				action.state = Window_Action_State::OPEN_GAME_LINK;
 				return action;
 			}
 			break;

@@ -653,9 +653,11 @@ void BoardRunner::run(std::default_random_engine & rng)
 				_textbox.setText("");
 				_textbox.hideText();
 				break;
-			case Window_Action_State::DISPLAY_GAME_LINK:
-				cout << _board.getLink() << endl;
+			case Window_Action_State::OPEN_GAME_LINK:
+			{
+				ShellExecute(NULL, NULL, _board.getLink().c_str(), NULL, NULL, SW_SHOWNORMAL);
 				break;
+			}
 			default:
 				break;
 			}

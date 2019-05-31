@@ -60,7 +60,7 @@ namespace Window_Action_State {
 		ENTER_GAME_LINK,
 		DISPLAY_ENTERED_GAME_LINK,
 		SET_GAME_LINK,
-		DISPLAY_GAME_LINK
+		OPEN_GAME_LINK
 	};
 }
 

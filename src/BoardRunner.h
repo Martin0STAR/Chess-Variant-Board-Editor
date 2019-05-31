@@ -10,6 +10,7 @@
 #include "EventHandler.h"
 #include "KeyboardHandler.h"
 #include "Textbox.h"
+#include <windows.h> //for opening links
 
 class BoardRunner
 {
