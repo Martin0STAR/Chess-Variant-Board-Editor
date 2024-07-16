@@ -63,12 +63,12 @@ bool PieceHandler::loadStyle(std::string style)
 					PieceContainer piececontainer;
 					piececontainer.name = name;
 					string filename = getPieceImageFileName(style, name, "white");
-					if (std::experimental::filesystem::exists(filename))
+					if (std::filesystem::exists(filename))
 					{
 						piececontainer.whiteimage.loadFromFile(filename);
 					}
 					filename = getPieceImageFileName(style, name, "black");
-					if (std::experimental::filesystem::exists(filename))
+					if (std::filesystem::exists(filename))
 					{
 						piececontainer.blackimage.loadFromFile(filename);
 					}

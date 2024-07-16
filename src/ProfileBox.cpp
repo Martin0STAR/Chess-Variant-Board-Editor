@@ -263,7 +263,7 @@ bool BoardComponent::ProfileBox::saveProfileImage()
 		return false;
 	}
 	string filename = getImageFileName();
-	if (experimental::filesystem::exists(filename))
+	if (filesystem::exists(filename))
 	{
 		return false;
 	}
@@ -281,38 +281,13 @@ bool BoardComponent::ProfileBox::updateProfilePicture()
 	}
 
 	string filename = getImageFileName();
-	if (experimental::filesystem::exists(filename))
+	if (filesystem::exists(filename))
 	{
 		_profileimage.loadFromFile(filename);
 		return true;
 	}
-	
-	sf::Http http;
-	sf::Http::Request request;
-	auto it = _urilist.find(_profilename);
-	if (it == _urilist.end())
-	{
-		string filename = getNoAvatarFileName();
-		_profileimage.loadFromFile(filename);
-		return true;
-	}
-	
-	http.setHost("http://images.chesscomfiles.com");
-	request.setUri(_urilist.at(_profilename));
-	request.setMethod(sf::Http::Request::Get);
-	request.setHttpVersion(1, 1);
-	request.setField("from", "me");
-	request.setField("Content-Type", "application/x-www-form-urlencoded");
-	sf::Http::Response response = http.sendRequest(request);
-
-	if (response.getBody().size() == 0)
-	{
-		string filename = getNoAvatarFileName();
-		_profileimage.loadFromFile(filename);
-		return true;
-	}
-	_profileimage.loadFromMemory(response.getBody().data(), response.getBody().size());
-	_profileimage.saveToFile(filename);
+	filename = getNoAvatarFileName();
+	_profileimage.loadFromFile(filename);
 	return true;
 }
 

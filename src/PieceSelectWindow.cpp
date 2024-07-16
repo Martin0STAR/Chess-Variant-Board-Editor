@@ -448,7 +448,7 @@ void PieceSelectWindow::drawTool(PieceHandler& piecehandler, Tool& tool, unsigne
 			sf::Color squarecolor = getSquareColor(x, y);
 			sf::Image toolimage;
 			toolimage.create(_displaysquaresize.x, _displaysquaresize.y, squarecolor);
-			if (std::experimental::filesystem::exists(imagefilename))
+			if (std::filesystem::exists(imagefilename))
 			{
 				icon.loadFromFile(imagefilename);
 			}

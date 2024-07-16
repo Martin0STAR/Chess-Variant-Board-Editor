@@ -150,7 +150,7 @@ void PieceAccessory::draw(sf::RenderTarget& target, sf::RenderStates states) con
 	else
 	{
 		string filename = getFileName();
-		if (std::experimental::filesystem::exists(filename))
+		if (std::filesystem::exists(filename))
 		{
 			sf::Image image;
 			image.loadFromFile(getFileName());
