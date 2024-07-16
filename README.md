@@ -2,7 +2,12 @@
 A program to create board images for chess variants.
 
 Compile:
-  cmake -S . -B build
+````
+  cmake -S . -B build\
   cmake --build build --config Release
+````
 
-Execute: build/bin/Release/main.exe
+Execute:
+````
+build/bin/Release/main.exe
+````
