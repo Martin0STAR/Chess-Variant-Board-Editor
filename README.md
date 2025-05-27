@@ -9,5 +9,5 @@ Compile:
 
 Execute:
 ````
-build/bin/Release/main.exe
+build\bin\Release\main.exe
 ````
